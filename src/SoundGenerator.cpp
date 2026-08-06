@@ -1,0 +1,409 @@
+#include "SoundGenerator.h"
+#include <cmath>
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <random>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+// ============================================
+// КЛАСС ДЛЯ ГЕНЕРАЦИИ РОЗОВОГО ШУМА
+// ============================================
+
+class PinkNoiseGenerator {
+public:
+    PinkNoiseGenerator() {
+        // Инициализация фильтров
+        for (int i = 0; i < 7; ++i) {
+            filters[i] = 0.0;
+        }
+        std::random_device rd;
+        gen.seed(rd());
+    }
+
+    double generate() {
+        // Генерируем белый шум
+        std::uniform_real_distribution<> dis(-1.0, 1.0);
+        double white = dis(gen);
+
+        // Розовый шум через сумму фильтров
+        // Используем 7 фильтров для хорошего приближения
+        filters[0] = 0.99886 * filters[0] + white * 0.0555179;
+        filters[1] = 0.99332 * filters[1] + white * 0.0750759;
+        filters[2] = 0.96900 * filters[2] + white * 0.1538520;
+        filters[3] = 0.86650 * filters[3] + white * 0.3104856;
+        filters[4] = 0.55000 * filters[4] + white * 0.5329522;
+        filters[5] = 0.76197 * filters[5] + white * 0.0162340;
+        filters[6] = 0.85000 * filters[6] + white * 0.0890046;
+
+        // Суммируем все фильтры
+        double pink = 0.0;
+        for (int i = 0; i < 7; ++i) {
+            pink += filters[i];
+        }
+
+        // Нормализация
+        pink = pink / 7.0;
+        return std::clamp(pink, -1.0, 1.0);
+    }
+
+private:
+    double filters[7];
+    std::mt19937 gen;
+};
+
+// ============================================
+// ГЛАВНЫЙ ГЕНЕРАТОР СВИП-ТОНА
+// ============================================
+
+std::vector<double> SoundGenerator::generate_sweep_tone(
+    double rpm_start,
+    double rpm_end,
+    double duration_seconds,
+    const EngineSoundParams& engine_params
+) {
+    int num_samples = static_cast<int>(params.sample_rate * duration_seconds);
+    std::vector<double> samples(num_samples, 0.0);
+
+    // Копируем параметры для изменения
+    EngineSoundParams current_params = engine_params;
+
+    // Генератор розового шума (создаем внутри функции)
+    PinkNoiseGenerator pink_noise;
+
+    for (int i = 0; i < num_samples; ++i) {
+        double time = static_cast<double>(i) / params.sample_rate;
+        double progress = time / duration_seconds;
+
+        // Текущие обороты (линейный свип)
+        double current_rpm = rpm_start + (rpm_end - rpm_start) * progress;
+        current_params.rpm = current_rpm;
+
+        // Базовые параметры звука
+        double firing_freq = calculate_firing_frequency(current_rpm, current_params.cylinders);
+
+        // Основной тон и гармоники
+        double sample = 0.0;
+
+        // 1. Основной тон (частота вспышек)
+        double fundamental = firing_freq;
+        sample += 0.4 * sin(2.0 * M_PI * fundamental * time);
+
+        // 2. Гармоники
+        sample += 0.25 * sin(2.0 * M_PI * fundamental * 2.0 * time);
+        sample += 0.15 * sin(2.0 * M_PI * fundamental * 3.0 * time);
+        sample += 0.08 * sin(2.0 * M_PI * fundamental * 4.0 * time);
+        sample += 0.05 * sin(2.0 * M_PI * fundamental * 0.5 * time);
+
+        // 3. Резонанс выхлопной системы
+        double exhaust_resonance = apply_resonance(firing_freq, current_rpm, current_params.load);
+        sample += exhaust_resonance * 0.3 * sin(2.0 * M_PI * fundamental * 1.5 * time);
+
+        // 4. РОЗОВЫЙ ШУМ вместо белого
+        // Амплитуда шума зависит от оборотов и нагрузки
+        double noise_amplitude = 0.03 * (current_rpm / 1000.0) * (1.0 + current_params.load);
+        noise_amplitude = std::clamp(noise_amplitude, 0.0, 0.3);
+
+        // Генерируем розовый шум
+        double pink = pink_noise.generate();
+
+        // Добавляем шум с учетом нагрузки
+        // На холостых шума меньше, на высоких оборотах - больше
+        sample += noise_amplitude * pink;
+
+        // 5. Дополнительный шум от работы клапанов (только на холостых)
+        if (current_rpm < 1500) {
+            double valve_noise = 0.03 * (1.0 - current_rpm / 1500.0);
+            sample += valve_noise * pink_noise.generate();
+        }
+
+        // 6. Шум от резонанса выхлопа
+        if (exhaust_resonance > 0.3) {
+            double resonance_noise = 0.02 * exhaust_resonance;
+            sample += resonance_noise * pink_noise.generate();
+        }
+
+        // 7. Эффект Доплера (имитация движения)
+        double doppler_shift = 0.01 * (current_rpm / 1000.0);
+        sample = apply_doppler_effect(sample, doppler_shift);
+
+        // 8. Пульсации выхлопа
+        sample = apply_exhaust_pulse(sample, current_rpm);
+
+        // 9. Огибающая (атака/затухание)
+        double envelope = 1.0 - exp(-time / 0.05);
+        if (time > duration_seconds - 0.1) {
+            envelope *= (duration_seconds - time) / 0.1;
+        }
+        sample *= envelope;
+
+        // 10. Зависимость от дросселя
+        double throttle_factor = 0.3 + 0.7 * current_params.throttle;
+        sample *= throttle_factor;
+
+        // 11. Зависимость от нагрузки
+        double load_factor = 0.5 + 0.5 * current_params.load;
+        sample *= load_factor;
+
+        samples[i] = sample;
+    }
+
+    // Нормализация
+    double max_amp = 0.0;
+    for (const auto& s : samples) {
+        max_amp = std::max(max_amp, std::abs(s));
+    }
+    if (max_amp > 0.0) {
+        for (auto& s : samples) {
+            s = s / max_amp * params.amplitude;
+        }
+    }
+
+    return samples;
+}
+
+// ============================================
+// ГЕНЕРАТОР ЗВУКА ДВИГАТЕЛЯ (постоянные обороты)
+// ============================================
+
+std::vector<double> SoundGenerator::generate_engine_sound(
+    const EngineSoundParams& engine_params,
+    double duration_seconds
+) {
+    std::cout << "  Generating engine sound: " << engine_params.rpm
+              << " RPM, duration: " << duration_seconds << "s" << std::endl;
+
+    auto result = generate_sweep_tone(
+        engine_params.rpm,
+        engine_params.rpm,
+        duration_seconds,
+        engine_params
+    );
+
+    // Проверяем амплитуду
+    double max_val = 0.0;
+    for (double s : result) {
+        max_val = std::max(max_val, std::abs(s));
+    }
+    std::cout << "  Generated " << result.size() << " samples, max amplitude: " << max_val << std::endl;
+
+    return result;
+}
+
+// ============================================
+// ОСТАЛЬНЫЕ МЕТОДЫ (без изменений)
+// ============================================
+
+double SoundGenerator::calculate_firing_frequency(double rpm, int cylinders) const {
+    return (rpm / 60.0) * (cylinders / 2.0);
+}
+
+double SoundGenerator::calculate_exhaust_temperature(double rpm, double load) const {
+    double base_temp = 600.0;
+    double temp_increase = 400.0 * load;
+    double rpm_temp = 0.05 * (rpm / 1000.0);
+    return base_temp + temp_increase + rpm_temp;
+}
+
+std::vector<double> SoundGenerator::generate_harmonics(
+    double base_freq,
+    double rpm,
+    double throttle,
+    double load,
+    double duration_seconds
+) {
+    int num_samples = static_cast<int>(params.sample_rate * duration_seconds);
+    std::vector<double> samples(num_samples, 0.0);
+
+    std::vector<std::pair<double, double>> harmonics = {
+        {1.0, 0.4},
+        {2.0, 0.25},
+        {3.0, 0.15},
+        {4.0, 0.08},
+        {0.5, 0.05},
+        {1.5, 0.12},
+        {2.5, 0.06},
+        {3.5, 0.03}
+    };
+
+    for (int i = 0; i < num_samples; ++i) {
+        double time = static_cast<double>(i) / params.sample_rate;
+        double sample = 0.0;
+
+        for (const auto& h : harmonics) {
+            double freq = base_freq * h.first;
+            double amp = h.second;
+
+            if (rpm > 3000) {
+                amp *= (1.0 + 0.3 * (rpm - 3000) / 5000);
+            }
+            amp *= (0.5 + 0.5 * load);
+            amp *= (0.3 + 0.7 * throttle);
+
+            sample += amp * sin(2.0 * M_PI * freq * time);
+        }
+
+        samples[i] = sample;
+    }
+
+    return samples;
+}
+
+std::vector<double> SoundGenerator::generate_envelope(
+    double duration_seconds,
+    double rpm,
+    double throttle
+) {
+    int num_samples = static_cast<int>(params.sample_rate * duration_seconds);
+    std::vector<double> envelope(num_samples, 0.0);
+
+    double attack_time = 0.02 + 0.01 * (1000.0 / rpm);
+    attack_time = std::clamp(attack_time, 0.005, 0.05);
+
+    double release_time = 0.03 + 0.02 * (1.0 - throttle);
+    release_time = std::clamp(release_time, 0.01, 0.06);
+
+    for (int i = 0; i < num_samples; ++i) {
+        double time = static_cast<double>(i) / params.sample_rate;
+
+        if (time < attack_time) {
+            envelope[i] = time / attack_time;
+        } else if (time < duration_seconds - release_time) {
+            envelope[i] = 1.0;
+        } else {
+            double decay_time = time - (duration_seconds - release_time);
+            envelope[i] = 1.0 - decay_time / release_time;
+        }
+
+        double modulation_freq = rpm / 120.0;
+        envelope[i] *= (1.0 + 0.05 * sin(2.0 * M_PI * modulation_freq * time));
+    }
+
+    return envelope;
+}
+
+double SoundGenerator::apply_doppler_effect(double freq, double velocity) const {
+    const double SPEED_OF_SOUND = 343.0;
+    double factor = SPEED_OF_SOUND / (SPEED_OF_SOUND - velocity);
+    return freq * factor;
+}
+
+double SoundGenerator::apply_resonance(double freq, double rpm, double load) const {
+    double resonant_1 = 40.0;
+    double resonant_2 = 80.0;
+    double resonant_3 = 160.0;
+    double resonant_4 = 320.0;
+
+    double rpm_factor = rpm / 1000.0;
+    double load_factor = 0.5 + 0.5 * load;
+
+    double resonance = 0.0;
+    resonance += 0.3 * exp(-pow((freq - resonant_1 * rpm_factor) / 20.0, 2));
+    resonance += 0.5 * exp(-pow((freq - resonant_2 * rpm_factor) / 30.0, 2));
+    resonance += 0.3 * exp(-pow((freq - resonant_3 * rpm_factor) / 40.0, 2));
+    resonance += 0.2 * exp(-pow((freq - resonant_4 * rpm_factor) / 50.0, 2));
+
+    resonance *= load_factor;
+    return std::clamp(resonance, 0.0, 1.0);
+}
+
+double SoundGenerator::apply_exhaust_pulse(double sample, double rpm) const {
+    double pulse_freq = rpm / 60.0;
+    static double phase = 0.0;
+    phase += 2.0 * M_PI * pulse_freq / params.sample_rate;
+
+    double pulse = 0.5 * (1.0 + sin(phase));
+    pulse = pow(pulse, 4);
+
+    return sample * (1.0 + 0.05 * pulse);
+}
+
+double SoundGenerator::normalize(double value) const {
+    return std::clamp(value, -1.0, 1.0);
+}
+
+// ============================================
+// СОХРАНЕНИЕ В WAV
+// ============================================
+
+bool SoundGenerator::save_to_wav(const std::vector<double>& samples,
+                                 const std::string& filename) {
+    if (samples.empty()) {
+        std::cerr << "Error: No samples to save!" << std::endl;
+        return false;
+    }
+
+    // Конвертация в 16-bit PCM
+    std::vector<int16_t> pcm_data;
+    pcm_data.reserve(samples.size());
+
+    for (double s : samples) {
+        double sample = std::clamp(s, -1.0, 1.0);
+        int16_t pcm = static_cast<int16_t>(sample * 32767.0);
+        pcm_data.push_back(pcm);
+    }
+
+    if (pcm_data.empty()) {
+        std::cerr << "Error: PCM data is empty!" << std::endl;
+        return false;
+    }
+
+    uint32_t data_size = static_cast<uint32_t>(pcm_data.size() * sizeof(int16_t));
+    uint32_t sample_rate = static_cast<uint32_t>(params.sample_rate);
+    uint16_t channels = 1;
+    uint16_t bits_per_sample = 16;
+    uint16_t block_align = channels * (bits_per_sample / 8);
+    uint32_t byte_rate = sample_rate * block_align;
+    uint32_t file_size = 44 + data_size - 8;
+
+    std::ofstream file(filename, std::ios::binary);
+    if (!file.is_open()) {
+        std::cerr << "Error: Cannot open file: " << filename << std::endl;
+        return false;
+    }
+
+    // Заголовок WAV
+    file.write("RIFF", 4);
+    file.write(reinterpret_cast<const char*>(&file_size), 4);
+    file.write("WAVE", 4);
+    file.write("fmt ", 4);
+    uint32_t fmt_size = 16;
+    file.write(reinterpret_cast<const char*>(&fmt_size), 4);
+    uint16_t audio_format = 1;
+    file.write(reinterpret_cast<const char*>(&audio_format), 2);
+    file.write(reinterpret_cast<const char*>(&channels), 2);
+    file.write(reinterpret_cast<const char*>(&sample_rate), 4);
+    file.write(reinterpret_cast<const char*>(&byte_rate), 4);
+    file.write(reinterpret_cast<const char*>(&block_align), 2);
+    file.write(reinterpret_cast<const char*>(&bits_per_sample), 2);
+    file.write("data", 4);
+    file.write(reinterpret_cast<const char*>(&data_size), 4);
+    file.write(reinterpret_cast<const char*>(pcm_data.data()), data_size);
+
+    file.close();
+
+    if (!file.good()) {
+        std::cerr << "Error: Failed to write to file: " << filename << std::endl;
+        return false;
+    }
+
+    std::cout << "  Saved: " << filename << " (" << samples.size()
+              << " samples, " << data_size << " bytes)" << std::endl;
+    return true;
+}
+
+// ============================================
+// ВОСПРОИЗВЕДЕНИЕ (заглушка)
+// ============================================
+
+void SoundGenerator::play_sound(const std::vector<double>& samples) {
+    static int counter = 0;
+    std::string filename = "temp_engine_sound_" + std::to_string(counter++) + ".wav";
+    if (save_to_wav(samples, filename)) {
+        std::cout << "Sound saved to: " << filename << std::endl;
+        std::cout << "To play: aplay " << filename << " (Linux) or use any audio player" << std::endl;
+    }
+}
