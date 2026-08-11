@@ -63,8 +63,8 @@ int main(int argc, char* argv[]) {
                 max_power_rpm = rpm;
             }
 
-            if (rpm % 500 == 0 || rpm == rpm_start || rpm == rpm_end ||
-                rpm == 3400 || rpm == 5600) {
+            // if (rpm % 500 == 0 || rpm == rpm_start || rpm == rpm_end ||
+            //     rpm == 3400 || rpm == 5600) {
                 std::cout << rpm << "\t "
                           << std::fixed << std::setprecision(1) << torque << "\t\t "
                           << std::setprecision(1) << power << "\t\t "
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
                 if (rpm == 3400) std::cout << "  *** TARGET: 94 Nm ***";
                 if (rpm == 5600) std::cout << "  *** TARGET: 69 hp ***";
                 std::cout << std::endl;
-            }
+            // }
         }
 
         std::cout << "\n=== Results ===" << std::endl;
