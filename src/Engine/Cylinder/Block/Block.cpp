@@ -2,8 +2,8 @@
 #include <utility>
 #include <cmath>
 
-Block::Block(Piston&& piston, Conrod&& conrod, Crankshaft&& crankshaft):
-    piston(std::move(piston)), conrod(std::move(conrod)), crankshaft(std::move(crankshaft)) {}
+Block::Block(double height, Piston&& piston, Conrod&& conrod, Crankshaft&& crankshaft):
+    height(height), piston(std::move(piston)), conrod(std::move(conrod)), crankshaft(std::move(crankshaft)) {}
 
 double Block::getPistonTopPosition(double angle) const {
     Crankshaft::Projections proj = crankshaft.getProjections(angle);

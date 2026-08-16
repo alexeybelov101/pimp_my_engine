@@ -1,11 +1,12 @@
 #pragma once
-#include "Piston.hpp"
-#include "Conrod.hpp"
-#include "Crankshaft.hpp"
+#include "BottomEnd/Piston.hpp"
+#include "BottomEnd/Conrod.hpp"
+#include "BottomEnd/Crankshaft.hpp"
 
 class Block {
 public:
     Block(
+        double height,
         Piston&& piston,
         Conrod&& conrod,
         Crankshaft&& crankshaft
@@ -18,6 +19,7 @@ public:
     double getSweptVolume() const;
 
 private:
+    double height;
     Piston piston;
     Conrod conrod;
     Crankshaft crankshaft;
