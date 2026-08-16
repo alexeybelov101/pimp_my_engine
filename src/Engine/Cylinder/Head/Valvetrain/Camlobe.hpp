@@ -1,7 +1,12 @@
 #pragma once
 
-struct Camlobe {
-    double max_lift;
-    double opening_angle;
-    double closing_angle;
+class Camlobe {
+public:
+    Camlobe(double maxLift, double duration);
+
+    double getLift(double angle) const;
+
+private:
+    double maxLift;
+    double duration;
 };

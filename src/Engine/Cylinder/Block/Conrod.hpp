@@ -2,10 +2,10 @@
 
 class Conrod {
 public:
-    explicit Conrod(double length_mm);
+    explicit Conrod(double length);
 
-    double get_length() const { return length_mm; }
+    double getLength() const;
 
 private:
-    double length_mm;
+    double length;
 };
