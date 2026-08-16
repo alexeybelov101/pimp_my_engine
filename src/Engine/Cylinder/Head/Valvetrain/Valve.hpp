@@ -1,11 +1,12 @@
 #pragma once
 
 class Valve {
-    public:
-        explicit Valve(double head_diameter);
+public:
+    Valve(double headDiameter, double seatAngle);
 
-        double get_flow_area(double lift) const;
+    double getFlowArea(double lift) const;
 
-    private:
-        double head_diameter;
+private:
+    double headDiameter;
+    double seatAngle;
 };

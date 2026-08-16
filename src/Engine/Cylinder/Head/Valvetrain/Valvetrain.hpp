@@ -4,16 +4,21 @@
 #include "Valve.hpp"
 
 class Valvetrain {
-    public:
-        Valvetrain(
-            const std::vector<Camshaft>& camshafts,
-            const std::vector<Valve>& valves
-        );
-
-        double get_air_flow_for_valve(int lobe_index, double angle) const;
-        double get_total_air_flow();
-
-    private:
-        std::vector<Camshaft> camshafts;
+public:
+    struct LobeGroup {
+        size_t lobeId;
         std::vector<Valve> valves;
+    };
+
+    Valvetrain(
+        Camshaft&& camshaft,
+        std::vector<LobeGroup>&& lobeGroups
+    );
+
+    double getFlowAreaById(size_t lobeId, double angle) const;
+    double getTotalFlowArea(double angle) const;
+
+private:
+    Camshaft camshaft;
+    std::vector<LobeGroup> lobeGroups;
 };

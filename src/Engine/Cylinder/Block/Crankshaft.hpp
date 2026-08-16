@@ -1,16 +1,23 @@
 #pragma once
-#include <cmath>
 
 class Crankshaft {
 public:
-    explicit Crankshaft(double stroke_mm);
+    explicit Crankshaft(double radius);
 
-    double get_stroke() const { return stroke_mm; }
-    double get_crank_radius() const { return stroke_mm / 2.0; }
+    struct Projections {
+        double horizontal;
+        double vertical;
+    };
+
+    Projections getProjections(double angle) const;
+
+    double getStroke() const;
+    double getRadius() const;
 
     // Высота подъема кривошипа для заданного угла
-    double get_crank_height(double crank_angle_deg) const;
+    double getVertical(double angle) const;
+    double getHorizontal(double angle) const;
 
 private:
-    double stroke_mm;
+    double radius;
 };

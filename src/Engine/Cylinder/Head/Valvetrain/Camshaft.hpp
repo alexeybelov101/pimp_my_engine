@@ -4,10 +4,15 @@
 
 class Camshaft {
 public:
-    Camshaft(const std::vector<Camlobe>& lobes);
+    struct LobePos {
+        Camlobe lobe;
+        double position;
+    };
 
-    double get_lift(int lobe_index, double angle) const;
+    Camshaft(std::vector<LobePos>&& lobepos);
+
+    double getLift(size_t lobeId, double angle) const;
 
 private:
-    std::vector<Camlobe> lobes;
+    std::vector<LobePos> lobepos;
 };
