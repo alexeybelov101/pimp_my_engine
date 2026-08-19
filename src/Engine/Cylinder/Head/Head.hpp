@@ -5,19 +5,19 @@
 class Head {
     public:
         Head(
-            const double chamber_volume_cc,
-            const Valvetrain& intake_valvetrain,
-            const Valvetrain& exhaust_valvetrain,
-            const Pipe& intake_pipe,
-            const Pipe& exhaust_pipe
+            double chamberVolume,
+            Valvetrain&& intakeValvetrain,
+            Valvetrain&& exhaustValvetrain,
+            Pipe&& intakePipe,
+            Pipe&& exhaustPipe
         );
 
-        double get_chamber_volume() const { return chamber_volume_cc; }
+        double getChamberVolume() const;
 
     private:
-        const double chamber_volume_cc;
-        const Valvetrain& intake_valvetrain;
-        const Valvetrain& exhaust_valvetrain;
-        const Pipe& intake_pipe;
-        const Pipe& exhaust_pipe;
+        double chamberVolume;
+        Valvetrain intakeValvetrain;
+        Valvetrain exhaustValvetrain;
+        Pipe intakePipe;
+        Pipe exhaustPipe;
 };

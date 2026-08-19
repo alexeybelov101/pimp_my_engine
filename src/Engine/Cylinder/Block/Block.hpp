@@ -14,9 +14,11 @@ public:
 
     double getPistonTopPosition(double angle) const;
     double getPistonVelocity(double angle, double rpm) const;
-
+    double getLeverArm(double angle) const;
     double getDisplacedVolume(double angle) const;
     double getSweptVolume() const;
+    double getTDC() const;
+    double getBDC() const;
 
 private:
     double height;
