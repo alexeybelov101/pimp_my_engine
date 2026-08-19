@@ -1,0 +1,68 @@
+{
+    "engine": {
+        "cylinders": {
+            "count": 4,
+            "prototype": {
+                "head": {
+                    "chamberVolume": 43.1,
+                    "intakeValvetrain": {
+                        "valves" : {
+                            "count": 1,
+                            "prototype": {
+                                "diameter": 37.0
+                            }
+                        },
+                        "camshaft": {
+                            "lobes": {
+                                "count": 1,
+                                "prototype": {
+                                    "position": -4.0,
+                                    "duration": 116.0,
+                                    "maxLift": 9.728
+                                }
+                            }
+                        }
+                    },
+                    "exhaustValvetrain": {
+                        "valves" : {
+                            "count": 1,
+                            "prototype": {
+                                "diameter": 32.0
+                            }
+                        },
+                        "camshaft": {
+                            "lobes": {
+                                "count": 1,
+                                "prototype": {
+                                    "position": -112.0,
+                                    "duration": 116.0,
+                                    "maxLift": 9.728
+                                }
+                            }
+                        }
+                    },
+                    "intakePipe": {
+                        "count": 1
+                    },
+                    "exhaustPipe": {
+                        "count": 1
+                    }
+                },
+                "block": {
+                    "height": 207.1,
+                    "piston": {
+                        "diameter": 79.0,
+                        "compressionHeight": 38.0,
+                        "deckVolume": 0.0
+                    },
+                    "conrod": {
+                        "length": 136.0
+                    },
+                    "crankshaft": {
+                        "radius": 66.0
+                    }
+                }
+            }
+        }
+    }
+}

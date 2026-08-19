@@ -19,13 +19,3 @@ double Crankshaft::getVertical(double angle) const {
 double Crankshaft::getHorizontal(double angle) const {
     return radius * std::sin(angle);
 }
-
-Crankshaft::Projections Crankshaft::getProjections(double angle) const {
-    double sinA, cosA;
-    sincos(angle, &sinA, &cosA);
-
-    return {
-        radius * sinA,
-        radius * cosA
-    };
-}

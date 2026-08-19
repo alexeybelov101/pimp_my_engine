@@ -4,13 +4,6 @@ class Crankshaft {
 public:
     explicit Crankshaft(double radius);
 
-    struct Projections {
-        double horizontal;
-        double vertical;
-    };
-
-    Projections getProjections(double angle) const;
-
     double getStroke() const;
     double getRadius() const;
 
