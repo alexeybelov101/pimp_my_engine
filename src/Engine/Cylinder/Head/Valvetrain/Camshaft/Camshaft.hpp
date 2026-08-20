@@ -9,10 +9,10 @@ public:
         double position;
     };
 
-    Camshaft(std::vector<LobePos>&& lobepos);
+    Camshaft(std::vector<LobePos>&& lobePos);
 
     double getLift(size_t lobeId, double angle) const;
 
 private:
-    std::vector<LobePos> lobepos;
+    std::vector<LobePos> lobePos;
 };

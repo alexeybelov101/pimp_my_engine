@@ -1,19 +1,20 @@
 {
     "engine": {
-        "cylinders": {
+        "cylinder": {
             "count": 4,
             "prototype": {
                 "head": {
                     "chamberVolume": 43.1,
                     "intakeValvetrain": {
-                        "valves" : {
+                        "valve" : {
                             "count": 1,
                             "prototype": {
-                                "diameter": 37.0
+                                "headDiameter": 37.0,
+                                "seatAngle": 45.5
                             }
                         },
                         "camshaft": {
-                            "lobes": {
+                            "lobe": {
                                 "count": 1,
                                 "prototype": {
                                     "position": -4.0,
@@ -24,14 +25,15 @@
                         }
                     },
                     "exhaustValvetrain": {
-                        "valves" : {
+                        "valve" : {
                             "count": 1,
                             "prototype": {
-                                "diameter": 32.0
+                                "headDiameter": 32.0,
+                                "seatAngle": 45.5
                             }
                         },
                         "camshaft": {
-                            "lobes": {
+                            "lobe": {
                                 "count": 1,
                                 "prototype": {
                                     "position": -112.0,

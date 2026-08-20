@@ -1,14 +1,13 @@
 #include "Valvetrain.hpp"
 
-Valvetrain::Valvetrain(Camshaft&& camshaft, std::vector<LobeGroup>&& lobeGroups):
-    camshaft(std::move(camshaft)), lobeGroups(std::move(lobeGroups)) {}
+Valvetrain::Valvetrain(Camshaft&& camshaft,  std::vector<std::vector<Valve>>&& lobeValves):
+    camshaft(std::move(camshaft)), lobeValves(std::move(lobeValves)) {}
 
-double Valvetrain::getFlowAreaById(size_t lobeId, double angle) const {
-    const LobeGroup& group = lobeGroups[lobeId];
+double Valvetrain::getFlowAreaByLobe(size_t lobeId, double angle) const {
     double lift = camshaft.getLift(lobeId, angle);
 
     double sum = 0.0;
-    for (Valve valve : group.valves) {
+    for (const Valve& valve : lobeValves[lobeId]) {
         sum += valve.getFlowArea(lift);
     }
 
@@ -17,8 +16,8 @@ double Valvetrain::getFlowAreaById(size_t lobeId, double angle) const {
 
 double Valvetrain::getTotalFlowArea(double angle) const {
     double sum = 0.0;
-    for (const LobeGroup& group : lobeGroups) {
-        sum += getFlowAreaById(group.lobeId, angle);
+    for (size_t lobeId = 0; lobeId < lobeValves.size(); lobeId++) {
+        sum += getFlowAreaByLobe(lobeId, angle);
     }
 
     return sum;

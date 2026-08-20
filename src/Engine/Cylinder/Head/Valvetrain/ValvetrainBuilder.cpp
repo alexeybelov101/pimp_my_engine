@@ -4,6 +4,7 @@
 #include "Valvetrain.hpp"
 #include "Valve.hpp"
 #include <memory>
+#include <utility>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -15,19 +16,29 @@ ValvetrainBuilder::~ValvetrainBuilder() = default;
 
 Valvetrain ValvetrainBuilder::build(const json& config) {
     Camshaft camshaft = camBuilder->build(config["camshaft"]);
+    std::vector<std::vector<Valve>> lobeValves = createLobeValves(config["valve"], static_cast<size_t>(config["camshaft"]["lobe"]["count"]));
 
-    const int lobeCount = config["camshaft"]["lobes"]["count"];
-    const int valveCount = config["valves"]["count"];
-    const auto& valveProto = config["valves"]["prototype"];
+    return Valvetrain(std::move(camshaft), std::move(lobeValves));
+}
 
-    std::vector<Valvetrain::LobeGroup> lobeGroup;
-    lobeGroup.reserve(lobeCount);
+std::vector<std::vector<Valve>> ValvetrainBuilder::createLobeValves(const json& config, size_t lobeCount) {
+    const size_t valvesPerLobe = static_cast<size_t>(config["count"]);
+    const auto& valveProto = config["prototype"];
 
-    for (int i = 0; i < lobeCount; ++i) {
+    std::vector<Valve> templateValves;
+    templateValves.reserve(valvesPerLobe);
 
-        for (int j = 0; j < valveCount; ++j) {
-
-        }
+    for (size_t valveId = 0; valveId < valvesPerLobe; ++valveId) {
+        templateValves.emplace_back(valveProto["headDiameter"], valveProto["seatAngle"]);
     }
+
+    std::vector<std::vector<Valve>> lobeValves;
+    lobeValves.reserve(lobeCount);
+
+    for (size_t lobeId = 0; lobeId < lobeCount; ++lobeId) {
+        lobeValves.push_back(templateValves);
+    }
+
+    return lobeValves;
 }
 
