@@ -15,7 +15,7 @@ Camshaft CamshaftBuilder::build(const json& config) {
 
     const auto& lobeProto = config["lobe"]["prototype"];
 
-    const int lobeCount = config["lobe"]["count"];
+    const size_t lobeCount = config["lobe"]["count"].get<size_t>();
     lobePos.reserve(lobeCount);
 
     Camlobe templateLobe(
@@ -24,7 +24,7 @@ Camshaft CamshaftBuilder::build(const json& config) {
     );
     double position = lobeProto["position"].get<double>() * DEG_TO_RAD;
 
-    for (int i = 0; i < lobeCount; ++i) {
+    for (size_t i = 0; i < lobeCount; ++i) {
         lobePos.push_back({templateLobe, position});
     }
 

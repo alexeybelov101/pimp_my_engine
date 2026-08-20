@@ -2,9 +2,8 @@
 #include <memory>
 #include <nlohmann/json_fwd.hpp>
 
-class Camshaft;
-class CamshaftBuilder;
 class Valve;
+class CamshaftBuilder;
 class Valvetrain;
 
 
