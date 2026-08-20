@@ -14,11 +14,15 @@ Camshaft CamshaftBuilder::build(const json& config) {
     const int lobeCount = config["lobe"]["count"];
     lobePos.reserve(lobeCount);
 
+    Camlobe templateLobe(
+        lobeProto["maxLift"].get<double>(),
+        lobeProto["duration"].get<double>()
+    );
+    double position = lobeProto["position"].get<double>();
+
     for (int i = 0; i < lobeCount; ++i) {
-        Camlobe lobe(lobeProto["maxLift"], lobeProto["duration"]);
-        lobePos.push_back({std::move(lobe), lobeProto["position"]});
+        lobePos.push_back({templateLobe, position});
     }
 
     return Camshaft(std::move(lobePos));
 }
-

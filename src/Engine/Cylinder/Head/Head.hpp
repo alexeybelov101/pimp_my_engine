@@ -3,21 +3,24 @@
 #include "Pipes/Pipe.hpp"
 
 class Head {
-    public:
-        Head(
-            double chamberVolume,
-            Valvetrain&& intakeValvetrain,
-            Valvetrain&& exhaustValvetrain,
-            Pipe&& intakePipe,
-            Pipe&& exhaustPipe
-        );
+public:
+    Head(
+        double chamberVolume,
+        Valvetrain&& intakeValvetrain,
+        Valvetrain&& exhaustValvetrain,
+        Pipe* intakePipe = nullptr,
+        Pipe* exhaustPipe = nullptr
+    );
 
-        double getChamberVolume() const;
+    double getChamberVolume() const;
 
-    private:
-        double chamberVolume;
-        Valvetrain intakeValvetrain;
-        Valvetrain exhaustValvetrain;
-        Pipe intakePipe;
-        Pipe exhaustPipe;
+    void setExhaustPipe(Pipe* pipe);
+    void setIntakePipe(Pipe* pipe);
+
+private:
+    double chamberVolume;
+    Valvetrain intakeValvetrain;
+    Valvetrain exhaustValvetrain;
+    Pipe* intakePipe;
+    Pipe* exhaustPipe;
 };
