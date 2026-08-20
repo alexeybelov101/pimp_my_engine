@@ -62,3 +62,19 @@ double Block::getBDC() const {
 
     return H + L - R;
 }
+
+double Block::getFTR() const { //недоход
+    return height - getTDC();
+}
+
+double Block::getFTRVolume() const { //объём недохода
+    return getFTR() * piston.getBoreArea();
+}
+
+double Block::getTotalDeckVolume() const {
+    return piston.getDeckVolume() + getFTRVolume();
+}
+
+double Block::getBoreArea() const {
+    return piston.getBoreArea();
+}

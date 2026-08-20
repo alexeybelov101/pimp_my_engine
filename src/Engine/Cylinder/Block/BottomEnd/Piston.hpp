@@ -7,6 +7,7 @@ class Piston {
         double getBore() const;
         double getCompressionHeight() const;
         double getBoreArea() const;
+        double getDeckVolume() const;
 
     private:
         double diameter;

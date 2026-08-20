@@ -15,3 +15,7 @@ double Piston::getCompressionHeight() const {
 double Piston::getBoreArea() const {
     return M_PI * diameter * diameter / 4;
 }
+
+double Piston::getDeckVolume() const {
+    return deckVolume;
+}

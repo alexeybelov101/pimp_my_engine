@@ -1,35 +1,24 @@
 #pragma once
-#include <cmath>
-#include "Block/Block.hpp"
 #include "Head/Head.hpp"
+#include "Block/Block.hpp"
 
 class Cylinder {
 public:
     Cylinder(
-        const Head& head,
-        const Block& block
+        double gasketHeight,
+        Head&& head,
+        Block&& block
     );
 
-    double get_compression_ratio() const;
-
-    struct CombustionParams {
-        double rpm;
-        double volumetric_efficiency;
-        double fuel_mass_kg;
-        double air_mass_kg;
-        double afr_stoich;
-        double k_polytropic;
-    };
-
-    double calculate_torque(const CombustionParams& params, double angle_deg) const;
+    double getGasketChamber() const;
+    double getTotalChamberVolume() const;
+    double getCompressionRatio() const;
+    double calculateTorque() const;
 
 private:
-    const double Head& head;
-    const double Block& block;
+    double gasketHeight;
+    Head head;
+    Block block;
 
-    double calculate_peak_pressure(const CombustionParams& params,
-                                   double V_compression,
-                                   double V_max) const;
-    double calculate_combustion_efficiency(double rpm) const;
-    double calculate_lever_arm_factor(double angle_deg) const;
+    double calculatePressure() const;
 };

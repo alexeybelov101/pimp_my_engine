@@ -3,8 +3,9 @@
         "cylinder": {
             "count": 4,
             "prototype": {
+                "gasketHeight": 1.065,
                 "head": {
-                    "chamberVolume": 43.1,
+                    "chamberVolume": 33200,
                     "intakeValvetrain": {
                         "valve" : {
                             "count": 1,
@@ -42,26 +43,20 @@
                                 }
                             }
                         }
-                    },
-                    "intakePipe": {
-                        "count": 1
-                    },
-                    "exhaustPipe": {
-                        "count": 1
                     }
                 },
                 "block": {
                     "height": 207.1,
                     "piston": {
                         "diameter": 79.0,
-                        "compressionHeight": 38.0,
+                        "compressionHeight": 37.9,
                         "deckVolume": 0.0
                     },
                     "conrod": {
                         "length": 136.0
                     },
                     "crankshaft": {
-                        "radius": 66.0
+                        "radius": 33.0
                     }
                 }
             }
