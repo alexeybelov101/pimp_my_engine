@@ -4,6 +4,10 @@
 #include <nlohmann/json.hpp>
 #include <utility>
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+#define DEG_TO_RAD (M_PI / 180.0)
+
 using json = nlohmann::json;
 
 Camshaft CamshaftBuilder::build(const json& config) {
@@ -16,9 +20,9 @@ Camshaft CamshaftBuilder::build(const json& config) {
 
     Camlobe templateLobe(
         lobeProto["maxLift"].get<double>(),
-        lobeProto["duration"].get<double>()
+        lobeProto["duration"].get<double>() * DEG_TO_RAD
     );
-    double position = lobeProto["position"].get<double>();
+    double position = lobeProto["position"].get<double>() * DEG_TO_RAD;
 
     for (int i = 0; i < lobeCount; ++i) {
         lobePos.push_back({templateLobe, position});

@@ -19,6 +19,10 @@ public:
     double getSweptVolume() const;
     double getTDC() const;
     double getBDC() const;
+    double getFTR() const;
+    double getFTRVolume () const;
+    double getTotalDeckVolume() const;
+    double getBoreArea() const;
 
 private:
     double height;

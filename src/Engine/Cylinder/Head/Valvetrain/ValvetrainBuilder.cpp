@@ -7,6 +7,10 @@
 #include <utility>
 #include <nlohmann/json.hpp>
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+#define DEG_TO_RAD (M_PI / 180.0)
+
 using json = nlohmann::json;
 
 ValvetrainBuilder::ValvetrainBuilder():
@@ -34,7 +38,7 @@ std::vector<std::vector<Valve>> ValvetrainBuilder::createLobeValves(const json& 
     for (size_t valveId = 0; valveId < valvesPerLobe; ++valveId) {
         templateValves.emplace_back(
             valveProto["headDiameter"].get<double>(),
-            valveProto["seatAngle"].get<double>()
+            valveProto["seatAngle"].get<double>() * DEG_TO_RAD
         );
     }
 
@@ -47,4 +51,3 @@ std::vector<std::vector<Valve>> ValvetrainBuilder::createLobeValves(const json& 
 
     return lobeValves;
 }
-
