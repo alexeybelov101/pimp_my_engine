@@ -5,20 +5,15 @@
 
 class Valvetrain {
 public:
-    struct LobeGroup {
-        size_t lobeId;
-        std::vector<Valve> valves;
-    };
-
     Valvetrain(
         Camshaft&& camshaft,
-        std::vector<LobeGroup>&& lobeGroups
+        std::vector<std::vector<Valve>>&& lobeValves
     );
 
-    double getFlowAreaById(size_t lobeId, double angle) const;
+    double getFlowAreaByLobe(size_t lobeId, double angle) const;
     double getTotalFlowArea(double angle) const;
 
 private:
     Camshaft camshaft;
-    std::vector<LobeGroup> lobeGroups;
+    std::vector<std::vector<Valve>>&& lobeValves;
 };

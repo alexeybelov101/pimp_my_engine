@@ -2,22 +2,23 @@
 #include "Camlobe.hpp"
 #include "Camshaft.hpp"
 #include <nlohmann/json.hpp>
+#include <utility>
 
 using json = nlohmann::json;
 
 Camshaft CamshaftBuilder::build(const json& config) {
-    std::vector<Camshaft::LobePos> lobepos;
+    std::vector<Camshaft::LobePos> lobePos;
 
-    const auto& lobeProto = config["lobes"]["prototype"];
+    const auto& lobeProto = config["lobe"]["prototype"];
 
-    const int lobeCount = config["lobes"]["count"];
-    lobepos.reserve(lobeCount);
+    const int lobeCount = config["lobe"]["count"];
+    lobePos.reserve(lobeCount);
 
     for (int i = 0; i < lobeCount; ++i) {
         Camlobe lobe(lobeProto["maxLift"], lobeProto["duration"]);
-        lobepos.push_back({std::move(lobe), lobeProto["position"]});
+        lobePos.push_back({std::move(lobe), lobeProto["position"]});
     }
 
-    return Camshaft(std::move(lobepos));
+    return Camshaft(std::move(lobePos));
 }
 
