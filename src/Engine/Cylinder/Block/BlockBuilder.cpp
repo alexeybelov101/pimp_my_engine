@@ -3,7 +3,6 @@
 #include "BottomEnd/Conrod.hpp"
 #include "BottomEnd/Crankshaft.hpp"
 #include "Block.hpp"
-#include <utility>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -11,9 +10,9 @@ using json = nlohmann::json;
 Block BlockBuilder::build(const json& config) {
     return Block(
         config["height"].get<double>(),
-        std::move(createPiston(config["piston"])),
-        std::move(createConrod(config["conrod"])),
-        std::move(createCrankshaft(config["crankshaft"]))
+        createPiston(config["piston"]),
+        createConrod(config["conrod"]),
+        createCrankshaft(config["crankshaft"])
     );
 }
 

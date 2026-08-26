@@ -1,0 +1,163 @@
+[
+  {
+    "file": "src/Engine/EngineBuilder.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O3",
+      "-std=c++20",
+      "-march=core2",
+      "-msse4.1",
+      "-ffast-math",
+      "-pthread",
+      "-MMD",
+      "-MP",
+      "-c",
+      "src/Engine/EngineBuilder.cpp",
+      "-o",
+      "build/Engine/EngineBuilder.o"
+    ],
+    "directory": "/home/spectre/Проекты/pimp_my_engine",
+    "output": "build/Engine/EngineBuilder.o"
+  },
+  {
+    "file": "src/Engine/Cylinder/Head/HeadBuilder.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O3",
+      "-std=c++20",
+      "-march=core2",
+      "-msse4.1",
+      "-ffast-math",
+      "-pthread",
+      "-MMD",
+      "-MP",
+      "-c",
+      "src/Engine/Cylinder/Head/HeadBuilder.cpp",
+      "-o",
+      "build/Engine/Cylinder/Head/HeadBuilder.o"
+    ],
+    "directory": "/home/spectre/Проекты/pimp_my_engine",
+    "output": "build/Engine/Cylinder/Head/HeadBuilder.o"
+  },
+  {
+    "file": "src/Engine/Cylinder/Head/Valvetrain/ValvetrainBuilder.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O3",
+      "-std=c++20",
+      "-march=core2",
+      "-msse4.1",
+      "-ffast-math",
+      "-pthread",
+      "-MMD",
+      "-MP",
+      "-c",
+      "src/Engine/Cylinder/Head/Valvetrain/ValvetrainBuilder.cpp",
+      "-o",
+      "build/Engine/Cylinder/Head/Valvetrain/ValvetrainBuilder.o"
+    ],
+    "directory": "/home/spectre/Проекты/pimp_my_engine",
+    "output": "build/Engine/Cylinder/Head/Valvetrain/ValvetrainBuilder.o"
+  },
+  {
+    "file": "src/Engine/Cylinder/Head/Valvetrain/Camshaft/CamshaftBuilder.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O3",
+      "-std=c++20",
+      "-march=core2",
+      "-msse4.1",
+      "-ffast-math",
+      "-pthread",
+      "-MMD",
+      "-MP",
+      "-c",
+      "src/Engine/Cylinder/Head/Valvetrain/Camshaft/CamshaftBuilder.cpp",
+      "-o",
+      "build/Engine/Cylinder/Head/Valvetrain/Camshaft/CamshaftBuilder.o"
+    ],
+    "directory": "/home/spectre/Проекты/pimp_my_engine",
+    "output": "build/Engine/Cylinder/Head/Valvetrain/Camshaft/CamshaftBuilder.o"
+  },
+  {
+    "file": "src/Engine/Cylinder/CylinderBuilder.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O3",
+      "-std=c++20",
+      "-march=core2",
+      "-msse4.1",
+      "-ffast-math",
+      "-pthread",
+      "-MMD",
+      "-MP",
+      "-c",
+      "src/Engine/Cylinder/CylinderBuilder.cpp",
+      "-o",
+      "build/Engine/Cylinder/CylinderBuilder.o"
+    ],
+    "directory": "/home/spectre/Проекты/pimp_my_engine",
+    "output": "build/Engine/Cylinder/CylinderBuilder.o"
+  },
+  {
+    "file": "src/Engine/Cylinder/Block/BlockBuilder.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O3",
+      "-std=c++20",
+      "-march=core2",
+      "-msse4.1",
+      "-ffast-math",
+      "-pthread",
+      "-MMD",
+      "-MP",
+      "-c",
+      "src/Engine/Cylinder/Block/BlockBuilder.cpp",
+      "-o",
+      "build/Engine/Cylinder/Block/BlockBuilder.o"
+    ],
+    "directory": "/home/spectre/Проекты/pimp_my_engine",
+    "output": "build/Engine/Cylinder/Block/BlockBuilder.o"
+  },
+  {
+    "file": "src/main.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O3",
+      "-std=c++20",
+      "-march=core2",
+      "-msse4.1",
+      "-ffast-math",
+      "-pthread",
+      "-MMD",
+      "-MP",
+      "-c",
+      "src/main.cpp",
+      "-o",
+      "build/main.o"
+    ],
+    "directory": "/home/spectre/Проекты/pimp_my_engine",
+    "output": "build/main.o"
+  }
+]

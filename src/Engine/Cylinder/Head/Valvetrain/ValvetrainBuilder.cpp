@@ -1,31 +1,22 @@
 #include "ValvetrainBuilder.hpp"
-#include "Camshaft/Camshaft.hpp"
 #include "Camshaft/CamshaftBuilder.hpp"
 #include "Valvetrain.hpp"
 #include "Valve.hpp"
-#include <memory>
-#include <utility>
 #include <nlohmann/json.hpp>
+#include <numbers>
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#define DEG_TO_RAD (M_PI / 180.0)
+constexpr double DEG_TO_RAD = std::numbers::pi / 180.0;
 
 using json = nlohmann::json;
 
-ValvetrainBuilder::ValvetrainBuilder():
-    camshaftBuilder(std::make_unique<CamshaftBuilder>()) {}
-
-ValvetrainBuilder::~ValvetrainBuilder() = default;
-
 Valvetrain ValvetrainBuilder::build(const json& config) {
-    Camshaft camshaft = camshaftBuilder->build(config["camshaft"]);
-    std::vector<std::vector<Valve>> lobeValves = createLobeValves(
-        config["valve"],
-        config["camshaft"]["lobe"]["count"].get<size_t>()
+    return Valvetrain(
+        CamshaftBuilder::build(config["camshaft"]),
+        createLobeValves(
+            config["valve"],
+            config["camshaft"]["lobe"]["count"].get<size_t>()
+        )
     );
-
-    return Valvetrain(std::move(camshaft), std::move(lobeValves));
 }
 
 std::vector<std::vector<Valve>> ValvetrainBuilder::createLobeValves(const json& config, size_t lobeCount) {

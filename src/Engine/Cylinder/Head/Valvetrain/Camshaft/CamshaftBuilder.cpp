@@ -3,10 +3,9 @@
 #include "Camshaft.hpp"
 #include <nlohmann/json.hpp>
 #include <utility>
+#include <numbers>
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#define DEG_TO_RAD (M_PI / 180.0)
+constexpr double DEG_TO_RAD = std::numbers::pi / 180.0;
 
 using json = nlohmann::json;
 

@@ -13,6 +13,8 @@ public:
 
     Engine(std::vector<CylPos>&& cylPos);
 
+    void do_a_barrel_roll();
+
 private:
     std::vector<CylPos> cylPos;
 };

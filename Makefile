@@ -1,7 +1,7 @@
 CXX = g++
 # Оптимизация для Intel Core 2 Quad Q9000 (архитектура Penryn, 45 нм)
 # Поддерживает SSE4.1, но не поддерживает AVX
-CXXFLAGS = -Wall -Wextra -Wpedantic -O3 -std=c++17 -march=core2 -msse4.1 -ffast-math -pthread
+CXXFLAGS = -Wall -Wextra -Wpedantic -O3 -std=c++20 -march=core2 -msse4.1 -ffast-math -pthread
 CXXFLAGS += -MMD -MP
 LDFLAGS = -lm -pthread
 
@@ -9,7 +9,9 @@ SRC_DIR = src
 BUILD_DIR = build
 BIN_DIR = bin
 
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+# Рекурсивный поиск всех .cpp файлов
+SOURCES = $(shell find $(SRC_DIR) -name "*.cpp")
+# Создание списка объектных файлов с сохранением структуры каталогов
 OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 DEPS = $(OBJECTS:.o=.d)
 TARGET = $(BIN_DIR)/dyno_stand
@@ -27,7 +29,9 @@ $(BIN_DIR):
 $(TARGET): $(OBJECTS) | $(BIN_DIR)
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
+# Правило для компиляции с сохранением структуры каталогов
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 -include $(DEPS)
