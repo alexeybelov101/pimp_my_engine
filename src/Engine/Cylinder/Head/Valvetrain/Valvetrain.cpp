@@ -16,9 +16,14 @@ double Valvetrain::getFlowAreaByLobe(size_t lobeId, double angle) const {
 
 double Valvetrain::getTotalFlowArea(double angle) const {
     double sum = 0.0;
-    for (size_t lobeId = 0; lobeId < lobeValves.size(); lobeId++) {
+
+    for (size_t lobeId = 0; lobeId < lobeValves.size(); ++lobeId) {
         sum += getFlowAreaByLobe(lobeId, angle);
     }
 
     return sum;
+}
+
+double Valvetrain::getLift(double angle) const {
+    return camshaft.getLift(0, angle);
 }

@@ -1,5 +1,5 @@
 #include "Piston.hpp"
-#include <cmath>
+#include <numbers>
 
 Piston::Piston(double diameter, double compressionHeight, double deckVolume) :
     diameter(diameter), compressionHeight(compressionHeight), deckVolume(deckVolume) {}
@@ -13,7 +13,7 @@ double Piston::getCompressionHeight() const {
 }
 
 double Piston::getBoreArea() const {
-    return M_PI * diameter * diameter / 4;
+    return std::numbers::pi * diameter * diameter / 4;
 }
 
 double Piston::getDeckVolume() const {

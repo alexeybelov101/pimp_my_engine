@@ -13,7 +13,9 @@ public:
     double getFlowAreaByLobe(size_t lobeId, double angle) const;
     double getTotalFlowArea(double angle) const;
 
+    double getLift(double angle) const;
+
 private:
     Camshaft camshaft;
-    std::vector<std::vector<Valve>>&& lobeValves;
+    std::vector<std::vector<Valve>> lobeValves;
 };

@@ -14,6 +14,11 @@ public:
 
     double getChamberVolume() const;
 
+    double getIntakeLift(double angle) const;
+    double getExhaustLift(double angle) const;
+    double getIntakeFlowArea(double angle) const;
+    double getExhaustFlowArea(double angle) const;
+
     void setExhaustPipe(Pipe* pipe);
     void setIntakePipe(Pipe* pipe);
 

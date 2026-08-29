@@ -1,0 +1,63 @@
+{
+    "cylinder": {
+        "count": 4,
+        "prototype": {
+            "head": {
+                "chamberVolume": 33200,
+                "intakeValvetrain": {
+                    "valve" : {
+                        "count": 1,
+                        "prototype": {
+                            "headDiameter": 37.0,
+                            "seatAngle": 45.5
+                        }
+                    },
+                    "camshaft": {
+                        "lobe": {
+                            "count": 1,
+                            "prototype": {
+                                "position": -4.0,
+                                "duration": 116.0,
+                                "maxLift": 9.728
+                            }
+                        }
+                    }
+                },
+                "exhaustValvetrain": {
+                    "valve" : {
+                        "count": 1,
+                        "prototype": {
+                            "headDiameter": 32.0,
+                            "seatAngle": 45.5
+                        }
+                    },
+                    "camshaft": {
+                        "lobe": {
+                            "count": 1,
+                            "prototype": {
+                                "position": -112.0,
+                                "duration": 116.0,
+                                "maxLift": 9.728
+                            }
+                        }
+                    }
+                }
+            },
+            "block": {
+                "height": 207.1,
+                "gasketHeight": 1.065,
+                "piston": {
+                    "diameter": 79.0,
+                    "compressionHeight": 37.9,
+                    "deckVolume": 3700
+                },
+                "conrod": {
+                    "length": 136.0
+                },
+                "crankshaft": {
+                    "radius": 33.0
+                }
+            }
+        }
+    }
+}

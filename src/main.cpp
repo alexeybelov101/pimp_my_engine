@@ -1,18 +1,38 @@
-#include "ConfigReader/ConfigReader.hpp"
+#include "Utility/ConfigReader.hpp"
+#include "Utility/ArgsParser.hpp"
 #include "Engine/EngineBuilder.hpp"
 #include "Engine/Engine.hpp"
-
 #include <nlohmann/json.hpp>
+#include <numbers>
+#include <chrono>
 #include <iostream>
+#include <numbers>
 
 using json = nlohmann::json;
 
 int main(int argc, char* argv[]) {
-    json config = ConfigReader::read("сonfigs/config.json");
+    auto settings = ArgsParser::parse(argc, argv);
 
-    std::cout << config.dump(4) << std::endl;
+    Engine engine = EngineBuilder::build(
+        ConfigReader::read(settings.configPath)
+    );
 
-    Engine engine = EngineBuilder::build(config["engine"]);
+    engine.setOmega(settings.rpm / 30.0 * std::numbers::pi);
+
+    const double dt = 1.0 / settings.frequency;
+
+    const double simulationTime = settings.time;
+    const int steps = static_cast<int>(simulationTime / dt);
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+    for (int i = 0; i < steps; ++i) {
+        engine.step(dt);
+    }
+
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::cout << "elapsed time: " << end - start << std::endl;
 
     return 0;
 }

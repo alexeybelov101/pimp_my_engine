@@ -1,6 +1,7 @@
 #pragma once
 #include <nlohmann/json_fwd.hpp>
 
+class Camlobe;
 class Camshaft;
 
 class CamshaftBuilder {

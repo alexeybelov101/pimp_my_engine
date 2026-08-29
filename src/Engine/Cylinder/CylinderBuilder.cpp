@@ -8,7 +8,6 @@ using json = nlohmann::json;
 
 Cylinder CylinderBuilder::build(const json& config) {
     return Cylinder(
-        config["gasketHeight"].get<double>(),
         HeadBuilder::build(config["head"]),
         BlockBuilder::build(config["block"])
     );

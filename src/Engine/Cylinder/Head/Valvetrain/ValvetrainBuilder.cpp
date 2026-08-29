@@ -4,6 +4,7 @@
 #include "Valve.hpp"
 #include <nlohmann/json.hpp>
 #include <numbers>
+#include <cmath>
 
 constexpr double DEG_TO_RAD = std::numbers::pi / 180.0;
 
@@ -29,7 +30,8 @@ std::vector<std::vector<Valve>> ValvetrainBuilder::createLobeValves(const json& 
     for (size_t valveId = 0; valveId < valvesPerLobe; ++valveId) {
         templateValves.emplace_back(
             valveProto["headDiameter"].get<double>(),
-            valveProto["seatAngle"].get<double>() * DEG_TO_RAD
+            std::sin(valveProto["seatAngle"].get<double>() * DEG_TO_RAD),
+            std::cos(valveProto["seatAngle"].get<double>() * DEG_TO_RAD)
         );
     }
 
