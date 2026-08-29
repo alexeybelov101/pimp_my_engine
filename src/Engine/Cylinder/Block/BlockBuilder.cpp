@@ -10,6 +10,7 @@ using json = nlohmann::json;
 Block BlockBuilder::build(const json& config) {
     return Block(
         config["height"].get<double>(),
+        config["gasketHeight"].get<double>(),
         createPiston(config["piston"]),
         createConrod(config["conrod"]),
         createCrankshaft(config["crankshaft"])

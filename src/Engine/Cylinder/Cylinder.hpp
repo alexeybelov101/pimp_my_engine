@@ -5,18 +5,16 @@
 class Cylinder {
 public:
     Cylinder(
-        double gasketHeight,
         Head&& head,
         Block&& block
     );
 
-    double getGasketChamber() const;
     double getTotalChamberVolume() const;
     double getCompressionRatio() const;
     double calculateTorque() const;
 
+    void step(double angle, double omega) const;
 private:
-    double gasketHeight;
     Head head;
     Block block;
 

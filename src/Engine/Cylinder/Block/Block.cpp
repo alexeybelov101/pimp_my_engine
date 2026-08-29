@@ -2,8 +2,8 @@
 #include <utility>
 #include <cmath>
 
-Block::Block(double height, Piston&& piston, Conrod&& conrod, Crankshaft&& crankshaft):
-    height(height), piston(std::move(piston)), conrod(std::move(conrod)), crankshaft(std::move(crankshaft)) {}
+Block::Block(double height, double gasketHeight, Piston&& piston, Conrod&& conrod, Crankshaft&& crankshaft):
+    height(height), gasketHeight(gasketHeight), piston(std::move(piston)), conrod(std::move(conrod)), crankshaft(std::move(crankshaft)) {}
 
 // TODO: оптимизация - sqrt(lambda^2 - sin^2) вычисляется дважды
 double Block::getPistonTopPosition(double angle) const {
@@ -29,9 +29,7 @@ double Block::getLeverArm(double angle) const {
     return R * sinA * (1.0 + cosA / std::sqrt(lambda * lambda - sinA * sinA));
 }
 
-double Block::getPistonVelocity(double angle, double rpm) const {
-    double omega = 2.0 * M_PI * rpm / 60.0;
-
+double Block::getPistonVelocity(double angle, double omega) const {
     return omega * getLeverArm(angle);
 }
 
@@ -63,18 +61,10 @@ double Block::getBDC() const {
     return H + L - R;
 }
 
-double Block::getFTR() const { //недоход
+double Block::getDeckClearance() const { //недоход
     return height - getTDC();
 }
 
-double Block::getFTRVolume() const { //объём недохода
-    return getFTR() * piston.getBoreArea();
-}
-
 double Block::getTotalDeckVolume() const {
-    return piston.getDeckVolume() + getFTRVolume();
-}
-
-double Block::getBoreArea() const {
-    return piston.getBoreArea();
+    return piston.getDeckVolume() + (getDeckClearance() + gasketHeight) * piston.getBoreArea();
 }

@@ -13,7 +13,7 @@ Engine EngineBuilder::build(const json& config) {
     size_t cylinderCount = config["cylinder"]["count"].get<size_t>();
     cylPos.reserve(cylinderCount);
 
-    double positionStep = 2 * std::numbers::pi / cylinderCount;
+    double positionStep = 4.0 * std::numbers::pi / cylinderCount;
     for (size_t i = 0; i < cylinderCount; ++i) {
         cylPos.emplace_back(
             CylinderBuilder::build(config["cylinder"]["prototype"]),

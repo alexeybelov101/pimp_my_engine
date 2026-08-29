@@ -7,6 +7,9 @@ public:
     struct LobePos {
         Camlobe lobe;
         double position;
+
+        LobePos(Camlobe&& lobe, double pos)
+            : lobe(std::move(lobe)), position(pos) {}
     };
 
     Camshaft(std::vector<LobePos>&& lobePos);

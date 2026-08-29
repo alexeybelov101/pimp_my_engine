@@ -13,8 +13,12 @@ public:
 
     Engine(std::vector<CylPos>&& cylPos);
 
-    void do_a_barrel_roll();
+    void setOmega(double newOmega);
+
+    void step(double dt);
 
 private:
+    double omega = 0.0;
+    double angle = 0.0;
     std::vector<CylPos> cylPos;
 };
