@@ -26,9 +26,9 @@ public:
     double getBoreArea() const;
 
 private:
-    double height;
-    double gasketHeight;
-    Piston piston;
-    Conrod conrod;
-    Crankshaft crankshaft;
+    double height_;
+    double gasketHeight_;
+    Piston piston_;
+    Conrod conrod_;
+    Crankshaft crankshaft_;
 };

@@ -1,15 +1,13 @@
 #pragma once
 #include "Valvetrain/Valvetrain.hpp"
-#include "Pipes/Pipe.hpp"
+#include "../../Pipes/Pipe.hpp"
 
 class Head {
 public:
     Head(
         double chamberVolume,
         Valvetrain&& intakeValvetrain,
-        Valvetrain&& exhaustValvetrain,
-        Pipe* intakePipe = nullptr,
-        Pipe* exhaustPipe = nullptr
+        Valvetrain&& exhaustValvetrain
     );
 
     double getChamberVolume() const;
@@ -23,9 +21,7 @@ public:
     void setIntakePipe(Pipe* pipe);
 
 private:
-    double chamberVolume;
-    Valvetrain intakeValvetrain;
-    Valvetrain exhaustValvetrain;
-    Pipe* intakePipe;
-    Pipe* exhaustPipe;
+    double chamberVolume_;
+    Valvetrain intakeValvetrain_;
+    Valvetrain exhaustValvetrain_;
 };

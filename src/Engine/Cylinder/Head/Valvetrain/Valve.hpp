@@ -7,7 +7,7 @@ public:
     double getFlowArea(double lift) const;
 
 private:
-    double headDiameter;
-    double sinSeatA;
-    double cosSeatA;
+    double headDiameter_;
+    double sinSeatA_;
+    double cosSeatA_;
 };

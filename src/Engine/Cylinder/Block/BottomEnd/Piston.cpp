@@ -2,20 +2,20 @@
 #include <numbers>
 
 Piston::Piston(double diameter, double compressionHeight, double deckVolume) :
-    diameter(diameter), compressionHeight(compressionHeight), deckVolume(deckVolume) {}
+    diameter_(diameter), compressionHeight_(compressionHeight), deckVolume_(deckVolume) {}
 
 double Piston::getBore() const {
-    return diameter;
+    return diameter_;
 }
 
 double Piston::getCompressionHeight() const {
-    return compressionHeight;
+    return compressionHeight_;
 }
 
 double Piston::getBoreArea() const {
-    return std::numbers::pi * diameter * diameter / 4;
+    return std::numbers::pi * diameter_ * diameter_ / 4;
 }
 
 double Piston::getDeckVolume() const {
-    return deckVolume;
+    return deckVolume_;
 }

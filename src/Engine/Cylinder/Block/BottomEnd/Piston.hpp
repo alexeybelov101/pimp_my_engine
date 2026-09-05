@@ -10,7 +10,7 @@ class Piston {
         double getDeckVolume() const;
 
     private:
-        double diameter;
-        double compressionHeight;
-        double deckVolume;
+        double diameter_;
+        double compressionHeight_;
+        double deckVolume_;
 };
