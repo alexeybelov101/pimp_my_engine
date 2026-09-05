@@ -1,7 +1,7 @@
 #pragma once
 #include "Head/Head.hpp"
 #include "Block/Block.hpp"
-#include "../Interfaces/Interfaces.hpp"
+#include "../../Interfaces/INode.hpp"
 #include "../../Constants/GasDynamics.hpp"
 
 class Cylinder : public INode {

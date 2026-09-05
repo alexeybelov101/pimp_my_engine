@@ -23,6 +23,19 @@ void Pipe::updateCells(double dt) {
     }
 }
 
+void Pipe::calculateInternalFluxes() {
+    HLLCSolver solver;
+
+    for (size_t i = 1; i < cells_.size(); ++i) {
+        // Создаём временные границы для соседних ячеек
+        // Или используем прямое вычисление между ячейками
+
+        // Прямой вызов HLLC между ячейками
+        Flux flux = computeHLLCFlux(cells_[i-1], cells_[i], area_);
+        fluxes_[i] = flux;
+    }
+}
+
 const IBoundary& Pipe::getLeftBoundary() const {
     return leftBoundary_;
 }
@@ -30,3 +43,8 @@ const IBoundary& Pipe::getLeftBoundary() const {
 const IBoundary& Pipe::getRightBoundary() const {
     return rightBoundary_;
 }
+
+// PipeBoundary
+//==============================================================================
+
+//==============================================================================
