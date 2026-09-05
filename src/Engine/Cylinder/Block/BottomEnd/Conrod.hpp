@@ -7,5 +7,5 @@ public:
     double getLength() const;
 
 private:
-    double length;
+    double length_;
 };

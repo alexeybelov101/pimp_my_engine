@@ -12,3 +12,11 @@ Cylinder CylinderBuilder::build(const json& config) {
         BlockBuilder::build(config["block"])
     );
 }
+
+Cylinder CylinderBuilder::build(const json& config, double offset) {
+    return Cylinder(
+        HeadBuilder::build(config["head"]),
+        BlockBuilder::build(config["block"]),
+        offset
+    );
+}

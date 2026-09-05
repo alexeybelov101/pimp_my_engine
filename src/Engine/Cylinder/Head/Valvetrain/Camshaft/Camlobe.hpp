@@ -7,6 +7,6 @@ public:
     double getLift(double angle) const;
 
 private:
-    double maxLift;
-    double duration;
+    double maxLift_;
+    double duration_;
 };

@@ -1,0 +1,13 @@
+#pragma once
+#include <vector>
+
+class IPhisycsNode;
+
+class Junction {
+public:
+    Junction(const std::vector<IPhisycsNode>& nodes);
+
+    void step();
+private:
+    const std::vector<IPhisycsNode>& nodes_;
+};

@@ -16,6 +16,6 @@ public:
     double getLift(double angle) const;
 
 private:
-    Camshaft camshaft;
-    std::vector<std::vector<Valve>> lobeValves;
+    Camshaft camshaft_;
+    std::vector<std::vector<Valve>> lobeValves_;
 };

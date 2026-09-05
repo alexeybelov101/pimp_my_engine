@@ -12,5 +12,5 @@ public:
     double getHorizontal(double angle) const;
 
 private:
-    double radius;
+    double radius_;
 };

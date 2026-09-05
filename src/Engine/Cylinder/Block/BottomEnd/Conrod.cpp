@@ -1,7 +1,7 @@
 #include "Conrod.hpp"
 
-Conrod::Conrod(double length): length(length) {}
+Conrod::Conrod(double length): length_(length) {}
 
 double Conrod::getLength() const {
-    return length;
+    return length_;
 }

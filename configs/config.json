@@ -1,17 +1,14 @@
 {
+    "flywheel" : {
+        "mass": 6700,
+        "radius": 263
+    },
     "cylinder": {
         "count": 4,
         "prototype": {
             "head": {
                 "chamberVolume": 33200,
                 "intakeValvetrain": {
-                    "valve" : {
-                        "count": 1,
-                        "prototype": {
-                            "headDiameter": 37.0,
-                            "seatAngle": 45.5
-                        }
-                    },
                     "camshaft": {
                         "lobe": {
                             "count": 1,
@@ -21,16 +18,16 @@
                                 "maxLift": 9.728
                             }
                         }
-                    }
-                },
-                "exhaustValvetrain": {
+                    },
                     "valve" : {
                         "count": 1,
                         "prototype": {
-                            "headDiameter": 32.0,
+                            "headDiameter": 37.0,
                             "seatAngle": 45.5
                         }
-                    },
+                    }
+                },
+                "exhaustValvetrain": {
                     "camshaft": {
                         "lobe": {
                             "count": 1,
@@ -39,6 +36,13 @@
                                 "duration": 116.0,
                                 "maxLift": 9.728
                             }
+                        }
+                    },
+                    "valve" : {
+                        "count": 1,
+                        "prototype": {
+                            "headDiameter": 32.0,
+                            "seatAngle": 45.5
                         }
                     }
                 }
@@ -59,5 +63,91 @@
                 }
             }
         }
+    },
+    "intakePipeSystem": {
+        "pipes": [
+            {
+                "id": 0,
+                "length": 100,
+                "radius": 22,
+                "children": [ 1, 2, 3, 4 ]
+            },
+            {
+                "id": 1,
+                "length": 230,
+                "radius": 16,
+                "children": []
+            },
+            {
+                "id": 2,
+                "length": 230,
+                "radius": 16,
+                "children": []
+            },
+            {
+                "id": 3,
+                "length": 230,
+                "radius": 16,
+                "children": []
+            },
+            {
+                "id": 4,
+                "length": 230,
+                "radius": 16,
+                "children": []
+            }
+        ]
+    },
+    "exhaustPipeSystem": {
+        "pipes": [
+            {
+                "id": 0,
+                "length": 380,
+                "radius": 18,
+                "children": [ 4 ]
+            },
+            {
+                "id": 1,
+                "length": 380,
+                "radius": 18,
+                "children": [ 5 ]
+            },
+            {
+                "id": 2,
+                "length": 380,
+                "radius": 18,
+                "children": [ 4 ]
+            },
+            {
+                "id": 3,
+                "length": 380,
+                "radius": 18,
+                "children": [ 5 ]
+            },
+            {
+                "id": 4,
+                "length": 620,
+                "radius": 21.5,
+                "children": [ 6 ]
+            },
+            {
+                "id": 5,
+                "length": 620,
+                "radius": 21.5,
+                "children": [ 6 ]
+            },
+            {
+                "id": 6,
+                "length": 1580,
+                "radius": 21.5,
+                "children": [ 7 ]
+            },
+            {
+                "id": 7,
+                "length": 1165,
+                "radius": 20,
+                "children": []
+            }
+        ]
     }
 }
