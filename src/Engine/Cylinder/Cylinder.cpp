@@ -96,7 +96,7 @@ const Cell Cylinder::CylinderBoundary::getState() const {
     double p = owner_->calculatePressure();
 
     // rho_E = p / (gamma - 1) + 0.5 * rho * u^2. При u=0 второе слагаемое равно 0.
-    double rho_E = p / (GasDynamics::GAMMA - 1.0);
+    double rho_E = p / (GD::GAMMA - 1.0);
 
     return Cell(rho, 0.0, rho_E);
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Interfaces/Interfaces.hpp"
+#include "../../Interfaces/INode.hpp"
 
 #include <vector>
 
@@ -9,6 +9,7 @@ public:
     ~Pipe() override = default;
 
     void step(double dt) override;
+    void calculateInternalFluxes();
 
     const IBoundary& getLeftBoundary() const override;
     const IBoundary& getRightBoundary() const override;
