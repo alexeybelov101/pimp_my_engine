@@ -1,4 +1,5 @@
 #include "Pipe.hpp"
+#include "../../Solvers/HLLC.hpp"
 
 Pipe::Pipe(double area, double dx_real, std::vector<Cell>&& cells, std::vector<Flux>&& fluxes)
     : area_(area), dx_real_(dx_real),
@@ -6,8 +7,15 @@ Pipe::Pipe(double area, double dx_real, std::vector<Cell>&& cells, std::vector<F
         leftBoundary_(this, true), rightBoundary_(this, false) {}
 
 void Pipe::step(double dt) {
-    // calculateInternalFluxes();
+    calculateInternalFluxes();
     updateCells(dt);
+}
+
+void Pipe::calculateInternalFluxes() {
+    for (size_t i = 1; i < cells_.size(); ++i) {
+        Flux flux = Solvers::HLLC(cells_[i-1], cells_[i], area_);
+        fluxes_[i] = flux;
+    }
 }
 
 void Pipe::updateCells(double dt) {
@@ -23,19 +31,6 @@ void Pipe::updateCells(double dt) {
     }
 }
 
-void Pipe::calculateInternalFluxes() {
-    HLLCSolver solver;
-
-    for (size_t i = 1; i < cells_.size(); ++i) {
-        // Создаём временные границы для соседних ячеек
-        // Или используем прямое вычисление между ячейками
-
-        // Прямой вызов HLLC между ячейками
-        Flux flux = computeHLLCFlux(cells_[i-1], cells_[i], area_);
-        fluxes_[i] = flux;
-    }
-}
-
 const IBoundary& Pipe::getLeftBoundary() const {
     return leftBoundary_;
 }
@@ -46,5 +41,19 @@ const IBoundary& Pipe::getRightBoundary() const {
 
 // PipeBoundary
 //==============================================================================
+Pipe::PipeBoundary::PipeBoundary(Pipe* owner, bool isLeft)
+            : owner_(owner), isLeft_(isLeft) {}
 
+const Cell Pipe::PipeBoundary::getState() const {
+    return isLeft_ ? owner_->cells_.front() : owner_->cells_.back();
+}
+
+void Pipe::PipeBoundary::setFlux(const Flux& flux) {
+    Flux& owner_flux = isLeft_ ? owner_->fluxes_.front() : owner_->fluxes_.back();
+    owner_flux = flux;
+}
+
+double Pipe::PipeBoundary::getArea() const {
+    return owner_->area_;
+}
 //==============================================================================

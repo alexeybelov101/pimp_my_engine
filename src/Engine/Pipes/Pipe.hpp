@@ -17,19 +17,11 @@ public:
 private:
     class PipeBoundary : public IBoundary {
     public:
-        PipeBoundary(Pipe* owner, bool isLeft)
-            : owner_(owner), isLeft_(isLeft) {}
+        PipeBoundary(Pipe* owner, bool isLeft);
 
-        const Cell getState() const override {
-            return isLeft_ ? owner_->cells_.front() : owner_->cells_.back();
-        }
-
-        void setFlux(const Flux& flux) override {
-            Flux& owner_flux = isLeft_ ? owner_->fluxes_.front() : owner_->fluxes_.back();
-            owner_flux = flux;
-        }
-
-        double getArea() const override { return owner_->area_; }
+        const Cell getState() const override;
+        void setFlux(const Flux& flux) override;
+        double getArea() const override;
 
     private:
         Pipe* owner_;

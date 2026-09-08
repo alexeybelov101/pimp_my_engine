@@ -1,8 +1,6 @@
 #include "Cylinder.hpp"
 #include <utility>
 
-#include <iostream>
-
 namespace GD = GasDynamics;
 
 Cylinder::Cylinder(Head&& head, Block&& block, double offset):

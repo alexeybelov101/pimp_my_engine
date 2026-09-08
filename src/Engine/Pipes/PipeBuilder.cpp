@@ -1,7 +1,8 @@
 #include "PipeBuilder.hpp"
 #include "Pipe.hpp"
+#include "../../Structs/Cell.hpp"
+#include "../../Structs/Flux.hpp"
 #include "../../Constants/GasDynamics.hpp"
-#include "../Interfaces/Interfaces.hpp"
 
 #include <numbers>
 #include <cmath>
