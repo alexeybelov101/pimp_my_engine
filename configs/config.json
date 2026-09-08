@@ -64,90 +64,46 @@
             }
         }
     },
-    "intakePipeSystem": {
-        "pipes": [
-            {
-                "id": 0,
-                "length": 100,
-                "radius": 22,
-                "children": [ 1, 2, 3, 4 ]
-            },
-            {
-                "id": 1,
-                "length": 230,
-                "radius": 16,
-                "children": []
-            },
-            {
-                "id": 2,
-                "length": 230,
-                "radius": 16,
-                "children": []
-            },
-            {
-                "id": 3,
-                "length": 230,
-                "radius": 16,
-                "children": []
-            },
-            {
-                "id": 4,
-                "length": 230,
-                "radius": 16,
-                "children": []
-            }
-        ]
-    },
-    "exhaustPipeSystem": {
-        "pipes": [
-            {
-                "id": 0,
-                "length": 380,
-                "radius": 18,
-                "children": [ 4 ]
-            },
-            {
-                "id": 1,
-                "length": 380,
-                "radius": 18,
-                "children": [ 5 ]
-            },
-            {
-                "id": 2,
-                "length": 380,
-                "radius": 18,
-                "children": [ 4 ]
-            },
-            {
-                "id": 3,
-                "length": 380,
-                "radius": 18,
-                "children": [ 5 ]
-            },
-            {
-                "id": 4,
-                "length": 620,
-                "radius": 21.5,
-                "children": [ 6 ]
-            },
-            {
-                "id": 5,
-                "length": 620,
-                "radius": 21.5,
-                "children": [ 6 ]
-            },
-            {
-                "id": 6,
-                "length": 1580,
-                "radius": 21.5,
-                "children": [ 7 ]
-            },
-            {
-                "id": 7,
-                "length": 1165,
-                "radius": 20,
-                "children": []
-            }
+    "pipeSystem": {
+        "nodes": {
+            "atmosphere": [],
+            "cylinders": [ 0, 1, 2, 3 ],
+            "pipes": [
+                //intake
+                    { "id": 0, "length": 100, "radius": 22 },
+                    { "id": 1, "length": 230, "radius": 16 },
+                    { "id": 2, "length": 230, "radius": 16 },
+                    { "id": 3, "length": 230, "radius": 16 },
+                    { "id": 4, "length": 230, "radius": 16 },
+                //exhaust
+                    { "id": 5, "length": 380, "radius": 18 },
+                    { "id": 6, "length": 380, "radius": 18 },
+                    { "id": 7, "length": 380, "radius": 18 },
+                    { "id": 8, "length": 380, "radius": 18 },
+                    { "id": 9, "length": 620, "radius": 21.5  },
+                    { "id": 10, "length": 620, "radius": 21.5  },
+                    { "id": 11, "length": 1580, "radius": 21.5 },
+                    { "id": 12, "length": 1165, "radius": 20 }
+            ]
+        },
+        "connections": [
+            //intake:
+                { "source": { "atmosphere": [ 0 ] }, "sink": { "pipes": [ 0 ] }},
+                { "source": { "pipes": [ 0 ] }, "sink": { "pipes": [ 1, 2, 3, 4 ] }},
+                { "source": { "pipes": [ 1 ] }, "sink": { "cylinders": [ 0 ] }},
+                { "source": { "pipes": [ 2 ] }, "sink": { "cylinders": [ 1 ] }},
+                { "source": { "pipes": [ 3 ] }, "sink": { "cylinders": [ 2 ] }},
+                { "source": { "pipes": [ 4 ] }, "sink": { "cylinders": [ 3 ] }},
+            //exhaust
+                { "source": { "cylinders": [ 0 ] }, "sink": { "pipes": [ 5 ] }},
+                { "source": { "cylinders": [ 1 ] }, "sink": { "pipes": [ 6 ] }},
+                { "source": { "cylinders": [ 2 ] }, "sink": { "pipes": [ 7 ] }},
+                { "source": { "cylinders": [ 3 ] }, "sink": { "pipes": [ 8 ] }},
+                { "source": { "pipes": [ 5, 7 ] }, "sink": { "pipes": [ 9 ] }},
+                { "source": { "pipes": [ 6, 8 ] }, "sink": { "pipes": [ 10 ] }},
+                { "source": { "pipes": [ 9, 10 ] }, "sink": { "pipes": [ 11 ] }},
+                { "source": { "pipes": [ 11 ] }, "sink": { "pipes": [ 12 ] }},
+                { "source": { "pipes": [ 12 ] }, "sink": { "atmosphere": [ 0 ] }}
         ]
     }
 }

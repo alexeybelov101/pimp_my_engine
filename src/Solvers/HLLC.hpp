@@ -1,33 +1,14 @@
 #pragma once
-#include "../Interfaces/ISolver.hpp"
+#include "../Structs/Cell.hpp"
+#include "../Structs/Flux.hpp"
 #include "../Constants/GasDynamics.hpp"
 #include <cmath>
 #include <algorithm>
 
 namespace GD = GasDynamics;
 
-class HLLCSolver : public ISolver {
-public:
-    std::pair<Flux, Flux> solve(
-        const IBoundary& leftBoundary,
-        const IBoundary& rightBoundary
-    ) override {
-        // Получаем состояния с обеих сторон границы
-        Cell leftState = leftBoundary.getState();
-        Cell rightState = rightBoundary.getState();
-
-        // Площадь сечения - минимум из двух (для сохранения консервативности)
-        double area = std::min(leftBoundary.getArea(), rightBoundary.getArea());
-
-        // Вычисляем поток через границу
-        Flux flux = calculateHLLC(leftState, rightState, area);
-
-        // Возвращаем противоположные потоки для каждой стороны
-        return { flux, {-flux.mass, -flux.momentum, -flux.energy} };
-    }
-
-private:
-    Flux calculateHLLC(const Cell& L, const Cell& R, double area) {
+namespace Solvers {
+    Flux HLLC(const Cell& L, const Cell& R, double area) {
         // Извлекаем примитивные переменные из консервативных
 
         // Левое состояние
@@ -102,4 +83,4 @@ private:
 
         return flux;
     }
-};
+}
