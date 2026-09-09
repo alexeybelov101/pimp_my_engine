@@ -5,7 +5,10 @@
 namespace GD = GasDynamics;
 
 Atmosphere::Atmosphere():
-    boundary_(this),
+    boundaries_{
+        AtmosphereBoundary(this, true),
+        AtmosphereBoundary(this, false)
+    },
     cell_(
         GD::RHO_AMBIENT,
         0.0,
@@ -13,18 +16,18 @@ Atmosphere::Atmosphere():
     ) {}
 
 const IBoundary& Atmosphere::getLeftBoundary() const {
-    return boundary_;
+    return boundaries_.first;
 }
 
 const IBoundary& Atmosphere::getRightBoundary() const {
-    return boundary_;
+    return boundaries_.second;
 }
 
 
 // AtmosphereBoundary
 //==============================================================================
-Atmosphere::AtmosphereBoundary::AtmosphereBoundary(Atmosphere* owner):
-    owner_(owner) {}
+Atmosphere::AtmosphereBoundary::AtmosphereBoundary(Atmosphere* owner, bool isLeft):
+    owner_(owner), isLeft_(isLeft) {}
 
 const Cell Atmosphere::AtmosphereBoundary::getState() const {
     return owner_->cell_;
@@ -34,6 +37,10 @@ void Atmosphere::AtmosphereBoundary::setFlux(const Flux& flux) {}
 
 double Atmosphere::AtmosphereBoundary::getArea() const {
     return std::numeric_limits<double>::infinity();
+}
+
+bool Atmosphere::AtmosphereBoundary::isLeft() const {
+    return isLeft_;
 }
 
 //==============================================================================

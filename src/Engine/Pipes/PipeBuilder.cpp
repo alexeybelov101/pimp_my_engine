@@ -20,12 +20,12 @@ Pipe PipeBuilder::build(const json& config, double dt) {
     double area = std::numbers::pi * radius * radius;
 
     double dx = (GD::WAVE_SPEED_MAX * dt) / GD::CFL;
-    int N = std::ceil(length / dx);
+    size_t N = std::ceil(length / dx);
     double dx_real = length / N;
 
     std::vector<Cell> cells;
     cells.reserve(N);
-    for (int i = 0; i < N; ++i) {
+    for (size_t i = 0; i < N; ++i) {
         cells.emplace_back(
            GD::RHO_AMBIENT,             // rho
            0.0,                         // (rho * u), u = 0
@@ -35,7 +35,7 @@ Pipe PipeBuilder::build(const json& config, double dt) {
 
     std::vector<Flux> fluxes;
     fluxes.reserve(N + 1);
-    for (int i = 0; i < (N + 1); ++i) {
+    for (size_t i = 0; i < (N + 1); ++i) {
         fluxes.emplace_back(
             0.0,        // Поток массы (rho * u)
             GD::P_ATM,  // Поток импульса (rho * u^2 + p)

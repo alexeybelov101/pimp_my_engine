@@ -42,6 +42,7 @@ private:
         const Cell getState() const override;
         void setFlux(const Flux& flux) override;
         double getArea() const override;
+        bool isLeft() const override;
     private:
         Cylinder* owner_;
         bool isLeft_;

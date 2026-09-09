@@ -22,12 +22,11 @@ void Pipe::updateCells(double dt) {
     double vol = area_ * dx_real_;
     for (size_t i = 0; i < cells_.size(); ++i) {
         // Поток слева (i) входит, поток справа (i+1) выходит
-        const Flux& f_left = fluxes_[i];
-        const Flux& f_right = fluxes_[i + 1];
+        const Flux& f_result = fluxes_[i] - fluxes_[i + 1];
 
-        cells_[i].rho += (f_left.mass - f_right.mass) * dt / vol;
-        cells_[i].rho_u += (f_left.momentum - f_right.momentum) * dt / vol;
-        cells_[i].rho_E += (f_left.energy - f_right.energy) * dt / vol;
+        cells_[i].rho += f_result.mass * dt / vol;
+        cells_[i].rho_u += f_result.momentum * dt / vol;
+        cells_[i].rho_E += f_result.energy * dt / vol;
     }
 }
 
@@ -55,5 +54,9 @@ void Pipe::PipeBoundary::setFlux(const Flux& flux) {
 
 double Pipe::PipeBoundary::getArea() const {
     return owner_->area_;
+}
+
+bool Pipe::PipeBoundary::isLeft() const {
+    return isLeft_;
 }
 //==============================================================================
