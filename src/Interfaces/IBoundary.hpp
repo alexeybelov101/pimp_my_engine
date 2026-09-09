@@ -8,4 +8,5 @@ public:
     virtual const Cell getState() const = 0;
     virtual void setFlux(const Flux& flux) = 0;
     virtual double getArea() const = 0;
+    virtual bool isLeft() const = 0;
 };

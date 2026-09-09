@@ -110,4 +110,8 @@ double Cylinder::CylinderBoundary::getArea() const {
         ? owner_->head_.getIntakeFlowArea(owner_->angle_ / 2.0)
         : owner_->head_.getExhaustFlowArea(owner_->angle_ / 2.0);
 }
+
+bool Cylinder::CylinderBoundary::isLeft() const {
+    return isLeft_;
+}
 //==============================================================================

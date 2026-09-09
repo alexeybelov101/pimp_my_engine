@@ -22,6 +22,7 @@ private:
         const Cell getState() const override;
         void setFlux(const Flux& flux) override;
         double getArea() const override;
+        bool isLeft() const override;
 
     private:
         Pipe* owner_;
