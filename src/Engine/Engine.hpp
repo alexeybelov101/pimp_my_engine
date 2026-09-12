@@ -1,10 +1,16 @@
 #pragma once
 #include "Cylinder/Cylinder.hpp"
 #include "Flywheel.hpp"
+#include "Pipes/PipeSystem.hpp"
+#include <memory>
 
 class Engine {
 public:
-    Engine(std::vector<Cylinder>&& cylinders, Flywheel&& flywheel);
+    Engine(
+        std::vector<std::unique_ptr<Cylinder>> cylinders,
+        std::unique_ptr<Flywheel> flywheel,
+        std::unique_ptr<PipeSystem> pipeSystem
+    );
 
     void setOmega(double omega);
 
@@ -13,6 +19,7 @@ public:
 private:
     double angle_;
 
-    std::vector<Cylinder> cylinders_;
-    Flywheel flywheel_;
+    std::vector<std::unique_ptr<Cylinder>> cylinders_;
+    std::unique_ptr<Flywheel> flywheel_;
+    std::unique_ptr<PipeSystem> pipeSystem_;
 };

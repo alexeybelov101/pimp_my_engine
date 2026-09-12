@@ -1,5 +1,8 @@
 #include "Cylinder.hpp"
 #include <utility>
+#include <algorithm>
+
+#include <iostream>
 
 namespace GD = GasDynamics;
 
@@ -28,10 +31,25 @@ void Cylinder::setKinematics(double angle, double omega) {
 }
 
 void Cylinder::step(double dt) {
+    std::cout << "angle: " << angle_ / std::numbers::pi * 180 << std::endl;
+    std::cout << "offset: " << offset_ << std::endl;
+    std::cout << "intake lift: " << head_.getIntakeLift((angle_ - offset_) / 2.0) << std::endl;
+    std::cout << "exhaust lift: " << head_.getExhaustLift((angle_ - offset_) / 2.0) << std::endl;
+
+// std::cout << "energy (before flux): " << energy_ << std::endl;
+// std::cout << "mass (before flux): " << mass_ << std::endl;
+
     applyFlux(dt);
     // dW = P * dV = P * (S * v_piston * dt)
     // dU = dQ - dW
-    energy_ -= calculateForceG() * block_.getPistonVelocity(angle_ + offset_, omega_) * dt;
+
+// std::cout << "energy (after flux): " << energy_ << std::endl;
+// std::cout << "mass (after flux): " << mass_ << std::endl;
+
+    energy_ -= calculateForceG() * block_.getPistonVelocity(angle_ - offset_, omega_) * dt;
+
+// std::cout << "energy (after gas work): " << energy_ << std::endl;
+// std::cout << "mass (after gas work): " << mass_ << std::endl;
 }
 
 double Cylinder::getTotalChamberVolume() const {
@@ -45,7 +63,7 @@ double Cylinder::getCompressionRatio() const {
 }
 
 double Cylinder::getCurrentVolume() const {
-    return getTotalChamberVolume() + block_.getDisplacedVolume(angle_ + offset_);
+    return getTotalChamberVolume() + block_.getDisplacedVolume(angle_ - offset_);
 }
 
 double Cylinder::calculatePressure() const {
@@ -61,12 +79,20 @@ double Cylinder::calculateForceI() const {
 }
 
 double Cylinder::calculateTorque() const {
-    return calculateForceI() * block_.getLeverArm(angle_ + offset_);
+    return calculateForceI() * block_.getLeverArm(angle_ - offset_);
 }
 
 void Cylinder::applyFlux(double dt) {
+    std::cout << "flux_mass * dt: " << flux_.mass * dt << std::endl;
+    std::cout << "flux_energy * dt: " << flux_.energy * dt << std::endl;
+    std::cout << "flux_momentum * dt: " << flux_.momentum * dt << std::endl;
+
     mass_ += flux_.mass * dt;
     energy_ += flux_.energy * dt;
+
+    mass_ = std::max(mass_, 1.0e-12);
+    energy_ = std::max(energy_, 1.0e-12);
+
     resetFlux();
 }
 
@@ -76,12 +102,8 @@ void Cylinder::resetFlux() {
     flux_.momentum = 0.0;
 }
 
-const IBoundary& Cylinder::getLeftBoundary() const {
-    return leftBoundary_;
-}
-
-const IBoundary& Cylinder::getRightBoundary() const {
-    return rightBoundary_;
+const IBoundary& Cylinder::getBoundary(bool isLeft) const {
+    return isLeft ? leftBoundary_ : rightBoundary_;
 }
 
 // CylinderBoundary
@@ -89,7 +111,7 @@ const IBoundary& Cylinder::getRightBoundary() const {
 Cylinder::CylinderBoundary::CylinderBoundary(Cylinder* owner, bool isLeft)
             : owner_(owner), isLeft_(isLeft) {}
 
-const Cell Cylinder::CylinderBoundary::getState() const {
+Cell Cylinder::CylinderBoundary::getState() const {
     double rho = owner_->mass_ / owner_->getCurrentVolume();
     double p = owner_->calculatePressure();
 
@@ -99,7 +121,7 @@ const Cell Cylinder::CylinderBoundary::getState() const {
     return Cell(rho, 0.0, rho_E);
 }
 
-void Cylinder::CylinderBoundary::setFlux(const Flux& flux) {
+void Cylinder::CylinderBoundary::setFlux(const Flux& flux) const {
     double sign = isLeft_ ? 1.0 : -1.0;
     owner_->flux_.mass += sign * flux.mass;
     owner_->flux_.energy += sign * flux.energy;
@@ -107,8 +129,8 @@ void Cylinder::CylinderBoundary::setFlux(const Flux& flux) {
 
 double Cylinder::CylinderBoundary::getArea() const {
     return isLeft_
-        ? owner_->head_.getIntakeFlowArea(owner_->angle_ / 2.0)
-        : owner_->head_.getExhaustFlowArea(owner_->angle_ / 2.0);
+        ? owner_->head_.getIntakeFlowArea((owner_->angle_ - owner_->offset_) / 2.0)
+        : owner_->head_.getExhaustFlowArea((owner_->angle_ - owner_->offset_) / 2.0);
 }
 
 bool Cylinder::CylinderBoundary::isLeft() const {

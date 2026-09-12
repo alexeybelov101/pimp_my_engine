@@ -2,25 +2,25 @@
 #include <nlohmann/json_fwd.hpp>
 #include <memory>
 #include <vector>
+#include <functional>
 
-class PipeSystem;
-class Pipe;
+class IBoundary;
 class IJunction;
 class Atmosphere;
+class Pipe;
 class Cylinder;
 
-class PipeSystemBuilder {
+class JunctionBuilder {
 public:
-    static std::unique_ptr<PipeSystem> build(
+    static std::unique_ptr<IJunction> build(
         const nlohmann::json& config,
-        const std::vector<std::unique_ptr<Cylinder>>& cylinders,
-        const double dt
+        const Atmosphere& atmosphere,
+        const std::vector<std::unique_ptr<Pipe>>& pipes,
+        const std::vector<std::unique_ptr<Cylinder>>& cylinders
     );
 
 private:
-    static std::vector<std::unique_ptr<Pipe>> createPipes(const nlohmann::json& config, double dt);
-
-    static std::vector<std::unique_ptr<IJunction>> createJunctions(
+    static std::vector<std::reference_wrapper<const IBoundary>> getBoundaries(
         const nlohmann::json& config,
         const Atmosphere& atmosphere,
         const std::vector<std::unique_ptr<Pipe>>& pipes,

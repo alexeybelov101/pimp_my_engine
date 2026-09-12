@@ -2,14 +2,15 @@
 #include "../../Interfaces/IJunction.hpp"
 #include "../../Interfaces/IBoundary.hpp"
 #include <vector>
+#include <functional>
 
 class Junction3 : public IJunction {
 public:
-    Junction3(std::vector<IBoundary>& boundaries);
-    ~Junction3() override = default;
+    explicit Junction3(
+        std::vector<std::reference_wrapper<const IBoundary>> boundaries);
 
-    void calculateBoundaryFluxes() override;
+    void calculateBoundaryFluxes() const override;
 
 private:
-    std::vector<IBoundary>& boundaries_;
+    std::vector<std::reference_wrapper<const IBoundary>> boundaries_;
 };

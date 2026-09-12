@@ -1,21 +1,23 @@
 #include "Junction2.hpp"
 #include "../../Solvers/HLLC.hpp"
+#include "../../Solvers/HLL.hpp"
 #include <algorithm>
 
-Junction2::Junction2(std::pair<IBoundary&, IBoundary&> boundaries):
-    boundaries_(boundaries) {}
+Junction2::Junction2(
+    std::reference_wrapper<const IBoundary> left,
+    std::reference_wrapper<const IBoundary> right
+): left_(left), right_(right) {}
 
-void Junction2::calculateBoundaryFluxes() {
-    Flux flux = Solvers::HLLC(
-        boundaries_.first.getState(),
-        boundaries_.second.getState(),
+void Junction2::calculateBoundaryFluxes() const {
+    const Flux flux = Solvers::HLLC(
+        left_.get().getState(),
+        right_.get().getState(),
         std::min(
-            boundaries_.first.getArea(),
-            boundaries_.second.getArea()
+            left_.get().getArea(),
+            right_.get().getArea()
         )
     );
 
-    boundaries_.first.setFlux(flux);
-    boundaries_.second.setFlux(flux);
+    left_.get().setFlux(flux);
+    right_.get().setFlux(flux);
 }
-

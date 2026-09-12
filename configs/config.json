@@ -1,10 +1,10 @@
 {
     "flywheel" : {
         "mass": 6700,
-        "radius": 263
+        "diameter": 263
     },
     "cylinder": {
-        "count": 4,
+        "count": 1,
         "prototype": {
             "head": {
                 "chamberVolume": 33200,
@@ -13,8 +13,8 @@
                         "lobe": {
                             "count": 1,
                             "prototype": {
-                                "position": -4.0,
-                                "duration": 116.0,
+                                "position": -12.0,
+                                "duration": 232.0,
                                 "maxLift": 9.728
                             }
                         }
@@ -32,8 +32,8 @@
                         "lobe": {
                             "count": 1,
                             "prototype": {
-                                "position": -112.0,
-                                "duration": 116.0,
+                                "position": 498.0,
+                                "duration": 232.0,
                                 "maxLift": 9.728
                             }
                         }
@@ -59,7 +59,7 @@
                     "length": 136.0
                 },
                 "crankshaft": {
-                    "radius": 33.0
+                    "stroke": 66.0
                 }
             }
         }
@@ -69,13 +69,11 @@
             "atmosphere": [],
             "cylinders": [ 0, 1, 2, 3 ],
             "pipes": [
-                //intake
                     { "id": 0, "length": 100, "radius": 22 },
                     { "id": 1, "length": 230, "radius": 16 },
                     { "id": 2, "length": 230, "radius": 16 },
                     { "id": 3, "length": 230, "radius": 16 },
                     { "id": 4, "length": 230, "radius": 16 },
-                //exhaust
                     { "id": 5, "length": 380, "radius": 18 },
                     { "id": 6, "length": 380, "radius": 18 },
                     { "id": 7, "length": 380, "radius": 18 },
@@ -86,24 +84,81 @@
                     { "id": 12, "length": 1165, "radius": 20 }
             ]
         },
-        "connections": [
-            //intake:
-                { "source": { "atmosphere": [ 0 ] }, "sink": { "pipes": [ 0 ] }},
-                { "source": { "pipes": [ 0 ] }, "sink": { "pipes": [ 1, 2, 3, 4 ] }},
-                { "source": { "pipes": [ 1 ] }, "sink": { "cylinders": [ 0 ] }},
-                { "source": { "pipes": [ 2 ] }, "sink": { "cylinders": [ 1 ] }},
-                { "source": { "pipes": [ 3 ] }, "sink": { "cylinders": [ 2 ] }},
-                { "source": { "pipes": [ 4 ] }, "sink": { "cylinders": [ 3 ] }},
-            //exhaust
-                { "source": { "cylinders": [ 0 ] }, "sink": { "pipes": [ 5 ] }},
-                { "source": { "cylinders": [ 1 ] }, "sink": { "pipes": [ 6 ] }},
-                { "source": { "cylinders": [ 2 ] }, "sink": { "pipes": [ 7 ] }},
-                { "source": { "cylinders": [ 3 ] }, "sink": { "pipes": [ 8 ] }},
-                { "source": { "pipes": [ 5, 7 ] }, "sink": { "pipes": [ 9 ] }},
-                { "source": { "pipes": [ 6, 8 ] }, "sink": { "pipes": [ 10 ] }},
-                { "source": { "pipes": [ 9, 10 ] }, "sink": { "pipes": [ 11 ] }},
-                { "source": { "pipes": [ 11 ] }, "sink": { "pipes": [ 12 ] }},
-                { "source": { "pipes": [ 12 ] }, "sink": { "atmosphere": [ 0 ] }}
+
+        "junctions-4": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 0 ]}},
+            { "left": { "cylinders": [ 0 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions-3": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 1 ] }},
+            { "left": { "pipes": [ 1 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "cylinders": [ 0 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions-2": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "cylinders": [ 0 ] }, "right": { "pipes": [ 5 ] }},
+            { "left": { "pipes": [ 5 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 1 ] }},
+            { "left": { "pipes": [ 1 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "cylinders": [ 0 ] }, "right": { "pipes": [ 5 ] }},
+            { "left": { "pipes": [ 5 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions0": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 1 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 2 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 3 ] }},
+
+            { "left": { "cylinders": [ 0 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "cylinders": [ 1 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "cylinders": [ 2 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "cylinders": [ 3 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions1": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 1 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 2 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 3 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 4 ] }},
+
+            { "left": { "pipes": [ 1 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "pipes": [ 2 ] }, "right": { "cylinders": [ 1 ] }},
+            { "left": { "pipes": [ 3 ] }, "right": { "cylinders": [ 2 ] }},
+            { "left": { "pipes": [ 4 ] }, "right": { "cylinders": [ 3 ] }},
+
+            { "left": { "cylinders": [ 0 ] }, "right": { "pipes": [ 5 ] }},
+            { "left": { "cylinders": [ 1 ] }, "right": { "pipes": [ 6 ] }},
+            { "left": { "cylinders": [ 2 ] }, "right": { "pipes": [ 7 ] }},
+            { "left": { "cylinders": [ 3 ] }, "right": { "pipes": [ 8 ] }},
+
+            { "left": { "pipes": [ 5 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "pipes": [ 6 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "pipes": [ 7 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "pipes": [ 8 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions2": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 0 ] }},
+            { "left": { "pipes": [ 0 ] }, "right": { "pipes": [ 1, 2, 3, 4 ] }},
+            { "left": { "pipes": [ 1 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "pipes": [ 2 ] }, "right": { "cylinders": [ 1 ] }},
+            { "left": { "pipes": [ 3 ] }, "right": { "cylinders": [ 2 ] }},
+            { "left": { "pipes": [ 4 ] }, "right": { "cylinders": [ 3 ] }},
+            { "left": { "cylinders": [ 0 ] }, "right": { "pipes": [ 5 ] }},
+            { "left": { "cylinders": [ 1 ] }, "right": { "pipes": [ 6 ] }},
+            { "left": { "cylinders": [ 2 ] }, "right": { "pipes": [ 7 ] }},
+            { "left": { "cylinders": [ 3 ] }, "right": { "pipes": [ 8 ] }},
+            { "left": { "pipes": [ 5, 7 ] }, "right": { "pipes": [ 9 ] }},
+            { "left": { "pipes": [ 6, 8 ] }, "right": { "pipes": [ 10 ] }},
+            { "left": { "pipes": [ 9, 10 ] }, "right": { "pipes": [ 11 ] }},
+            { "left": { "pipes": [ 11 ] }, "right": { "pipes": [ 12 ] }},
+            { "left": { "pipes": [ 12 ] }, "right": { "atmosphere": [ 0 ] }}
         ]
     }
 }

@@ -22,9 +22,9 @@ Camshaft CamshaftBuilder::build(const json& config) {
         lobePos.emplace_back(
             Camlobe (
                 lobeProto["maxLift"].get<double>() * MM_TO_M,
-                lobeProto["duration"].get<double>() * DEG_TO_RAD
+                lobeProto["duration"].get<double>() / 2.0 * DEG_TO_RAD
             ),
-            lobeProto["position"].get<double>() * DEG_TO_RAD
+            lobeProto["position"].get<double>() / 2.0 * DEG_TO_RAD
         );
     }
 

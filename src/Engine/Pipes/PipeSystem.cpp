@@ -1,18 +1,27 @@
 #include "PipeSystem.hpp"
+#include "Atmosphere.hpp"
+#include "Pipe.hpp"
+#include "../../Interfaces/IJunction.hpp"
+#include <utility>
 
-PipeSystem::PipeSystem(std::vector<Pipe> pipes, std::vector<IJunction>&& junctions):
-    atmosphere_(Atmosphere()), pipes_(pipes), junctions_(std::move(junctions)) {}
+PipeSystem::PipeSystem(
+    std::unique_ptr<Atmosphere> atmosphere,
+    std::vector<std::unique_ptr<Pipe>> pipes,
+    std::vector<std::unique_ptr<IJunction>> junctions)
+    : atmosphere_(std::move(atmosphere)),
+      pipes_(std::move(pipes)),
+      junctions_(std::move(junctions)) {}
+
+PipeSystem::PipeSystem(PipeSystem&&) noexcept = default;
+PipeSystem& PipeSystem::operator=(PipeSystem&&) noexcept = default;
+PipeSystem::~PipeSystem() = default;
 
 void PipeSystem::step(double dt) {
-    calculateBoundaryFluxes();
+    for (auto& junction : junctions_) {
+        junction->calculateBoundaryFluxes();
+    }
 
     for (auto& pipe : pipes_) {
-        pipe.step(dt);
-    }
-}
-
-void PipeSystem::calculateBoundaryFluxes() {
-    for (auto& junction : junctions_) {
-        junction.calculateBoundaryFluxes();
+        pipe->step(dt);
     }
 }
