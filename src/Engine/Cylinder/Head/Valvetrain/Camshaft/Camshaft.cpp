@@ -7,7 +7,7 @@ Camshaft::Camshaft(std::vector<LobePos>&& lobePos)
 
 double Camshaft::getLift(size_t lobeId, double angle) const {
     double relativeAngle = fmod(
-        angle + lobePos_[lobeId].position_,
+        angle - lobePos_[lobeId].position_,
         2 * std::numbers::pi
     );
 

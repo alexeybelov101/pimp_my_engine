@@ -32,15 +32,14 @@ double getEnergy() { return energy_; }
 
     void step(double dt) override;
 
-    const IBoundary& getLeftBoundary() const override;
-    const IBoundary& getRightBoundary() const override;
+    const IBoundary& getBoundary(bool isLeft) const override;
 private:
     class CylinderBoundary : public IBoundary {
     public:
         CylinderBoundary(Cylinder* owner, bool isLeft);
 
-        const Cell getState() const override;
-        void setFlux(const Flux& flux) override;
+        Cell getState() const override;
+        void setFlux(const Flux& flux) const override;
         double getArea() const override;
         bool isLeft() const override;
     private:

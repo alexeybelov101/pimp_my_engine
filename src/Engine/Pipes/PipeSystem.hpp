@@ -1,20 +1,35 @@
 #pragma once
-
-#include "../../Interfaces/IJunction.hpp"
-#include "Pipe.hpp"
-#include "Atmosphere.hpp"
-
+#include <memory>
 #include <vector>
+
+class Atmosphere;
+class Pipe;
+class IJunction;
 
 class PipeSystem {
 public:
-    PipeSystem(std::vector<Pipe> pipes, std::vector<IJunction>&& junctions);
+    PipeSystem(
+        std::unique_ptr<Atmosphere> atmosphere,
+        std::vector<std::unique_ptr<Pipe>> pipes,
+        std::vector<std::unique_ptr<IJunction>> junctions
+    );
+
+    PipeSystem(PipeSystem&&) noexcept;
+    PipeSystem& operator=(PipeSystem&&) noexcept;
+
+    PipeSystem(const PipeSystem&) = delete;
+    PipeSystem& operator=(const PipeSystem&) = delete;
+
+    ~PipeSystem();
 
     void step(double dt);
-    void calculateBoundaryFluxes();
+
+    const Atmosphere& atmosphere() const { return *atmosphere_; }
+    const std::vector<std::unique_ptr<Pipe>>& pipes() const { return pipes_; }
+    const std::vector<std::unique_ptr<IJunction>>& junctions() const { return junctions_; }
 
 private:
-    Atmosphere atmosphere_;
-    std::vector<Pipe> pipes_;
-    std::vector<IJunction> junctions_;
+    std::unique_ptr<Atmosphere> atmosphere_;
+    std::vector<std::unique_ptr<Pipe>> pipes_;
+    std::vector<std::unique_ptr<IJunction>> junctions_;
 };

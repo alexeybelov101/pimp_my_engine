@@ -8,7 +8,8 @@
 namespace GD = GasDynamics;
 
 namespace Solvers {
-    Flux HLLC(const Cell& L, const Cell& R, double area) {
+    inline Flux HLLC(const Cell& L, const Cell& R, double area) {
+        if (area == 0.0) { return Flux(); }
         // Извлекаем примитивные переменные из консервативных
 
         // Левое состояние

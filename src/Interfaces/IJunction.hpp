@@ -3,6 +3,5 @@
 class IJunction {
 public:
     virtual ~IJunction() = default;
-
-    virtual void calculateBoundaryFluxes() = 0;
+    virtual void calculateBoundaryFluxes() const = 0;
 };

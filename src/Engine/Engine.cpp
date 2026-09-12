@@ -6,27 +6,37 @@
 
 #include <iostream>
 
-Engine::Engine(std::vector<Cylinder>&& cylinders, Flywheel&& flywheel):
-    cylinders_(std::move(cylinders)), flywheel_(flywheel) {}
+Engine::Engine(
+    std::vector<std::unique_ptr<Cylinder>> cylinders,
+    std::unique_ptr<Flywheel> flywheel,
+    std::unique_ptr<PipeSystem> pipeSystem
+):
+    cylinders_(std::move(cylinders)),
+    flywheel_(std::move(flywheel)),
+    pipeSystem_(std::move(pipeSystem)) {}
 
 void Engine::setOmega(double omega) {
-    flywheel_.setOmega(omega);
+    flywheel_->setOmega(omega);
 }
 
 void Engine::step(double dt) {
-    angle_ += flywheel_.getOmega() * dt;
-    angle_ = fmod(angle_, 2.0 * std::numbers::pi);
-    if (angle_ < 0.0) angle_ += 2.0 * std::numbers::pi;
+    angle_ += flywheel_->getOmega() * dt;
+    angle_ = fmod(angle_, 4.0 * std::numbers::pi);
+    if (angle_ < 0.0) angle_ += 4.0 * std::numbers::pi;
+
+    pipeSystem_->step(dt);
 
     double torque = 0.0;
     // #pragma omp parallel for
-    for (auto& cylinder : cylinders_) {
-    // for (size_t id = 0; id < cylinders_.size(); ++id) {
-        cylinder.setKinematics(angle_, flywheel_.getOmega());
-        cylinder.step(dt);
+    // for (auto& cylinder : cylinders_) {
+    for (size_t id = 0; id < cylinders_.size(); ++id) {
+std::cout << "Cylunder id: " << id << std::endl;
+        cylinders_[id]->setKinematics(angle_, flywheel_->getOmega());
+        cylinders_[id]->step(dt);
 
-        torque += cylinder.calculateTorque();
+        torque += cylinders_[id]->calculateTorque();
     }
+    std::cout << std::endl;
 
-    flywheel_.applyTorque(torque, dt);
+    // flywheel_->applyTorque(torque, dt);
 }

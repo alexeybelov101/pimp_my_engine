@@ -1,26 +1,29 @@
 #pragma once
 #include "../../Interfaces/INode.hpp"
-
+#include "../../Structs/Cell.hpp"
+#include "../../Structs/Flux.hpp"
 #include <vector>
 
 class Pipe : public INode {
 public:
-    Pipe(double area, double dx_real, std::vector<Cell>&& cells, std::vector<Flux>&& fluxes);
+    Pipe(double area,
+         double dx_real,
+         std::vector<Cell>&& cells,
+         std::vector<Flux>&& fluxes);
     ~Pipe() override = default;
 
     void step(double dt) override;
     void calculateInternalFluxes();
 
-    const IBoundary& getLeftBoundary() const override;
-    const IBoundary& getRightBoundary() const override;
+    const IBoundary& getBoundary(bool isLeft) const override;
 
 private:
     class PipeBoundary : public IBoundary {
     public:
         PipeBoundary(Pipe* owner, bool isLeft);
 
-        const Cell getState() const override;
-        void setFlux(const Flux& flux) override;
+        Cell getState() const override;
+        void setFlux(const Flux& flux) const override;
         double getArea() const override;
         bool isLeft() const override;
 

@@ -4,46 +4,46 @@
 #include "../../Structs/Flux.hpp"
 #include "../../Constants/GasDynamics.hpp"
 
+#include <nlohmann/json.hpp>
+#include <memory>
 #include <numbers>
 #include <cmath>
 #include <vector>
-#include <nlohmann/json.hpp>
+
+#include <iostream>
 
 namespace GD = GasDynamics;
 using json = nlohmann::json;
 
 constexpr double MM_TO_M = 1.0e-3;
 
-Pipe PipeBuilder::build(const json& config, double dt) {
-    double length = config["length"].get<double>() * MM_TO_M;
-    double radius = config["radius"].get<double>() * MM_TO_M;
-    double area = std::numbers::pi * radius * radius;
+std::unique_ptr<Pipe> PipeBuilder::build(const json& config, double dt) {
+    const double length = config["length"].get<double>() * MM_TO_M;
+    const double radius = config["radius"].get<double>() * MM_TO_M;
+    const double area   = std::numbers::pi * radius * radius;
 
-    double dx = (GD::WAVE_SPEED_MAX * dt) / GD::CFL;
-    size_t N = std::ceil(length / dx);
-    double dx_real = length / N;
-
+    const double dx = (GD::WAVE_SPEED_MAX * dt) / GD::CFL;
+    const size_t N  = static_cast<size_t>(std::ceil(length / dx));
+    const double dx_real = length / N;
+std::cout << "N: " << N << std::endl;
     std::vector<Cell> cells;
     cells.reserve(N);
     for (size_t i = 0; i < N; ++i) {
         cells.emplace_back(
-           GD::RHO_AMBIENT,             // rho
-           0.0,                         // (rho * u), u = 0
-           GD::P_ATM / (GD::GAMMA - 1)  // (p / (gamma - 1) + 0.5 * rho * u^2), u = 0
+            GD::RHO_AMBIENT,
+            0.0,
+            GD::P_ATM / (GD::GAMMA - 1.0)
         );
     }
 
     std::vector<Flux> fluxes;
     fluxes.reserve(N + 1);
-    for (size_t i = 0; i < (N + 1); ++i) {
-        fluxes.emplace_back(
-            0.0,        // Поток массы (rho * u)
-            GD::P_ATM,  // Поток импульса (rho * u^2 + p)
-            0.0         // Поток энергии (u * (E + p))
-        );
+    for (size_t i = 0; i < N + 1; ++i) {
+        fluxes.emplace_back(0.0, GD::P_ATM, 0.0);
     }
 
-    return Pipe(
+    // make_unique требует публичный конструктор Pipe(...)
+    return std::make_unique<Pipe>(
         area,
         dx_real,
         std::move(cells),
