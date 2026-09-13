@@ -1,6 +1,6 @@
 {
     "flywheel" : {
-        "mass": 6700,
+        "mass": 670000,
         "diameter": 263
     },
     "cylinder": {
@@ -84,6 +84,16 @@
                     { "id": 12, "length": 1165, "radius": 20 }
             ]
         },
+
+        "junctions-6": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 1 ]}},
+            { "left": { "pipes": [ 1 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions-5": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 1 ] }},
+            { "left": { "pipes": [ 1 ] }, "right": { "cylinders": [ 0 ] }}
+        ],
 
         "junctions-4": [
             { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 0 ]}},

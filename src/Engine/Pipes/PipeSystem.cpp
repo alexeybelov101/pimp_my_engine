@@ -24,4 +24,6 @@ void PipeSystem::step(double dt) {
     for (auto& pipe : pipes_) {
         pipe->step(dt);
     }
+
+    atmosphere_->step(dt);
 }

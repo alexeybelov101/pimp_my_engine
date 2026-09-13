@@ -10,8 +10,6 @@
 #include <cmath>
 #include <vector>
 
-#include <iostream>
-
 namespace GD = GasDynamics;
 using json = nlohmann::json;
 
@@ -25,7 +23,7 @@ std::unique_ptr<Pipe> PipeBuilder::build(const json& config, double dt) {
     const double dx = (GD::WAVE_SPEED_MAX * dt) / GD::CFL;
     const size_t N  = static_cast<size_t>(std::ceil(length / dx));
     const double dx_real = length / N;
-std::cout << "N: " << N << std::endl;
+
     std::vector<Cell> cells;
     cells.reserve(N);
     for (size_t i = 0; i < N; ++i) {
@@ -39,7 +37,7 @@ std::cout << "N: " << N << std::endl;
     std::vector<Flux> fluxes;
     fluxes.reserve(N + 1);
     for (size_t i = 0; i < N + 1; ++i) {
-        fluxes.emplace_back(0.0, GD::P_ATM, 0.0);
+        fluxes.emplace_back(0.0, GD::P_ATM * area, 0.0);
     }
 
     // make_unique требует публичный конструктор Pipe(...)

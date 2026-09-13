@@ -30,7 +30,7 @@ std::vector<std::vector<Valve>> ValvetrainBuilder::createLobeValves(const json& 
 
     for (size_t valveId = 0; valveId < valvesPerLobe; ++valveId) {
         templateValves.emplace_back(
-            valveProto["headDiameter"].get<double>() * MM_TO_M,
+            valveProto["headDiameter"].get<double>() / 2.0 * MM_TO_M,
             std::sin(valveProto["seatAngle"].get<double>() * DEG_TO_RAD),
             std::cos(valveProto["seatAngle"].get<double>() * DEG_TO_RAD)
         );

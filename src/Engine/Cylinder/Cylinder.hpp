@@ -30,6 +30,9 @@ double getEnergy() { return energy_; }
     void applyFlux(double dt);
     void resetFlux();
 
+    double getPistonVelocity() const;
+    double getVolumeChange(double dt) const;
+
     void step(double dt) override;
 
     const IBoundary& getBoundary(bool isLeft) const override;
@@ -41,6 +44,7 @@ private:
         Cell getState() const override;
         void setFlux(const Flux& flux) const override;
         double getArea() const override;
+        double getAperture() const override;
         bool isLeft() const override;
     private:
         Cylinder* owner_;

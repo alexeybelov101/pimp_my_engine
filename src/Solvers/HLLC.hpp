@@ -1,6 +1,7 @@
 #pragma once
 #include "../Structs/Cell.hpp"
 #include "../Structs/Flux.hpp"
+#include "../Structs/HLLCResult.hpp"
 #include "../Constants/GasDynamics.hpp"
 #include <cmath>
 #include <algorithm>
@@ -8,8 +9,7 @@
 namespace GD = GasDynamics;
 
 namespace Solvers {
-    inline Flux HLLC(const Cell& L, const Cell& R, double area) {
-        if (area == 0.0) { return Flux(); }
+    inline HLLCResult HLLC(const Cell& L, const Cell& R, double area) {
         // Извлекаем примитивные переменные из консервативных
 
         // Левое состояние
@@ -40,6 +40,7 @@ namespace Solvers {
 
         // Выбираем подходящее состояние для вычисления потока
         Flux flux;
+        double p_star = 0.0;
 
         if (0.0 <= S_L) {
             // Всё течение движется вправо - используем левое состояние
@@ -51,7 +52,7 @@ namespace Solvers {
             // Левое звёздное состояние (*L)
             double rho_star = rhoL * (S_L - uL) / (S_L - S_M);
             double u_star = S_M;
-            double p_star = pL + rhoL * (S_L - uL) * (S_M - uL);
+            p_star = pL + rhoL * (S_L - uL) * (S_M - uL);
 
             // Полная энергия в звёздном состоянии
             double E_star = p_star / ((GD::GAMMA - 1.0) * rho_star) + 0.5 * u_star * u_star;
@@ -65,7 +66,7 @@ namespace Solvers {
             // Правое звёздное состояние (*R)
             double rho_star = rhoR * (S_R - uR) / (S_R - S_M);
             double u_star = S_M;
-            double p_star = pR + rhoR * (S_R - uR) * (S_M - uR);
+            p_star = pR + rhoR * (S_R - uR) * (S_M - uR);
 
             // Полная энергия в звёздном состоянии
             double E_star = p_star / ((GD::GAMMA - 1.0) * rho_star) + 0.5 * u_star * u_star;
@@ -82,6 +83,6 @@ namespace Solvers {
             flux.energy = uR * (R.rho_E + pR) * area;
         }
 
-        return flux;
+        return {flux, p_star};
     }
 }

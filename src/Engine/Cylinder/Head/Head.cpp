@@ -18,14 +18,23 @@ double Head::getIntakeLift(double angle) const {
     return intakeValvetrain_.getLift(angle);
 }
 
-double Head::getExhaustLift(double angle) const {
-    return exhaustValvetrain_.getLift(angle);
-}
-
 double Head::getIntakeFlowArea(double angle) const {
     return intakeValvetrain_.getTotalFlowArea(angle);
 }
 
+double Head::getIntakeValveArea() const {
+    return intakeValvetrain_.getTotalValveArea();
+}
+
+
+double Head::getExhaustLift(double angle) const {
+    return exhaustValvetrain_.getLift(angle);
+}
+
 double Head::getExhaustFlowArea(double angle) const {
     return exhaustValvetrain_.getTotalFlowArea(angle);
+}
+
+double Head::getExhaustValveArea() const {
+    return exhaustValvetrain_.getTotalValveArea();
 }

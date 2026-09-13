@@ -19,4 +19,12 @@ struct Flux {
             energy - other.energy
         );
     }
+
+    Flux operator+(const Flux& other) const {
+        return Flux(
+            mass + other.mass,
+            momentum + other.momentum,
+            energy + other.energy
+        );
+    }
 };

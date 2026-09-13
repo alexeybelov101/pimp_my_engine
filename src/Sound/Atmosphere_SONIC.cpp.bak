@@ -1,0 +1,167 @@
+#include "Atmosphere.hpp"
+#include "../../Constants/GasDynamics.hpp"
+#include <limits>
+#include <cmath>
+#include <cstdint>
+#include <algorithm>
+
+#include <iostream>
+
+namespace GD = GasDynamics;
+
+Atmosphere::Atmosphere():
+    leftBoundary_(AtmosphereBoundary(this, true)),
+    rightBoundary_(AtmosphereBoundary(this, false)),
+    cell_(
+        GD::RHO_AMBIENT,
+        0.0,
+        GD::P_ATM / (GD::GAMMA - 1.0)
+    ) {
+        startRecording("engine.wav", 48000);
+    }
+
+Atmosphere::~Atmosphere() {
+    stopRecording();
+}
+
+const IBoundary& Atmosphere::getBoundary(bool isLeft) const {
+    return isLeft ? leftBoundary_ : rightBoundary_;
+}
+
+// === запись ===
+
+void Atmosphere::startRecording(const std::string& path, uint32_t sampleRate) {
+    stopRecording();
+    wavPath_       = path;
+    wavSampleRate_ = sampleRate;
+    wavSamples_.clear();
+    wavSamples_.reserve(sampleRate * 10);
+    dcAvg_ = 0.0;
+    dcInit_ = false;
+    recording_ = true;
+}
+
+void Atmosphere::stopRecording() {
+    if (!recording_ && wavSamples_.empty()) return;
+    recording_ = false;
+    writeWavFile();
+    wavSamples_.clear();
+}
+
+void Atmosphere::writeWavFile() {
+    std::ofstream f(wavPath_, std::ios::binary);
+    if (!f) return;
+
+    const uint32_t dataSize      = static_cast<uint32_t>(wavSamples_.size() * sizeof(int16_t));
+    const uint32_t chunkSize     = 36 + dataSize;
+    const uint16_t numChannels   = 1;
+    const uint16_t bitsPerSample = 16;
+    const uint32_t byteRate      = wavSampleRate_ * numChannels * bitsPerSample / 8;
+    const uint16_t blockAlign    = numChannels * bitsPerSample / 8;
+    const uint16_t audioFormat   = 1;
+
+    f.write("RIFF", 4);
+    f.write(reinterpret_cast<const char*>(&chunkSize), 4);
+    f.write("WAVE", 4);
+
+    f.write("fmt ", 4);
+    uint32_t fmtSize = 16;
+    f.write(reinterpret_cast<const char*>(&fmtSize), 4);
+    f.write(reinterpret_cast<const char*>(&audioFormat), 2);
+    f.write(reinterpret_cast<const char*>(&numChannels), 2);
+    f.write(reinterpret_cast<const char*>(&wavSampleRate_), 4);
+    f.write(reinterpret_cast<const char*>(&byteRate), 4);
+    f.write(reinterpret_cast<const char*>(&blockAlign), 2);
+    f.write(reinterpret_cast<const char*>(&bitsPerSample), 2);
+
+    f.write("data", 4);
+    f.write(reinterpret_cast<const char*>(&dataSize), 4);
+    f.write(reinterpret_cast<const char*>(wavSamples_.data()), dataSize);
+}
+
+void Atmosphere::pushSample(double dP, double dm, double dE) {
+    // Микрофон на границе: слышим dP, но добавляем вклад dE и dm,
+    // чтобы «щупать» всё, что меняется за dt.
+    // Акустическое давление из потока энергии:
+    //   p_ac = (gamma - 1) * dE   (удельная энергия -> давление)
+    // Плюс динамический напор от dm: 0.5 * dm^2 / rho  (малое, но пусть будет)
+    constexpr double GAMMA = GD::GAMMA;
+
+    double pAcoustic = (GAMMA - 1.0) * dE;
+
+    // динамический вклад от массы
+    double rho = GD::RHO_AMBIENT;
+    if (rho > 0.0) {
+        pAcoustic += 0.5 * dm * dm / rho;
+    }
+
+    // dP оставляем как «моментальный» вклад импульса
+    pAcoustic += dP;
+
+    // === DC-removal (однополюсный ФВЧ) ===
+    // alpha = 0.999 -> срез ~ 48000/(2*pi*1000) ~ 7.6 Гц
+    constexpr double ALPHA = 1;
+    if (!dcInit_) {
+        dcAvg_ = pAcoustic;
+        dcInit_ = true;
+    } else {
+        dcAvg_ = ALPHA * dcAvg_ + (1.0 - ALPHA) * pAcoustic;
+    }
+    double x = pAcoustic - dcAvg_;
+
+    // === масштаб под рабочий диапазон dP ~ [-0.05 .. +5] ===
+    constexpr double SCALE = 0.5;
+    x /= SCALE;
+
+    // === мягкий лимитер (tanh) вместо жёсткого клипа ===
+    // при |x| << 1 почти линейно, при больших — плавно к ±1
+    x = std::tanh(x);
+
+    // жёсткая страховка (tanh не выходит за ±1, но на всякий)
+    if (x >  1.0) x =  1.0;
+    if (x < -1.0) x = -1.0;
+
+    int16_t s = static_cast<int16_t>(x * 32767.0);
+    wavSamples_.push_back(s);
+}
+
+void Atmosphere::step(double dt) {
+    // всё, что может измениться за dt — берём из потока
+    double const dP = flux_.momentum * dt;
+    double const dm = flux_.mass     * dt;
+    double const dE = flux_.energy   * dt;
+
+    if (recording_) {
+        pushSample(dP, dm, dE);
+    }
+
+    resetFlux();
+}
+
+void Atmosphere::resetFlux() {
+    flux_ = Flux();
+}
+
+// AtmosphereBoundary
+//==============================================================================
+Atmosphere::AtmosphereBoundary::AtmosphereBoundary(Atmosphere* owner, bool isLeft)
+    : owner_(owner), isLeft_(isLeft) {}
+
+Cell Atmosphere::AtmosphereBoundary::getState() const {
+    return owner_->cell_;
+}
+
+void Atmosphere::AtmosphereBoundary::setFlux(const Flux& flux) const {
+    double sign = isLeft_ ? 1.0 : -1.0;
+    owner_->flux_.energy   += sign * flux.energy;
+    owner_->flux_.momentum += sign * flux.momentum;
+    owner_->flux_.mass     += sign * flux.mass;
+}
+
+double Atmosphere::AtmosphereBoundary::getArea() const {
+    return std::numeric_limits<double>::infinity();
+}
+
+bool Atmosphere::AtmosphereBoundary::isLeft() const {
+    return isLeft_;
+}

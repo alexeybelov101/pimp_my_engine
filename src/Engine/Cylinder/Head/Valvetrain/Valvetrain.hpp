@@ -12,6 +12,7 @@ public:
 
     double getFlowAreaByLobe(size_t lobeId, double angle) const;
     double getTotalFlowArea(double angle) const;
+    double getTotalValveArea() const;
 
     double getLift(double angle) const;
 

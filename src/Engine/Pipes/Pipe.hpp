@@ -25,6 +25,7 @@ private:
         Cell getState() const override;
         void setFlux(const Flux& flux) const override;
         double getArea() const override;
+        double getAperture() const override;
         bool isLeft() const override;
 
     private:
