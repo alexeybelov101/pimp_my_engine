@@ -1,14 +1,26 @@
 #pragma once
 #include "../../Interfaces/INode.hpp"
 #include "../../Structs/Cell.hpp"
+#include "../../Structs/Flux.hpp"
+
+#include <cstdint>
+#include <fstream>
+#include <string>
+#include <vector>
 
 class Atmosphere : public INode {
 public:
     Atmosphere();
-    ~Atmosphere() override = default;
+    ~Atmosphere() override;
 
     const IBoundary& getBoundary(bool isLeft) const override;
     void step(double dt) override;
+
+    void resetFlux();
+
+    // === запись WAV ===
+    void startRecording(const std::string& path, uint32_t sampleRate);
+    void stopRecording();
 
 private:
     class AtmosphereBoundary : public IBoundary {
@@ -19,7 +31,6 @@ private:
         Cell getState() const override;
         void setFlux(const Flux& flux) const override;
         double getArea() const override;
-        double getAperture() const override;
         bool isLeft() const override;
 
     private:
@@ -29,6 +40,16 @@ private:
 
     AtmosphereBoundary leftBoundary_;
     AtmosphereBoundary rightBoundary_;
-
     const Cell cell_;
+
+    Flux flux_;
+
+    // === WAV-писатель ===
+    std::ofstream wav_;
+    std::vector<int16_t> wavSamples_;
+    uint32_t wavSampleRate_ = 48000;
+    bool recording_ = false;
+
+    void writeWavHeader();      // вызывается в stopRecording
+    void pushSample(double dP); // вызывается в step
 };

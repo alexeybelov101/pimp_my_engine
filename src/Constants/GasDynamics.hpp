@@ -17,8 +17,8 @@ namespace GasDynamics {
     // Пределы устойчивости и граничные условия
     // =========================================================================
 
-    constexpr double T_EXHAUST_MAX = 1200.0;  // К (Ожидаемый пик температуры)
-    constexpr double MACH_MAX = 1.0;          // Максимальное ожидаемое число Маха
+    constexpr double T_EXHAUST_MAX = 900.0;  // К (Ожидаемый пик температуры)
+    constexpr double MACH_MAX = 1;          // Максимальное ожидаемое число Маха
 
     // Скорость звука при максимальной температуре: c = sqrt(gamma * R * T)
     constexpr double C_MAX = std::sqrt(GAMMA * R_SPECIFIC * T_EXHAUST_MAX);

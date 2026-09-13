@@ -8,5 +8,6 @@ public:
     virtual Cell getState() const = 0;
     virtual void setFlux(const Flux& flux) const = 0;
     virtual double getArea() const = 0;
+    virtual double getAperture() const = 0; //the cake is lie
     virtual bool isLeft() const = 0;
 };

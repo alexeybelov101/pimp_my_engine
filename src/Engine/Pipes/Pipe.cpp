@@ -16,13 +16,12 @@ Pipe::Pipe(
 
 void Pipe::step(double dt) {
     calculateInternalFluxes();
-
     updateCells(dt);
 }
 
 void Pipe::calculateInternalFluxes() {
     for (size_t i = 1; i < cells_.size(); ++i) {
-        fluxes_[i] = Solvers::HLLC(cells_[i - 1], cells_[i], area_);
+        fluxes_[i] = Solvers::HLLC(cells_[i - 1], cells_[i], area_).flux;
     }
 }
 
@@ -56,6 +55,10 @@ void Pipe::PipeBoundary::setFlux(const Flux& flux) const {
 }
 
 double Pipe::PipeBoundary::getArea() const {
+    return owner_->area_;
+}
+
+double Pipe::PipeBoundary::getAperture() const {
     return owner_->area_;
 }
 

@@ -30,26 +30,22 @@ void Cylinder::setKinematics(double angle, double omega) {
     omega_ = omega;
 }
 
+//=============================================================
+double Cylinder::getPistonVelocity() const {
+    // angle_ - offset_ — угол, под которым блок «видит» коленвал
+    return block_.getPistonVelocity(angle_ - offset_, omega_);
+}
+
+double Cylinder::getVolumeChange(double dt) const {
+    return block_.getPistonVelocity(angle_ - offset_, omega_) * block_.getBoreArea() * dt;
+}
+//=============================================================
+
 void Cylinder::step(double dt) {
-    std::cout << "angle: " << angle_ / std::numbers::pi * 180 << std::endl;
-    std::cout << "offset: " << offset_ << std::endl;
-    std::cout << "intake lift: " << head_.getIntakeLift((angle_ - offset_) / 2.0) << std::endl;
-    std::cout << "exhaust lift: " << head_.getExhaustLift((angle_ - offset_) / 2.0) << std::endl;
-
-// std::cout << "energy (before flux): " << energy_ << std::endl;
-// std::cout << "mass (before flux): " << mass_ << std::endl;
-
     applyFlux(dt);
-    // dW = P * dV = P * (S * v_piston * dt)
-    // dU = dQ - dW
 
-// std::cout << "energy (after flux): " << energy_ << std::endl;
-// std::cout << "mass (after flux): " << mass_ << std::endl;
-
-    energy_ -= calculateForceG() * block_.getPistonVelocity(angle_ - offset_, omega_) * dt;
-
-// std::cout << "energy (after gas work): " << energy_ << std::endl;
-// std::cout << "mass (after gas work): " << mass_ << std::endl;
+    std::cout << "mass: " << mass_ << std::endl;
+    std::cout << "energy: " << energy_ << std::endl;
 }
 
 double Cylinder::getTotalChamberVolume() const {
@@ -83,12 +79,10 @@ double Cylinder::calculateTorque() const {
 }
 
 void Cylinder::applyFlux(double dt) {
-    std::cout << "flux_mass * dt: " << flux_.mass * dt << std::endl;
-    std::cout << "flux_energy * dt: " << flux_.energy * dt << std::endl;
-    std::cout << "flux_momentum * dt: " << flux_.momentum * dt << std::endl;
-
     mass_ += flux_.mass * dt;
     energy_ += flux_.energy * dt;
+
+    energy_ -= calculatePressure() * getVolumeChange(dt);
 
     mass_ = std::max(mass_, 1.0e-12);
     energy_ = std::max(energy_, 1.0e-12);
@@ -115,10 +109,13 @@ Cell Cylinder::CylinderBoundary::getState() const {
     double rho = owner_->mass_ / owner_->getCurrentVolume();
     double p = owner_->calculatePressure();
 
-    // rho_E = p / (gamma - 1) + 0.5 * rho * u^2. При u=0 второе слагаемое равно 0.
-    double rho_E = p / (GD::GAMMA - 1.0);
+    // const double u_piston = owner_->getPistonVelocity();
+    // const double u = isLeft_ ? u_piston : -u_piston;
 
-    return Cell(rho, 0.0, rho_E);
+    // rho_E = p / (gamma - 1) + 0.5 * rho * u^2..
+    const double rho_E = p / (GD::GAMMA - 1.0); // + 0.5 * rho * u * u;
+
+    return Cell(rho, 0, rho_E);
 }
 
 void Cylinder::CylinderBoundary::setFlux(const Flux& flux) const {
@@ -128,6 +125,12 @@ void Cylinder::CylinderBoundary::setFlux(const Flux& flux) const {
 }
 
 double Cylinder::CylinderBoundary::getArea() const {
+    return isLeft_
+        ? owner_->head_.getIntakeValveArea()
+        : owner_->head_.getExhaustValveArea();
+}
+
+double Cylinder::CylinderBoundary::getAperture() const {
     return isLeft_
         ? owner_->head_.getIntakeFlowArea((owner_->angle_ - owner_->offset_) / 2.0)
         : owner_->head_.getExhaustFlowArea((owner_->angle_ - owner_->offset_) / 2.0);
