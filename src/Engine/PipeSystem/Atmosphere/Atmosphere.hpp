@@ -1,6 +1,6 @@
 #pragma once
-#include "../../Interfaces/INode.hpp"
-#include "../../Structs/Cell.hpp"
+#include "Interfaces/INode.hpp"
+#include "Structs/Cell.hpp"
 
 class Atmosphere : public INode {
 public:

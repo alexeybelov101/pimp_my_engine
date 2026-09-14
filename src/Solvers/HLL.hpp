@@ -1,11 +1,9 @@
 #pragma once
-#include "../Structs/Cell.hpp"
-#include "../Structs/Flux.hpp"
-#include "../Constants/GasDynamics.hpp"
+#include "Structs/Cell.hpp"
+#include "Structs/Flux.hpp"
+#include "Constants/GasDynamics.hpp"
 #include <cmath>
 #include <algorithm>
-
-#include <iostream>
 
 namespace GD = GasDynamics;
 
@@ -16,26 +14,17 @@ namespace Solvers {
         double rhoL = L.rho;
         double uL = (rhoL > 1e-10) ? L.rho_u / rhoL : 0.0;
         double pL = std::max((GD::GAMMA - 1.0) * (L.rho_E - 0.5 * L.rho_u * uL), 1.0);
-// std::cout << "rhoL: " << rhoL << std::endl;
-// std::cout << "uL: " << uL << std::endl;
-// std::cout << "pL: " << pL << std::endl;
+
         double rhoR = R.rho;
         double uR = (rhoR > 1e-10) ? R.rho_u / rhoR : 0.0;
         double pR = std::max((GD::GAMMA - 1.0) * (R.rho_E - 0.5 * R.rho_u * uR), 1.0);
-// std::cout << "rhoR: " << rhoR << std::endl;
-// std::cout << "uR: " << uR << std::endl;
-// std::cout << "pR: " << pR << std::endl;
+
         double aL = std::sqrt(GD::GAMMA * pL / rhoL);
         double aR = std::sqrt(GD::GAMMA * pR / rhoR);
-// std::cout << "aL: " << aL << std::endl;
-// std::cout << "aR: " << aR << std::endl;
 
         // Оценки скоростей волн (Davis)
         double S_L = std::min(uL - aL, uR - aR);
         double S_R = std::max(uL + aL, uR + aR);
-// std::cout << "S_L: " << S_L << std::endl;
-// std::cout << "S_R: " << S_L << std::endl;
-std::cout << std::endl;
 
         Flux F_L(rhoL * uL, rhoL * uL * uL + pL, uL * (L.rho_E + pL));
         Flux F_R(rhoR * uR, rhoR * uR * uR + pR, uR * (R.rho_E + pR));

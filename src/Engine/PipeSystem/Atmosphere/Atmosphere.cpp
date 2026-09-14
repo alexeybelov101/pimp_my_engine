@@ -1,5 +1,5 @@
 #include "Atmosphere.hpp"
-#include "../../Constants/GasDynamics.hpp"
+#include "Constants/GasDynamics.hpp"
 #include <limits>
 
 namespace GD = GasDynamics;
