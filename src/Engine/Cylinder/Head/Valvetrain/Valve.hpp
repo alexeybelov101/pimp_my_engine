@@ -2,7 +2,11 @@
 
 class Valve {
 public:
-    Valve(double headRadius, double sinSeatA, double cosSeatA);
+    Valve(
+        double headRadius,
+        double sinSeatA,
+        double cosSeatA
+    );
 
     double getFlowArea(double lift) const;
     double getValveArea() const;

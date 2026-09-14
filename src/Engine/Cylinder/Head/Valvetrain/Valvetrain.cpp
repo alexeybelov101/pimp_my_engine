@@ -1,7 +1,11 @@
 #include "Valvetrain.hpp"
 
-Valvetrain::Valvetrain(Camshaft&& camshaft,  std::vector<std::vector<Valve>>&& lobeValves):
-    camshaft_(std::move(camshaft)), lobeValves_(std::move(lobeValves)) {}
+Valvetrain::Valvetrain(
+    Camshaft&& camshaft,
+    std::vector<std::vector<Valve>>&& lobeValves
+):
+    camshaft_(std::move(camshaft)),
+    lobeValves_(std::move(lobeValves)) {}
 
 double Valvetrain::getFlowAreaByLobe(size_t lobeId, double angle) const {
     double lift = camshaft_.getLift(lobeId, angle);

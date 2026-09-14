@@ -4,8 +4,6 @@
 #include <cmath>
 // #include <omp.h>
 
-#include <iostream>
-
 Engine::Engine(
     std::vector<std::unique_ptr<Cylinder>> cylinders,
     std::unique_ptr<Flywheel> flywheel,
@@ -23,7 +21,7 @@ void Engine::step(double dt) {
     angle_ += flywheel_->getOmega() * dt;
     angle_ = fmod(angle_, 4.0 * std::numbers::pi);
     if (angle_ < 0.0) angle_ += 4.0 * std::numbers::pi;
-std::cout << "angle: " << angle_ / std::numbers::pi * 180 << std::endl;
+
     pipeSystem_->step(dt);
 
     double torque = 0.0;
@@ -36,7 +34,5 @@ std::cout << "angle: " << angle_ / std::numbers::pi * 180 << std::endl;
         torque += cylinders_[id]->calculateTorque();
     }
 
-    // flywheel_->applyTorque(torque, dt);
-    std::cout << "rpm: " << flywheel_->getOmega() / std::numbers::pi * 30 << std::endl;
-    std::cout << std::endl;
+    flywheel_->applyTorque(torque, dt);
 }

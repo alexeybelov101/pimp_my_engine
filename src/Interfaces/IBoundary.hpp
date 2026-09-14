@@ -1,6 +1,6 @@
 #pragma once
-#include "../Structs/Cell.hpp"
-#include "../Structs/Flux.hpp"
+#include "Structs/Cell.hpp"
+#include "Structs/Flux.hpp"
 
 class IBoundary {
 public:

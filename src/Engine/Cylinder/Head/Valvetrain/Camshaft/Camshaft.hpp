@@ -1,6 +1,6 @@
 #pragma once
-#include <vector>
 #include "Camlobe.hpp"
+#include <vector>
 
 class Camshaft {
 public:

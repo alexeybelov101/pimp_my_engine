@@ -1,6 +1,6 @@
 #include "Junction2.hpp"
-#include "../../Solvers/HLLC.hpp"
-#include "../../Solvers/Wall.hpp"
+#include "Solvers/HLLC.hpp"
+#include "Solvers/Wall.hpp"
 #include <algorithm>
 
 Junction2::Junction2(

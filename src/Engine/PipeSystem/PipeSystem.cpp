@@ -1,6 +1,6 @@
 #include "PipeSystem.hpp"
-#include "Atmosphere.hpp"
-#include "Pipe.hpp"
+#include "Atmosphere/Atmosphere.hpp"
+#include "Pipe/Pipe.hpp"
 #include "../../Interfaces/IJunction.hpp"
 #include <utility>
 

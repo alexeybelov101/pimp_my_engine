@@ -162,6 +162,10 @@ double Atmosphere::AtmosphereBoundary::getArea() const {
     return std::numeric_limits<double>::infinity();
 }
 
+double Atmosphere::AtmosphereBoundary::getAperture() const {
+    return std::numeric_limits<double>::infinity();
+}
+
 bool Atmosphere::AtmosphereBoundary::isLeft() const {
     return isLeft_;
 }

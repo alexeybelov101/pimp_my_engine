@@ -2,8 +2,6 @@
 #include <utility>
 #include <algorithm>
 
-#include <iostream>
-
 namespace GD = GasDynamics;
 
 Cylinder::Cylinder(Head&& head, Block&& block, double offset):
@@ -32,7 +30,6 @@ void Cylinder::setKinematics(double angle, double omega) {
 
 //=============================================================
 double Cylinder::getPistonVelocity() const {
-    // angle_ - offset_ — угол, под которым блок «видит» коленвал
     return block_.getPistonVelocity(angle_ - offset_, omega_);
 }
 
@@ -43,9 +40,6 @@ double Cylinder::getVolumeChange(double dt) const {
 
 void Cylinder::step(double dt) {
     applyFlux(dt);
-
-    std::cout << "mass: " << mass_ << std::endl;
-    std::cout << "energy: " << energy_ << std::endl;
 }
 
 double Cylinder::getTotalChamberVolume() const {

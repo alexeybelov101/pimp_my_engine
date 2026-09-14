@@ -1,8 +1,7 @@
 #pragma once
-#include "../Structs/Cell.hpp"
-#include "../Structs/Flux.hpp"
-#include "../Constants/GasDynamics.hpp"
-#include <algorithm>
+#include "Structs/Cell.hpp"
+#include "Structs/Flux.hpp"
+#include "Constants/GasDynamics.hpp"
 
 namespace GD = GasDynamics;
 

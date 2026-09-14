@@ -1,5 +1,5 @@
 #include "Junction3.hpp"
-#include "../../Solvers/RiemannSolver3x.hpp"
+#include "Solvers/RiemannSolver3x.hpp"
 #include <utility>
 
 Junction3::Junction3(

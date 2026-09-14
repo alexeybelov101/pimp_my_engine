@@ -1,7 +1,7 @@
 #pragma once
-#include "../../Interfaces/INode.hpp"
-#include "../../Structs/Cell.hpp"
-#include "../../Structs/Flux.hpp"
+#include "../../../Interfaces/INode.hpp"
+#include "../../../Structs/Cell.hpp"
+#include "../../../Structs/Flux.hpp"
 #include <vector>
 
 class Pipe : public INode {

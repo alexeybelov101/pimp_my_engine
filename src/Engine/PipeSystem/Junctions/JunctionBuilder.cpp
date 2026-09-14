@@ -1,11 +1,11 @@
 #include "JunctionBuilder.hpp"
 #include "Junction2.hpp"
 #include "Junction3.hpp"
-#include "Atmosphere.hpp"
-#include "Pipe.hpp"
-#include "../Cylinder/Cylinder.hpp"
-#include "../../Interfaces/IBoundary.hpp"
-#include "../../Interfaces/IJunction.hpp"
+#include "Engine/PipeSystem/Atmosphere/Atmosphere.hpp"
+#include "Engine/PipeSystem/Pipe/Pipe.hpp"
+#include "Engine/Cylinder/Cylinder.hpp"
+#include "Interfaces/IBoundary.hpp"
+#include "Interfaces/IJunction.hpp"
 
 #include <nlohmann/json.hpp>
 #include <memory>

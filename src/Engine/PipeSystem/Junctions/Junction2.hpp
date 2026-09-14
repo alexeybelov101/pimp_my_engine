@@ -1,6 +1,6 @@
 #pragma once
-#include "../../Interfaces/IJunction.hpp"
-#include "../../Interfaces/IBoundary.hpp"
+#include "Interfaces/IJunction.hpp"
+#include "Interfaces/IBoundary.hpp"
 #include <functional>
 
 class Junction2 : public IJunction {

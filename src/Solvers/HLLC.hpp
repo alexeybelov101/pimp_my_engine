@@ -1,8 +1,8 @@
 #pragma once
-#include "../Structs/Cell.hpp"
-#include "../Structs/Flux.hpp"
-#include "../Structs/HLLCResult.hpp"
-#include "../Constants/GasDynamics.hpp"
+#include "Structs/Cell.hpp"
+#include "Structs/Flux.hpp"
+#include "Structs/HLLCResult.hpp"
+#include "Constants/GasDynamics.hpp"
 #include <cmath>
 #include <algorithm>
 

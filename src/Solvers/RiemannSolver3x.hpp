@@ -1,6 +1,6 @@
 #pragma once
-#include "../Structs/Flux.hpp"
-#include "../Interfaces/IBoundary.hpp"
+#include "Structs/Flux.hpp"
+#include "Interfaces/IBoundary.hpp"
 
 #include <vector>
 #include <functional>

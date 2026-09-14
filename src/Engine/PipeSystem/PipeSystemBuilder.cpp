@@ -1,9 +1,9 @@
 #include "PipeSystemBuilder.hpp"
-#include "PipeBuilder.hpp"
-#include "JunctionBuilder.hpp"
+#include "Pipe/PipeBuilder.hpp"
+#include "Junctions/JunctionBuilder.hpp"
 #include "PipeSystem.hpp"
-#include "Pipe.hpp"
-#include "Atmosphere.hpp"
+#include "Pipe/Pipe.hpp"
+#include "Atmosphere/Atmosphere.hpp"
 #include "../../Interfaces/IJunction.hpp"
 #include "../Cylinder/Cylinder.hpp"
 
