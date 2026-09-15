@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "CamshaftBuilder.hpp"
 #include "Camlobe.hpp"
 #include "Camshaft.hpp"
@@ -6,6 +7,7 @@
 #include <numbers>
 
 constexpr double DEG_TO_RAD = std::numbers::pi / 180.0;
+constexpr double MM_TO_M = 1.0e-3;
 
 using json = nlohmann::json;
 
@@ -20,10 +22,10 @@ Camshaft CamshaftBuilder::build(const json& config) {
     for (size_t i = 0; i < lobeCount; ++i) {
         lobePos.emplace_back(
             Camlobe (
-                lobeProto["maxLift"].get<double>(),
-                lobeProto["duration"].get<double>() * DEG_TO_RAD
+                lobeProto["maxLift"].get<double>() * MM_TO_M,
+                lobeProto["duration"].get<double>() / 2.0 * DEG_TO_RAD
             ),
-            lobeProto["position"].get<double>() * DEG_TO_RAD
+            lobeProto["position"].get<double>() / 2.0 * DEG_TO_RAD
         );
     }
 

@@ -1,23 +1,39 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Engine.hpp"
 #include <utility>
 #include <numbers>
 #include <cmath>
 // #include <omp.h>
 
-Engine::Engine(std::vector<CylPos>&& cylPos):
-    cylPos(std::move(cylPos)) {}
+Engine::Engine(
+    std::vector<std::unique_ptr<Cylinder>> cylinders,
+    std::unique_ptr<Flywheel> flywheel,
+    std::unique_ptr<PipeSystem> pipeSystem
+):
+    cylinders_(std::move(cylinders)),
+    flywheel_(std::move(flywheel)),
+    pipeSystem_(std::move(pipeSystem)) {}
 
-void Engine::setOmega(double newOmega) {
-    omega = newOmega;
+void Engine::setOmega(double omega) {
+    flywheel_->setOmega(omega);
 }
 
 void Engine::step(double dt) {
-    angle += omega * dt;
-    angle = fmod(angle, 2.0 * std::numbers::pi);
-    if (angle < 0.0) angle += 2.0 * std::numbers::pi;
+    angle_ += flywheel_->getOmega() * dt;
+    angle_ = fmod(angle_, 4.0 * std::numbers::pi);
+    if (angle_ < 0.0) angle_ += 4.0 * std::numbers::pi;
 
+    pipeSystem_->step(dt);
+
+    double torque = 0.0;
     // #pragma omp parallel for
-    for (size_t id = 0; id < cylPos.size(); ++id) {
-        cylPos[id].cylinder.step(angle + cylPos[id].position, omega);
+    // for (auto& cylinder : cylinders_) {
+    for (size_t id = 0; id < cylinders_.size(); ++id) {
+        cylinders_[id]->setKinematics(angle_, flywheel_->getOmega());
+        cylinders_[id]->step(dt);
+
+        torque += cylinders_[id]->calculateTorque();
     }
+
+    flywheel_->applyTorque(torque, dt);
 }

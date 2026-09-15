@@ -1,24 +1,27 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
+#include "Flywheel.hpp"
 #include "Cylinder/Cylinder.hpp"
+#include "PipeSystem/PipeSystem.hpp"
+#include <vector>
+#include <memory>
 
 class Engine {
 public:
-    struct CylPos {
-        Cylinder cylinder;
-        double position;
+    Engine(
+        std::vector<std::unique_ptr<Cylinder>> cylinders,
+        std::unique_ptr<Flywheel> flywheel,
+        std::unique_ptr<PipeSystem> pipeSystem
+    );
 
-        CylPos(Cylinder&& cyl, double pos)
-            : cylinder(std::move(cyl)), position(pos) {}
-    };
-
-    Engine(std::vector<CylPos>&& cylPos);
-
-    void setOmega(double newOmega);
+    void setOmega(double omega);
 
     void step(double dt);
 
 private:
-    double omega = 0.0;
-    double angle = 0.0;
-    std::vector<CylPos> cylPos;
+    double angle_;
+
+    std::vector<std::unique_ptr<Cylinder>> cylinders_;
+    std::unique_ptr<Flywheel> flywheel_;
+    std::unique_ptr<PipeSystem> pipeSystem_;
 };

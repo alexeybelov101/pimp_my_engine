@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
 
 class Conrod {
@@ -7,5 +8,5 @@ public:
     double getLength() const;
 
 private:
-    double length;
+    double length_;
 };

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
 
 class Crankshaft {
@@ -12,5 +13,5 @@ public:
     double getHorizontal(double angle) const;
 
 private:
-    double radius;
+    double radius_;
 };

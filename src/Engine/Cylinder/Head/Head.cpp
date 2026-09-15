@@ -1,43 +1,40 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Head.hpp"
-#include "Valvetrain/Valvetrain.hpp"
 #include <utility>
 
 Head::Head(
     double chamberVolume,
     Valvetrain&& intakeValvetrain,
-    Valvetrain&& exhaustValvetrain,
-    Pipe* intakePipe,
-    Pipe* exhaustPipe
-) : chamberVolume(chamberVolume),
-    intakeValvetrain(std::move(intakeValvetrain)),
-    exhaustValvetrain(std::move(exhaustValvetrain)),
-    intakePipe(intakePipe),
-    exhaustPipe(exhaustPipe) {}
+    Valvetrain&& exhaustValvetrain
+) : chamberVolume_(chamberVolume),
+    intakeValvetrain_(std::move(intakeValvetrain)),
+    exhaustValvetrain_(std::move(exhaustValvetrain)) {}
 
 double Head::getChamberVolume() const {
-    return chamberVolume;
+    return chamberVolume_;
 }
 
 double Head::getIntakeLift(double angle) const {
-    return intakeValvetrain.getLift(angle);
-}
-
-double Head::getExhaustLift(double angle) const {
-    return exhaustValvetrain.getLift(angle);
+    return intakeValvetrain_.getLift(angle);
 }
 
 double Head::getIntakeFlowArea(double angle) const {
-    return intakeValvetrain.getTotalFlowArea(angle);
+    return intakeValvetrain_.getTotalFlowArea(angle);
+}
+
+double Head::getIntakeValveArea() const {
+    return intakeValvetrain_.getTotalValveArea();
+}
+
+
+double Head::getExhaustLift(double angle) const {
+    return exhaustValvetrain_.getLift(angle);
 }
 
 double Head::getExhaustFlowArea(double angle) const {
-    return exhaustValvetrain.getTotalFlowArea(angle);
+    return exhaustValvetrain_.getTotalFlowArea(angle);
 }
 
-void Head::setIntakePipe(Pipe* pipe) {
-    intakePipe = pipe;
-}
-
-void Head::setExhaustPipe(Pipe* pipe) {
-    exhaustPipe = pipe;
+double Head::getExhaustValveArea() const {
+    return exhaustValvetrain_.getTotalValveArea();
 }

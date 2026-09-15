@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
 #include <iostream>
 #include <getopt.h>
@@ -5,9 +6,9 @@
 class ArgsParser {
 public:
     struct Settings {
-        double time = 60.0;         // секунды
+        double time = 20;         // секунды
         double frequency = 1000.0;  // Гц
-        double rpm = 60.0;             //об/мин
+        double rpm = 600.0;             //об/мин
         std::string configPath = "configs/config.json";
     };
 

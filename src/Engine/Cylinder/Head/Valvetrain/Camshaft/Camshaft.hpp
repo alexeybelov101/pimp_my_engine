@@ -1,15 +1,16 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
-#include <vector>
 #include "Camlobe.hpp"
+#include <vector>
 
 class Camshaft {
 public:
     struct LobePos {
-        Camlobe lobe;
-        double position;
+        Camlobe lobe_;
+        double position_;
 
         LobePos(Camlobe&& lobe, double pos)
-            : lobe(std::move(lobe)), position(pos) {}
+            : lobe_(std::move(lobe)), position_(pos) {}
     };
 
     Camshaft(std::vector<LobePos>&& lobePos);
@@ -17,5 +18,5 @@ public:
     double getLift(size_t lobeId, double angle) const;
 
 private:
-    std::vector<LobePos> lobePos;
+    std::vector<LobePos> lobePos_;
 };

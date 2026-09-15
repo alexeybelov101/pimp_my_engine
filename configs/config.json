@@ -1,44 +1,48 @@
 {
+    "flywheel" : {
+        "mass": 6700,
+        "diameter": 263
+    },
     "cylinder": {
         "count": 4,
         "prototype": {
             "head": {
                 "chamberVolume": 33200,
                 "intakeValvetrain": {
+                    "camshaft": {
+                        "lobe": {
+                            "count": 1,
+                            "prototype": {
+                                "position": -12.0,
+                                "duration": 232.0,
+                                "maxLift": 9.728
+                            }
+                        }
+                    },
                     "valve" : {
                         "count": 1,
                         "prototype": {
                             "headDiameter": 37.0,
                             "seatAngle": 45.5
                         }
-                    },
+                    }
+                },
+                "exhaustValvetrain": {
                     "camshaft": {
                         "lobe": {
                             "count": 1,
                             "prototype": {
-                                "position": -4.0,
-                                "duration": 116.0,
+                                "position": 498.0,
+                                "duration": 232.0,
                                 "maxLift": 9.728
                             }
                         }
-                    }
-                },
-                "exhaustValvetrain": {
+                    },
                     "valve" : {
                         "count": 1,
                         "prototype": {
                             "headDiameter": 32.0,
                             "seatAngle": 45.5
-                        }
-                    },
-                    "camshaft": {
-                        "lobe": {
-                            "count": 1,
-                            "prototype": {
-                                "position": -112.0,
-                                "duration": 116.0,
-                                "maxLift": 9.728
-                            }
                         }
                     }
                 }
@@ -55,9 +59,82 @@
                     "length": 136.0
                 },
                 "crankshaft": {
-                    "radius": 33.0
+                    "stroke": 66.0
                 }
             }
         }
+    },
+    "pipeSystem": {
+        "nodes": {
+            "atmosphere": [],
+            "cylinders": [ 0, 1, 2, 3 ],
+            "pipes": [
+                    { "id": 0, "length": 100, "radius": 22 },
+                    { "id": 1, "length": 230, "radius": 16 },
+                    { "id": 2, "length": 230, "radius": 16 },
+                    { "id": 3, "length": 230, "radius": 16 },
+                    { "id": 4, "length": 230, "radius": 16 },
+                    { "id": 5, "length": 380, "radius": 18 },
+                    { "id": 6, "length": 380, "radius": 18 },
+                    { "id": 7, "length": 380, "radius": 18 },
+                    { "id": 8, "length": 380, "radius": 18 },
+                    { "id": 9, "length": 620, "radius": 21.5  },
+                    { "id": 10, "length": 620, "radius": 21.5  },
+                    { "id": 11, "length": 1580, "radius": 21.5 },
+                    { "id": 12, "length": 1165, "radius": 20 }
+            ]
+        },
+
+        "junctions0": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 1 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 2 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 3 ] }},
+
+            { "left": { "cylinders": [ 0 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "cylinders": [ 1 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "cylinders": [ 2 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "cylinders": [ 3 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 1 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 2 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 3 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 4 ] }},
+
+            { "left": { "pipes": [ 1 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "pipes": [ 2 ] }, "right": { "cylinders": [ 1 ] }},
+            { "left": { "pipes": [ 3 ] }, "right": { "cylinders": [ 2 ] }},
+            { "left": { "pipes": [ 4 ] }, "right": { "cylinders": [ 3 ] }},
+
+            { "left": { "cylinders": [ 0 ] }, "right": { "pipes": [ 5 ] }},
+            { "left": { "cylinders": [ 1 ] }, "right": { "pipes": [ 6 ] }},
+            { "left": { "cylinders": [ 2 ] }, "right": { "pipes": [ 7 ] }},
+            { "left": { "cylinders": [ 3 ] }, "right": { "pipes": [ 8 ] }},
+
+            { "left": { "pipes": [ 5 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "pipes": [ 6 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "pipes": [ 7 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "pipes": [ 8 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions2": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 0 ] }},
+            { "left": { "pipes": [ 0 ] }, "right": { "pipes": [ 1, 2, 3, 4 ] }},
+            { "left": { "pipes": [ 1 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "pipes": [ 2 ] }, "right": { "cylinders": [ 1 ] }},
+            { "left": { "pipes": [ 3 ] }, "right": { "cylinders": [ 2 ] }},
+            { "left": { "pipes": [ 4 ] }, "right": { "cylinders": [ 3 ] }},
+            { "left": { "cylinders": [ 0 ] }, "right": { "pipes": [ 5 ] }},
+            { "left": { "cylinders": [ 1 ] }, "right": { "pipes": [ 6 ] }},
+            { "left": { "cylinders": [ 2 ] }, "right": { "pipes": [ 7 ] }},
+            { "left": { "cylinders": [ 3 ] }, "right": { "pipes": [ 8 ] }},
+            { "left": { "pipes": [ 5, 7 ] }, "right": { "pipes": [ 9 ] }},
+            { "left": { "pipes": [ 6, 8 ] }, "right": { "pipes": [ 10 ] }},
+            { "left": { "pipes": [ 9, 10 ] }, "right": { "pipes": [ 11 ] }},
+            { "left": { "pipes": [ 11 ] }, "right": { "pipes": [ 12 ] }},
+            { "left": { "pipes": [ 12 ] }, "right": { "atmosphere": [ 0 ] }}
+        ]
     }
 }

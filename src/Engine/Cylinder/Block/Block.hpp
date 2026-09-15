@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
 #include "BottomEnd/Piston.hpp"
 #include "BottomEnd/Conrod.hpp"
@@ -26,9 +27,9 @@ public:
     double getBoreArea() const;
 
 private:
-    double height;
-    double gasketHeight;
-    Piston piston;
-    Conrod conrod;
-    Crankshaft crankshaft;
+    double height_;
+    double gasketHeight_;
+    Piston piston_;
+    Conrod conrod_;
+    Crankshaft crankshaft_;
 };

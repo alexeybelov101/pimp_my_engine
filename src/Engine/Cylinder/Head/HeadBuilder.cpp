@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "HeadBuilder.hpp"
 #include "Valvetrain/ValvetrainBuilder.hpp"
 #include "Head.hpp"
@@ -5,9 +6,11 @@
 
 using json = nlohmann::json;
 
+constexpr double MM3_TO_M3 = 1.0e-9;
+
 Head HeadBuilder::build(const json& config) {
     return Head(
-        config["chamberVolume"].get<double>(),
+        config["chamberVolume"].get<double>() * MM3_TO_M3,
         ValvetrainBuilder::build(config["intakeValvetrain"]),
         ValvetrainBuilder::build(config["exhaustValvetrain"])
     );

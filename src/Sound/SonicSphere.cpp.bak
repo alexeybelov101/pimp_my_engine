@@ -1,0 +1,54 @@
+#include "Atmosphere.hpp"
+#include "../../Constants/GasDynamics.hpp"
+#include <limits>
+
+#include <iostream>
+
+namespace GD = GasDynamics;
+
+Atmosphere::Atmosphere():
+    leftBoundary_(AtmosphereBoundary(this, true)),
+    rightBoundary_(AtmosphereBoundary(this, false)),
+    cell_(
+        GD::RHO_AMBIENT,
+        0.0,
+        GD::P_ATM / (GD::GAMMA - 1.0)
+    ) {}
+
+const IBoundary& Atmosphere::getBoundary(bool isLeft) const {
+    return isLeft ? leftBoundary_ : rightBoundary_;
+}
+
+void Atmosphere::step(double dt) {
+    double const dP = flux_.momentum * dt;
+    std::cout << "dP: " << dP << std::endl;
+    resetFlux();
+};
+
+void Atmosphere::resetFlux() {
+    flux_ = Flux();
+}
+
+// AtmosphereBoundary
+//==============================================================================
+Atmosphere::AtmosphereBoundary::AtmosphereBoundary(Atmosphere* owner, bool isLeft)
+    : owner_(owner), isLeft_(isLeft) {}
+
+Cell Atmosphere::AtmosphereBoundary::getState() const {
+    return owner_->cell_;
+}
+
+void Atmosphere::AtmosphereBoundary::setFlux(const Flux& flux) const {
+    double sign = isLeft_ ? 1.0 : -1.0;
+    owner_->flux_.energy += sign * flux.energy;
+    owner_->flux_.momentum += sign * flux.momentum;
+    owner_->flux_.mass += sign * flux.mass;
+}
+
+double Atmosphere::AtmosphereBoundary::getArea() const {
+    return std::numeric_limits<double>::infinity();
+}
+
+bool Atmosphere::AtmosphereBoundary::isLeft() const {
+    return isLeft_;
+}

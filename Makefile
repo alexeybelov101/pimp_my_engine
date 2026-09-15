@@ -1,8 +1,8 @@
 CXX = g++
 # Оптимизация для Intel Core 2 Quad Q9000 (архитектура Penryn, 45 нм)
 # Поддерживает SSE4.1, но не поддерживает AVX
-CXXFLAGS = -Wall -Wextra -Wpedantic -O2 -std=c++20 -march=core2 -msse4.1 -pthread
-CXXFLAGS += -MMD -MP #-fopenmp
+CXXFLAGS = -Wall -Wextra -Wpedantic -O2 -flto -std=c++26 -march=core2 -msse4.1 -pthread
+CXXFLAGS += -Isrc -MMD -MP #-fopenmp
 LDFLAGS = -lm -pthread #-fopenmp
 
 SRC_DIR = src

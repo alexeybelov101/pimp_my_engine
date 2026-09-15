@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
 
 class Piston {
     public:
-        Piston(double diameter, double compressionHeight, double deckVolume);
+        Piston(double radius, double compressionHeight, double deckVolume);
 
         double getBore() const;
         double getCompressionHeight() const;
@@ -10,7 +11,7 @@ class Piston {
         double getDeckVolume() const;
 
     private:
-        double diameter;
-        double compressionHeight;
-        double deckVolume;
+        double radius_;
+        double compressionHeight_;
+        double deckVolume_;
 };

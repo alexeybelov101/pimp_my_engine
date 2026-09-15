@@ -1,31 +1,27 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
 #include "Valvetrain/Valvetrain.hpp"
-#include "Pipes/Pipe.hpp"
 
 class Head {
 public:
     Head(
         double chamberVolume,
         Valvetrain&& intakeValvetrain,
-        Valvetrain&& exhaustValvetrain,
-        Pipe* intakePipe = nullptr,
-        Pipe* exhaustPipe = nullptr
+        Valvetrain&& exhaustValvetrain
     );
 
     double getChamberVolume() const;
 
     double getIntakeLift(double angle) const;
-    double getExhaustLift(double angle) const;
     double getIntakeFlowArea(double angle) const;
-    double getExhaustFlowArea(double angle) const;
+    double getIntakeValveArea() const;
 
-    void setExhaustPipe(Pipe* pipe);
-    void setIntakePipe(Pipe* pipe);
+    double getExhaustLift(double angle) const;
+    double getExhaustFlowArea(double angle) const;
+    double getExhaustValveArea() const;
 
 private:
-    double chamberVolume;
-    Valvetrain intakeValvetrain;
-    Valvetrain exhaustValvetrain;
-    Pipe* intakePipe;
-    Pipe* exhaustPipe;
+    double chamberVolume_;
+    Valvetrain intakeValvetrain_;
+    Valvetrain exhaustValvetrain_;
 };

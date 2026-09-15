@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
 
 class Camlobe {
@@ -7,6 +8,6 @@ public:
     double getLift(double angle) const;
 
 private:
-    double maxLift;
-    double duration;
+    double maxLift_;
+    double duration_;
 };

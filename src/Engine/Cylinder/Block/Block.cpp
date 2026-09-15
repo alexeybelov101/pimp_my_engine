@@ -1,15 +1,16 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Block.hpp"
 #include <utility>
 #include <cmath>
 
 Block::Block(double height, double gasketHeight, Piston&& piston, Conrod&& conrod, Crankshaft&& crankshaft):
-    height(height), gasketHeight(gasketHeight), piston(std::move(piston)), conrod(std::move(conrod)), crankshaft(std::move(crankshaft)) {}
+    height_(height), gasketHeight_(gasketHeight), piston_(std::move(piston)), conrod_(std::move(conrod)), crankshaft_(std::move(crankshaft)) {}
 
 // TODO: оптимизация - sqrt(lambda^2 - sin^2) вычисляется дважды
 double Block::getPistonTopPosition(double angle) const {
-    double R = crankshaft.getRadius();
-    double L = conrod.getLength();
-    double H = piston.getCompressionHeight();
+    double R = crankshaft_.getRadius();
+    double L = conrod_.getLength();
+    double H = piston_.getCompressionHeight();
     double lambda = L / R;
 
     double sinA, cosA;
@@ -19,8 +20,8 @@ double Block::getPistonTopPosition(double angle) const {
 }
 
 double Block::getLeverArm(double angle) const {
-    double R = crankshaft.getRadius();
-    double L = conrod.getLength();
+    double R = crankshaft_.getRadius();
+    double L = conrod_.getLength();
     double lambda = L / R;  // отношение длины шатуна к радиусу
 
     double sinA, cosA;
@@ -34,7 +35,7 @@ double Block::getPistonVelocity(double angle, double omega) const {
 }
 
 double Block::getDisplacedVolume(double angle) const {
-    double S = piston.getBoreArea();
+    double S = piston_.getBoreArea();
     double x_TDC = getTDC();
     double x_current = getPistonTopPosition(angle);
 
@@ -42,29 +43,33 @@ double Block::getDisplacedVolume(double angle) const {
 }
 
 double Block::getSweptVolume() const {
-    return piston.getBoreArea() * crankshaft.getStroke();
+    return piston_.getBoreArea() * crankshaft_.getStroke();
 }
 
 double Block::getTDC() const {
-    double R = crankshaft.getRadius();
-    double L = conrod.getLength();
-    double H = piston.getCompressionHeight();
+    double R = crankshaft_.getRadius();
+    double L = conrod_.getLength();
+    double H = piston_.getCompressionHeight();
 
     return H + L + R;
 }
 
 double Block::getBDC() const {
-    double R = crankshaft.getRadius();
-    double L = conrod.getLength();
-    double H = piston.getCompressionHeight();
+    double R = crankshaft_.getRadius();
+    double L = conrod_.getLength();
+    double H = piston_.getCompressionHeight();
 
     return H + L - R;
 }
 
 double Block::getDeckClearance() const { //недоход
-    return height - getTDC();
+    return height_ - getTDC();
 }
 
 double Block::getTotalDeckVolume() const {
-    return piston.getDeckVolume() + (getDeckClearance() + gasketHeight) * piston.getBoreArea();
+    return piston_.getDeckVolume() + (getDeckClearance() + gasketHeight_) * piston_.getBoreArea();
+}
+
+double Block::getBoreArea() const {
+    return piston_.getBoreArea();
 }
