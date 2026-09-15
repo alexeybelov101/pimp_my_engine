@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "HeadBuilder.hpp"
 #include "Valvetrain/ValvetrainBuilder.hpp"
 #include "Head.hpp"

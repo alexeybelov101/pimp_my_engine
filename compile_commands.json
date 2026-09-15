@@ -1,29 +1,5 @@
 [
   {
-    "file": "src/Engine/EngineBuilder.cpp",
-    "arguments": [
-      "/usr/bin/g++",
-      "-Wall",
-      "-Wextra",
-      "-Wpedantic",
-      "-O2",
-      "-flto",
-      "-std=c++26",
-      "-march=core2",
-      "-msse4.1",
-      "-pthread",
-      "-Isrc",
-      "-MMD",
-      "-MP",
-      "-c",
-      "src/Engine/EngineBuilder.cpp",
-      "-o",
-      "build/Engine/EngineBuilder.o"
-    ],
-    "directory": "/home/spectre/Проекты/pimp_my_engine",
-    "output": "build/Engine/EngineBuilder.o"
-  },
-  {
     "file": "src/Engine/Engine.cpp",
     "arguments": [
       "/usr/bin/g++",
@@ -46,6 +22,30 @@
     ],
     "directory": "/home/spectre/Проекты/pimp_my_engine",
     "output": "build/Engine/Engine.o"
+  },
+  {
+    "file": "src/Engine/EngineBuilder.cpp",
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-O2",
+      "-flto",
+      "-std=c++26",
+      "-march=core2",
+      "-msse4.1",
+      "-pthread",
+      "-Isrc",
+      "-MMD",
+      "-MP",
+      "-c",
+      "src/Engine/EngineBuilder.cpp",
+      "-o",
+      "build/Engine/EngineBuilder.o"
+    ],
+    "directory": "/home/spectre/Проекты/pimp_my_engine",
+    "output": "build/Engine/EngineBuilder.o"
   },
   {
     "file": "src/Engine/PipeSystem/Atmosphere/Atmosphere.cpp",

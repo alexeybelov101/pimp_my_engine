@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "BlockBuilder.hpp"
 #include "BottomEnd/Piston.hpp"
 #include "BottomEnd/Conrod.hpp"

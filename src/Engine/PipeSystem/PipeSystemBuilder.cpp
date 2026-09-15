@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "PipeSystemBuilder.hpp"
 #include "Pipe/PipeBuilder.hpp"
 #include "Junctions/JunctionBuilder.hpp"

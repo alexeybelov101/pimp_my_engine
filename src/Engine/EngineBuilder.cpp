@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "EngineBuilder.hpp"
 #include "Cylinder/CylinderBuilder.hpp"
 #include "PipeSystem/PipeSystemBuilder.hpp"

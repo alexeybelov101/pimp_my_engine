@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Junction2.hpp"
 #include "Solvers/HLLC.hpp"
 #include "Solvers/Wall.hpp"
