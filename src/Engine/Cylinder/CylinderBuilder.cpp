@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "CylinderBuilder.hpp"
 #include "Head/HeadBuilder.hpp"
 #include "Block/BlockBuilder.hpp"

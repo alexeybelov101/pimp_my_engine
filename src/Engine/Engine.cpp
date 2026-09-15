@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Engine.hpp"
 #include <utility>
 #include <numbers>

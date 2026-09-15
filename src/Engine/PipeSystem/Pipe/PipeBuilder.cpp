@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "PipeBuilder.hpp"
 #include "Pipe.hpp"
 #include "../../../Structs/Cell.hpp"

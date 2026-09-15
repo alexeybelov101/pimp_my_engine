@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "PipeSystem.hpp"
 #include "Atmosphere/Atmosphere.hpp"
 #include "Pipe/Pipe.hpp"
