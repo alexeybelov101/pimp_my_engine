@@ -1,49 +1,50 @@
-CXX = g++
-# Оптимизация для Intel Core 2 Quad Q9000 (архитектура Penryn, 45 нм)
-# Поддерживает SSE4.1, но не поддерживает AVX
-CXXFLAGS = -Wall -Wextra -Wpedantic -O2 -flto -std=c++26 -march=core2 -msse4.1 -pthread
-CXXFLAGS += -Isrc -MMD -MP #-fopenmp
-LDFLAGS = -lm -pthread #-fopenmp
+CXX      := g++
+CPPFLAGS := -Isrc
+LDLIBS   := -lm
 
-SRC_DIR = src
-BUILD_DIR = build
-BIN_DIR = bin
+CXXFLAGS := -Wall -Wextra -Wpedantic -std=c++26 -march=native -MMD -MP
 
-# Рекурсивный поиск всех .cpp файлов
-SOURCES = $(shell find $(SRC_DIR) -name "*.cpp")
-# Создание списка объектных файлов с сохранением структуры каталогов
-OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
-DEPS = $(OBJECTS:.o=.d)
-TARGET = $(BIN_DIR)/pimp_my_engine
+SRC_DIR := src
 
-.PHONY: all clean run debug release
+ifeq (debug,$(filter debug,$(MAKECMDGOALS)))
+  MODE     := debug
+  CXXFLAGS += -O0 -g
+  LDFLAGS  :=
+else
+  MODE     := release
+  CXXFLAGS += -O2 -flto -DNDEBUG
+  LDFLAGS  := -flto -O2 -march=native
+endif
+
+BUILD_DIR := build/$(MODE)
+BIN_DIR   := bin/$(MODE)
+
+SOURCES := $(shell find $(SRC_DIR) -name '*.cpp')
+OBJECTS := $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
+DEPS    := $(OBJECTS:.o=.d)
+TARGET  := $(BIN_DIR)/pimp_my_engine
+
+.PHONY: all debug release run clean
 
 all: $(TARGET)
 
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+debug: all
+release: all
 
-$(BIN_DIR):
-	mkdir -p $(BIN_DIR)
+run: all
+	./$(TARGET)
 
 $(TARGET): $(OBJECTS) | $(BIN_DIR)
-	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
+	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS) $(LDLIBS)
 
-# Правило для компиляции с сохранением структуры каталогов
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(BIN_DIR):
+	mkdir -p $@
 
 -include $(DEPS)
 
-run: $(TARGET)
-	./$(TARGET)
-
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR)
-
-debug: CXXFLAGS += -g -DDEBUG -O0
-debug: clean all
-
-release: CXXFLAGS += -DNDEBUG
-release: clean all
+	rm -rf build bin
