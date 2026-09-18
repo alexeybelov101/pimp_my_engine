@@ -9,7 +9,12 @@ The project is at an early stage of development. Interfaces and structure may ch
 ## Requirements
 Building requires:
 - GCC with support for the C++26 standard;
-- the nlohmann/json library (header-only, installed separately).
+- the nlohmann/json library (header-only). Installation:
+  - Debian/Ubuntu: `sudo apt install nlohmann-json3-dev`
+  - Arch: `sudo pacman -S nlohmann-json`
+  - macOS: `brew install nlohmann-json`
+  - Windows: `vcpkg install nlohmann-json`
+  - From source: https://github.com/nlohmann/json#cmake
 
 ## Building
 The project uses a Makefile. The following targets are available:
@@ -64,3 +69,4 @@ The project is distributed under the AGPL-3.0-or-later license. The full license
 15. Account for heat release and heat transfer.
 16. Implement the cooling system.
 17. Implement forced induction systems.
+
