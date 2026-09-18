@@ -9,7 +9,12 @@
 ## Требования
 Для сборки требуются:
 - компилятор GCC с поддержкой стандарта C++26;
-- библиотека nlohmann/json (заголовочная, устанавливается отдельно).
+- библиотека nlohmann/json (header-only). Установка:
+  - Debian/Ubuntu: `sudo apt install nlohmann-json3-dev`
+  - Arch: `sudo pacman -S nlohmann-json`
+  - macOS: `brew install nlohmann-json`
+  - Windows: `vcpkg install nlohmann-json`
+  - Из исходников: https://github.com/nlohmann/json#cmake
 
 ## Сборка
 Проект использует Makefile. Доступны следующие цели:
