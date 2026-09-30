@@ -5,56 +5,38 @@
 
 namespace GD = GasDynamics;
 
-Cylinder::Cylinder(Head&& head, Block&& block, double offset):
-    offset_(offset), angle_(0.0), omega_(0.0),
-    head_(std::move(head)), block_(std::move(block)),
+Cylinder::Cylinder(
+    Head::Headlet& headlet,
+    Block::Blocklet& blocklet
+):
+    headlet_(headlet), blocklet_(blocklet),
     mass_(GD::RHO_AMBIENT * getCurrentVolume()),
     energy_(GD::P_ATM / (GD::GAMMA - 1.0) * getCurrentVolume()),
     leftBoundary_(this, true), rightBoundary_(this, false),
     flux_(Flux(0.0, 0.0, 0.0)) {}
 
 Cylinder::Cylinder(Cylinder&& other) noexcept:
-    offset_(other.offset_), angle_(other.angle_), omega_(other.omega_),
-    head_(std::move(other.head_)), block_(std::move(other.block_)),
+    headlet_(other.headlet_), blocklet_(other.blocklet_),
     mass_(other.mass_), energy_(other.energy_),
     leftBoundary_(this, true), rightBoundary_(this, false),
     flux_(std::move(other.flux_)) {}
 
-void Cylinder::setOmega(double omega) {
-    omega_ = omega;
-}
-
-void Cylinder::setKinematics(double angle, double omega) {
-    angle_ = angle;
-    omega_ = omega;
-}
-
 //=============================================================
-double Cylinder::getPistonVelocity() const {
-    return block_.getPistonVelocity(angle_ - offset_, omega_);
-}
-
-double Cylinder::getVolumeChange(double dt) const {
-    return block_.getPistonVelocity(angle_ - offset_, omega_) * block_.getBoreArea() * dt;
-}
-//=============================================================
-
 void Cylinder::step(double dt) {
     applyFlux(dt);
 }
 
 double Cylinder::getTotalChamberVolume() const {
-    return head_.getChamberVolume() + block_.getTotalDeckVolume();
+    return headlet_.getChamberVolume() + blocklet_.getTotalDeckVolume();
 }
 
 double Cylinder::getCompressionRatio() const {
     double totalChamberVolume = getTotalChamberVolume();
-
-    return (block_.getSweptVolume() + totalChamberVolume) / totalChamberVolume;
+    return (blocklet_.getSweptVolume() + totalChamberVolume) / totalChamberVolume;
 }
 
 double Cylinder::getCurrentVolume() const {
-    return getTotalChamberVolume() + block_.getDisplacedVolume(angle_ - offset_);
+    return getTotalChamberVolume() + blocklet_.getDisplacedVolume();
 }
 
 double Cylinder::calculatePressure() const {
@@ -62,22 +44,22 @@ double Cylinder::calculatePressure() const {
 }
 
 double Cylinder::calculateForceG() const {
-    return calculatePressure() * block_.getBoreArea();
+    return calculatePressure() * blocklet_.getBoreArea();
 }
 
 double Cylinder::calculateForceI() const {
-    return (calculatePressure() - GD::P_ATM) * block_.getBoreArea();
+    return (calculatePressure() - GD::P_ATM) * blocklet_.getBoreArea();
 }
 
 double Cylinder::calculateTorque() const {
-    return calculateForceI() * block_.getLeverArm(angle_ - offset_);
+    return calculateForceI() * blocklet_.getLeverArm();
 }
 
 void Cylinder::applyFlux(double dt) {
     mass_ += flux_.mass * dt;
     energy_ += flux_.energy * dt;
 
-    energy_ -= calculatePressure() * getVolumeChange(dt);
+    energy_ -= calculatePressure() * blocklet_.getPistonVelocity() * blocklet_.getBoreArea() * dt;
 
     mass_ = std::max(mass_, 1.0e-12);
     energy_ = std::max(energy_, 1.0e-12);
@@ -104,9 +86,6 @@ Cell Cylinder::CylinderBoundary::getState() const {
     double rho = owner_->mass_ / owner_->getCurrentVolume();
     double p = owner_->calculatePressure();
 
-    // const double u_piston = owner_->getPistonVelocity();
-    // const double u = isLeft_ ? u_piston : -u_piston;
-
     // rho_E = p / (gamma - 1) + 0.5 * rho * u^2..
     const double rho_E = p / (GD::GAMMA - 1.0); // + 0.5 * rho * u * u;
 
@@ -121,14 +100,14 @@ void Cylinder::CylinderBoundary::setFlux(const Flux& flux) const {
 
 double Cylinder::CylinderBoundary::getArea() const {
     return isLeft_
-        ? owner_->head_.getIntakeValveArea()
-        : owner_->head_.getExhaustValveArea();
+        ? owner_->headlet_.getIntakeValveArea()
+        : owner_->headlet_.getExhaustValveArea();
 }
 
 double Cylinder::CylinderBoundary::getAperture() const {
     return isLeft_
-        ? owner_->head_.getIntakeFlowArea((owner_->angle_ - owner_->offset_) / 2.0)
-        : owner_->head_.getExhaustFlowArea((owner_->angle_ - owner_->offset_) / 2.0);
+        ? owner_->headlet_.getIntakeFlowArea()
+        : owner_->headlet_.getExhaustFlowArea();
 }
 
 bool Cylinder::CylinderBoundary::isLeft() const {

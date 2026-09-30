@@ -1,89 +1,85 @@
 {
-    "flywheel" : {
-        "mass": 6700,
-        "diameter": 263
-    },
-    "cylinder": {
-        "count": 4,
-        "prototype": {
-            "head": {
-                "chamberVolume": 33200,
-                "intakeValvetrain": {
-                    "camshaft": {
-                        "lobe": {
-                            "count": 1,
-                            "prototype": {
-                                "position": -12.0,
-                                "duration": 232.0,
-                                "maxLift": 9.728
-                            }
-                        }
-                    },
-                    "valve" : {
-                        "count": 1,
-                        "prototype": {
-                            "headDiameter": 37.0,
-                            "seatAngle": 45.5
-                        }
-                    }
-                },
-                "exhaustValvetrain": {
-                    "camshaft": {
-                        "lobe": {
-                            "count": 1,
-                            "prototype": {
-                                "position": 498.0,
-                                "duration": 232.0,
-                                "maxLift": 9.728
-                            }
-                        }
-                    },
-                    "valve" : {
-                        "count": 1,
-                        "prototype": {
-                            "headDiameter": 32.0,
-                            "seatAngle": 45.5
-                        }
-                    }
-                }
-            },
-            "block": {
-                "height": 207.1,
-                "gasketHeight": 1.065,
-                "piston": {
-                    "diameter": 79.0,
-                    "compressionHeight": 37.9,
-                    "deckVolume": 3700
-                },
-                "conrod": {
-                    "length": 136.0
-                },
-                "crankshaft": {
-                    "stroke": 66.0
-                }
-            }
+    "kinematics": {
+        "flywheels" : [
+            { "mass": 6700, "diameter": 263 }
+        ],
+        "conrods": [
+            { "length": 136.0 }
+        ],
+        "pistons": [
+            { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 }
+        ],
+        "valves" : [
+            { "headDiameter": 37.0, "seatAngle": 45.5 },
+            { "headDiameter": 32.0, "seatAngle": 45.5 }
+        ],
+        "lobes": [
+            { "duration": 232.0, "maxLift": 9.728 }
+        ],
+        "crankshafts": [
+            { "radius": 33.0, "crankpins": [
+                { "position": 0 },
+                { "position": 180 },
+                { "position": 180 },
+                { "position": 0 }
+            ]}
+        ],
+        "camshafts": [
+            { "lobes": [{ "id": 0, "position": -12 }]},
+            { "lobes": [{ "id": 1, "position": 498 }]}
+        ],
+        "valvetrains": [
+            { "valvetrainlets": [
+                { "camshaft": { "id": 0, "position": 0 }, "valves": [ { "id": 0, "count": 1 } ]},
+                { "camshaft": { "id": 0, "position": 540 }, "valves": [ { "id": 0, "count": 1 } ]},
+                { "camshaft": { "id": 0, "position": 180 }, "valves": [ { "id": 0, "count": 1 } ]},
+                { "camshaft": { "id": 0, "position": 360 }, "valves": [ { "id": 0, "count": 1 } ]}
+            ]},
+            { "valvetrainlets": [
+                { "camshaft": { "id": 1, "position": 0 }, "valves": [ { "id": 1, "count": 1 } ]},
+                { "camshaft": { "id": 1, "position": 540 }, "valves": [ { "id": 1, "count": 1 } ]},
+                { "camshaft": { "id": 1, "position": 180 }, "valves": [ { "id": 1, "count": 1 } ]},
+                { "camshaft": { "id": 1, "position": 360 }, "valves": [ { "id": 1, "count": 1 } ]}
+            ]}
+        ],
+        "heads": [
+            { "chamberVolume": 33200, "intakeValvetrain": { "id": 0 }, "exhaustValvetrain": { "id": 1 } }
+        ],
+        "blocks": [
+            { "height": 207.1, "gasketHeight": 1.065, "blocklets": [
+                { "piston": { "id": 0 }, "conrod": { "id": 0 }, "crankpin": { "id": 0 } },
+                { "piston": { "id": 0 }, "conrod": { "id": 0 }, "crankpin": { "id": 1 } },
+                { "piston": { "id": 0 }, "conrod": { "id": 0 }, "crankpin": { "id": 2 } },
+                { "piston": { "id": 0 }, "conrod": { "id": 0 }, "crankpin": { "id": 3 } }
+            ]}
+        ],
+        "banks": [
+            { "angle": 0, "head": { "id": 0 }, "block": { "id": 0 } }
+        ],
+        "engine": {
+            "flywheel": { "id": 0 },
+            "crankshaft": { "id": 0 },
+            "banks": [
+                { "id": 0, "position": 0 }
+            ]
         }
     },
     "pipeSystem": {
-        "nodes": {
-            "atmosphere": [],
-            "cylinders": [ 0, 1, 2, 3 ],
-            "pipes": [
-                    { "id": 0, "length": 100, "radius": 22 },
-                    { "id": 1, "length": 230, "radius": 16 },
-                    { "id": 2, "length": 230, "radius": 16 },
-                    { "id": 3, "length": 230, "radius": 16 },
-                    { "id": 4, "length": 230, "radius": 16 },
-                    { "id": 5, "length": 380, "radius": 18 },
-                    { "id": 6, "length": 380, "radius": 18 },
-                    { "id": 7, "length": 380, "radius": 18 },
-                    { "id": 8, "length": 380, "radius": 18 },
-                    { "id": 9, "length": 620, "radius": 21.5  },
-                    { "id": 10, "length": 620, "radius": 21.5  },
-                    { "id": 11, "length": 1580, "radius": 21.5 },
-                    { "id": 12, "length": 1165, "radius": 20 }
-            ]
-        },
+        "pipes": [
+                { "id": 0, "length": 100, "radius": 22 },
+                { "id": 1, "length": 230, "radius": 16 },
+                { "id": 2, "length": 230, "radius": 16 },
+                { "id": 3, "length": 230, "radius": 16 },
+                { "id": 4, "length": 230, "radius": 16 },
+                { "id": 5, "length": 380, "radius": 18 },
+                { "id": 6, "length": 380, "radius": 18 },
+                { "id": 7, "length": 380, "radius": 18 },
+                { "id": 8, "length": 380, "radius": 18 },
+                { "id": 9, "length": 620, "radius": 21.5  },
+                { "id": 10, "length": 620, "radius": 21.5  },
+                { "id": 11, "length": 1580, "radius": 21.5 },
+                { "id": 12, "length": 1165, "radius": 20 }
+        ],
 
         "junctions0": [
             { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 0 ] }},

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
-#include "Flywheel.hpp"
-#include "Cylinder/Cylinder.hpp"
+#include "Kinematics/Flywheel/Flywheel.hpp"
+#include "PipeSystem/Cylinder/Cylinder.hpp"
 #include "PipeSystem/PipeSystem.hpp"
 #include <vector>
 #include <memory>

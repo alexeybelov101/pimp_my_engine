@@ -1,22 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
 
-#include "Head/Head.hpp"
-#include "Block/Block.hpp"
+#include "Engine/Kinematics/Bank/Head/Head.hpp"
+#include "Engine/Kinematics/Bank/Block/Block.hpp"
 #include "Interfaces/INode.hpp"
 #include "Constants/GasDynamics.hpp"
 
 class Cylinder : public INode {
 public:
     Cylinder(
-        Head&& head,
-        Block&& block,
-        double offset = 0.0
+        Head::Headlet& headlet,
+        Block::Blocklet& blocklet
     );
 
     Cylinder(Cylinder&& other) noexcept;
-
-double getEnergy() { return energy_; }
 
     double getTotalChamberVolume() const;
     double getCompressionRatio() const;
@@ -27,13 +24,8 @@ double getEnergy() { return energy_; }
     double calculateForceI() const; //Индикаторная работа
     double calculateTorque() const;
 
-    void setOmega(double omega);
-    void setKinematics(double angle, double omega);
     void applyFlux(double dt);
     void resetFlux();
-
-    double getPistonVelocity() const;
-    double getVolumeChange(double dt) const;
 
     void step(double dt) override;
 
@@ -53,12 +45,8 @@ private:
         bool isLeft_;
     };
 
-    const double offset_;
-
-    double angle_;
-    double omega_;
-    Head head_;
-    Block block_;
+    Head::Headlet& headlet_;
+    Block::Blocklet& blocklet_;
 
     double mass_;
     double energy_;

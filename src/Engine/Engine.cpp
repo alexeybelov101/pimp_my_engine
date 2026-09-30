@@ -19,10 +19,6 @@ void Engine::setOmega(double omega) {
 }
 
 void Engine::step(double dt) {
-    angle_ += flywheel_->getOmega() * dt;
-    angle_ = fmod(angle_, 4.0 * std::numbers::pi);
-    if (angle_ < 0.0) angle_ += 4.0 * std::numbers::pi;
-
     pipeSystem_->step(dt);
 
     double torque = 0.0;
