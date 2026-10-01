@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
 #include "Valvetrain/Valvetrain.hpp"
+#include <memory>
 #include <vector>
 
 class Head {
@@ -28,15 +29,15 @@ public:
 
     Head(
         double chamberVolume,
-        Valvetrain&& intakeValvetrain,
-        Valvetrain&& exhaustValvetrain
+        std::unique_ptr<Valvetrain> intakeValvetrain,
+        std::unique_ptr<Valvetrain> exhaustValvetrain
     );
 
 private:
-    void setHeadlets(std::vector<Headlet>&& headlets);
+    void setHeadlets(std::vector<std::unique_ptr<Headlet>> headlets);
 
     double chamberVolume_;
-    Valvetrain intakeValvetrain_;
-    Valvetrain exhaustValvetrain_;
-    std::vector<Headlet> headlets_;
+    std::unique_ptr<Valvetrain> intakeValvetrain_;
+    std::unique_ptr<Valvetrain> exhaustValvetrain_;
+    std::vector<std::unique_ptr<Headlet>> headlets_;
 };

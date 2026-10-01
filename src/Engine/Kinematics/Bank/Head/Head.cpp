@@ -5,8 +5,8 @@
 
 Head::Head(
     double chamberVolume,
-    Valvetrain&& intakeValvetrain,
-    Valvetrain&& exhaustValvetrain
+    std::unique_ptr<Valvetrain> intakeValvetrain,
+    std::unique_ptr<Valvetrain> exhaustValvetrain
 ) : chamberVolume_(chamberVolume),
     intakeValvetrain_(std::move(intakeValvetrain)),
     exhaustValvetrain_(std::move(exhaustValvetrain)) {}
@@ -19,7 +19,7 @@ Head::Headlet::Headlet(
     intakeValvetrainlet_(intakeValvetrainlet),
     exhaustValvetrainlet_(exhaustValvetrainlet) {}
 
-void Head::setHeadlets(std::vector<Headlet>&& headlets) {
+void Head::setHeadlets(std::vector<std::unique_ptr<Headlet>> headlets) {
     headlets_ = std::move(headlets);
 }
 

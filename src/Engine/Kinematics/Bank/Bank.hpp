@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
+#include <memory>
 #include "Head/Head.hpp"
 #include "Block/Block.hpp"
 
@@ -7,15 +8,13 @@ class Bank {
 public:
     Bank(
         double position,
-        Head&& head,
-        Block&& block
+        std::unique_ptr<Head> head,
+        std::unique_ptr<Block> block
     );
-
-    void step(double dt);
 
 private:
     const double position_;
-    Head head_;
-    Block block_;
+    std::unique_ptr<Head> head_;
+    std::unique_ptr<Block> block_;
 };
 

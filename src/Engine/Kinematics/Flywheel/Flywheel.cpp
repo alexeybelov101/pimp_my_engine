@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Flywheel.hpp"
 
-Flywheel::Flywheel(double mass, double raduis):
-    mass_(mass), radius_(raduis), omega_(0.0) {}
+Flywheel::Flywheel(
+    double mass,
+    double raduis
+):
+    mass_(mass),
+    radius_(raduis),
+    omega_(0.0) {}
 
 void Flywheel::applyTorque(double torque, double dt) {
     omega_ += torque * 0.95 / getInertia() * dt;

@@ -3,8 +3,8 @@
 #include <vector>
 
 Drive::Drive(
-    Flywheel* flywheel,
-    Crankshaft* crankshaft,
+    Flywheel& flywheel,
+    Crankshaft& crankshaft,
     std::vector<Valvetrain*> valvetrains
 ):
     flywheel_(flywheel),
@@ -12,8 +12,8 @@ Drive::Drive(
     valvetrains_(valvetrains) {}
 
 void Drive::step(double dt) {
-    double angle = flywheel_->getOmega() * dt;
-    crankshaft_->addAngle(angle);
+    double angle = flywheel_.getOmega() * dt;
+    crankshaft_.addAngle(angle);
     for (auto& valvetrain : valvetrains_) {
         valvetrain->addAngle(angle * 0.5);
     }

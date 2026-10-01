@@ -1,16 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
-#include "Kinematics/Flywheel/Flywheel.hpp"
-#include "PipeSystem/Cylinder/Cylinder.hpp"
-#include "PipeSystem/PipeSystem.hpp"
-#include <vector>
 #include <memory>
+#include "Kinematics/Kinematics.hpp"
+#include "PipeSystem/PipeSystem.hpp"
 
 class Engine {
 public:
     Engine(
-        std::vector<std::unique_ptr<Cylinder>> cylinders,
-        std::unique_ptr<Flywheel> flywheel,
+        std::unique_ptr<Kinematics> kinematics,
         std::unique_ptr<PipeSystem> pipeSystem
     );
 
@@ -21,7 +18,6 @@ public:
 private:
     double angle_;
 
-    std::vector<std::unique_ptr<Cylinder>> cylinders_;
-    std::unique_ptr<Flywheel> flywheel_;
+    std::unique_ptr<Kinematics> kinematics_;
     std::unique_ptr<PipeSystem> pipeSystem_;
 };

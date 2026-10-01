@@ -3,8 +3,16 @@
 #include <numbers>
 #include <cmath>
 
-Crankshaft::Crankshaft(double angle, double radius, std::vector<Pin>&& pins, Flywheel& flywheel):
-    angle_(angle), radius_(radius), pins_(std::move(pins)), flywheel_(flywheel) {}
+Crankshaft::Crankshaft(
+    double angle,
+    double radius,
+    std::vector<Pin>&& pins,
+    Flywheel& flywheel
+):
+    angle_(angle),
+    radius_(radius),
+    pins_(std::move(pins)),
+    flywheel_(flywheel) {}
 
 void Crankshaft::addAngle(double angle) {
     angle_ += angle;

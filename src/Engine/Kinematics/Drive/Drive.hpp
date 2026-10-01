@@ -8,15 +8,15 @@
 class Drive {
 public:
     Drive(
-        Flywheel* flywheel,
-        Crankshaft* crankshaft,
+        Flywheel& flywheel,
+        Crankshaft& crankshaft,
         std::vector<Valvetrain*> valvetrains
     );
 
     void step(double dt);
 
 private:
-    Flywheel* flywheel_;
-    Crankshaft* crankshaft_;
+    Flywheel& flywheel_;
+    Crankshaft& crankshaft_;
     std::vector<Valvetrain*> valvetrains_;
 };
