@@ -15,15 +15,10 @@ Cylinder::Cylinder(
     leftBoundary_(this, true), rightBoundary_(this, false),
     flux_(Flux(0.0, 0.0, 0.0)) {}
 
-Cylinder::Cylinder(Cylinder&& other) noexcept:
-    headlet_(other.headlet_), blocklet_(other.blocklet_),
-    mass_(other.mass_), energy_(other.energy_),
-    leftBoundary_(this, true), rightBoundary_(this, false),
-    flux_(std::move(other.flux_)) {}
-
 //=============================================================
 void Cylinder::step(double dt) {
     applyFlux(dt);
+    applyForce();
 }
 
 double Cylinder::getTotalChamberVolume() const {
@@ -51,15 +46,15 @@ double Cylinder::calculateForceI() const {
     return (calculatePressure() - GD::P_ATM) * blocklet_.getBoreArea();
 }
 
-double Cylinder::calculateTorque() const {
-    return calculateForceI() * blocklet_.getLeverArm();
+void Cylinder::applyForce() {
+    blocklet_.applyForce(calculateForceI());
 }
 
 void Cylinder::applyFlux(double dt) {
     mass_ += flux_.mass * dt;
     energy_ += flux_.energy * dt;
 
-    energy_ -= calculatePressure() * blocklet_.getPistonVelocity() * blocklet_.getBoreArea() * dt;
+    energy_ -= calculateForceG() * blocklet_.getPistonVelocity() * dt;
 
     mass_ = std::max(mass_, 1.0e-12);
     energy_ = std::max(energy_, 1.0e-12);

@@ -16,7 +16,6 @@ public:
 
 private:
     static std::unique_ptr<Flywheel> createFlywheel(const nlohmann::json& config);
-    static std::unique_ptr<Crankshaft> createCrankshaft(const nlohmann::json& config);
     static std::vector<std::unique_ptr<Bank>> createBanks(const nlohmann::json& config);
     static std::unique_ptr<Drive> createDrive(const nlohmann::json& config);
 };

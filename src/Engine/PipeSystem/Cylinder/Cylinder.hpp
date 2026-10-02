@@ -13,8 +13,6 @@ public:
         Block::Blocklet& blocklet
     );
 
-    Cylinder(Cylinder&& other) noexcept;
-
     double getTotalChamberVolume() const;
     double getCompressionRatio() const;
     double getCurrentVolume() const;
@@ -22,7 +20,8 @@ public:
     double calculatePressure() const;
     double calculateForceG() const; //Работа над газом
     double calculateForceI() const; //Индикаторная работа
-    double calculateTorque() const;
+
+    void applyForce();
 
     void applyFlux(double dt);
     void resetFlux();

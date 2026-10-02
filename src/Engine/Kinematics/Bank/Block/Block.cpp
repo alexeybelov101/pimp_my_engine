@@ -79,6 +79,6 @@ double Block::Blocklet::getBoreArea() const {
     return piston_.getBoreArea();
 }
 
-void Block::Blocklet::setTorque(double torque) {
-    pin_.setTorque(torque);
+void Block::Blocklet::applyForce(double force) {
+    pin_.setTorque(force * getLeverArm());
 }

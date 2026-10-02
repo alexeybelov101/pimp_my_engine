@@ -28,7 +28,7 @@ public:
         double getTotalDeckVolume() const;
         double getBoreArea() const;
 
-        void setTorque(double torque);
+        void applyForce(double force);
 
     private:
         Block* owner_;

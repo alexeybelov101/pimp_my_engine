@@ -4,15 +4,16 @@
 #include <cmath>
 
 Crankshaft::Crankshaft(
-    double angle,
     double radius,
     std::vector<Pin>&& pins,
     Flywheel& flywheel
 ):
-    angle_(angle),
+    angle_(0.0),
     radius_(radius),
     pins_(std::move(pins)),
-    flywheel_(flywheel) {}
+    flywheel_(flywheel) {
+        for (auto& p : pins_) p.owner_ = this;
+    }
 
 void Crankshaft::addAngle(double angle) {
     angle_ += angle;
@@ -23,6 +24,12 @@ void Crankshaft::step(double dt) {
     flywheel_.applyTorque(torque_, dt);
     torque_ = 0.0;
 }
+
+// Pin
+//==============================================================================
+Crankshaft::Pin::Pin(double position):
+    owner_(nullptr),
+    position_(position) {}
 
 double Crankshaft::Pin::getThrow() const {
     return owner_->radius_;

@@ -7,7 +7,7 @@ class Crankshaft {
 public:
     class Pin {
     public:
-        Pin(Crankshaft* owner, double position);
+        explicit Pin(double position);
 
         double getThrow() const;
         double getAngle() const;
@@ -18,9 +18,15 @@ public:
     private:
         Crankshaft* owner_;
         double position_;
+
+        friend class Crankshaft;
     };
 
-    Crankshaft(double angle, double radius, std::vector<Pin>&& pins, Flywheel& flywheel);
+    Crankshaft(
+        double radius,
+        std::vector<Pin>&& pins,
+        Flywheel& flywheel
+    );
 
     void addAngle(double angle);
     void step(double dt);
