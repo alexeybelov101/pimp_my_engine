@@ -3,9 +3,9 @@
 #include <nlohmann/json_fwd.hpp>
 #include <memory>
 
-class Cylinder;
+class Bank;
 
-class CylinderBuilder {
+class BankBuilder {
 public:
-    static std::unique_ptr<Cylinder> build(const nlohmann::json& config, double offset = 0.0);
+    static std::unique_ptr<Bank> build(const nlohmann::json& config);
 };

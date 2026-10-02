@@ -1,68 +1,89 @@
 {
     "kinematics": {
-        "flywheels" : [
-            { "mass": 6700, "diameter": 263 }
-        ],
-        "conrods": [
-            { "length": 136.0 }
-        ],
-        "pistons": [
-            { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 }
-        ],
-        "valves" : [
-            { "headDiameter": 37.0, "seatAngle": 45.5 },
-            { "headDiameter": 32.0, "seatAngle": 45.5 }
-        ],
-        "lobes": [
-            { "duration": 232.0, "maxLift": 9.728 }
-        ],
-        "crankshafts": [
-            { "radius": 33.0, "crankpins": [
-                { "position": 0 },
-                { "position": 180 },
-                { "position": 180 },
-                { "position": 0 }
-            ]}
-        ],
-        "camshafts": [
-            { "lobes": [{ "id": 0, "position": -12 }]},
-            { "lobes": [{ "id": 1, "position": 498 }]}
-        ],
-        "valvetrains": [
-            { "valvetrainlets": [
-                { "camshaft": { "id": 0, "position": 0 }, "valves": [ { "id": 0, "count": 1 } ]},
-                { "camshaft": { "id": 0, "position": 540 }, "valves": [ { "id": 0, "count": 1 } ]},
-                { "camshaft": { "id": 0, "position": 180 }, "valves": [ { "id": 0, "count": 1 } ]},
-                { "camshaft": { "id": 0, "position": 360 }, "valves": [ { "id": 0, "count": 1 } ]}
-            ]},
-            { "valvetrainlets": [
-                { "camshaft": { "id": 1, "position": 0 }, "valves": [ { "id": 1, "count": 1 } ]},
-                { "camshaft": { "id": 1, "position": 540 }, "valves": [ { "id": 1, "count": 1 } ]},
-                { "camshaft": { "id": 1, "position": 180 }, "valves": [ { "id": 1, "count": 1 } ]},
-                { "camshaft": { "id": 1, "position": 360 }, "valves": [ { "id": 1, "count": 1 } ]}
-            ]}
-        ],
-        "heads": [
-            { "chamberVolume": 33200, "intakeValvetrain": { "id": 0 }, "exhaustValvetrain": { "id": 1 } }
-        ],
-        "blocks": [
-            { "height": 207.1, "gasketHeight": 1.065, "blocklets": [
-                { "piston": { "id": 0 }, "conrod": { "id": 0 }, "crankpin": { "id": 0 } },
-                { "piston": { "id": 0 }, "conrod": { "id": 0 }, "crankpin": { "id": 1 } },
-                { "piston": { "id": 0 }, "conrod": { "id": 0 }, "crankpin": { "id": 2 } },
-                { "piston": { "id": 0 }, "conrod": { "id": 0 }, "crankpin": { "id": 3 } }
-            ]}
-        ],
-        "banks": [
-            { "angle": 0, "head": { "id": 0 }, "block": { "id": 0 } }
-        ],
-        "engine": {
-            "flywheel": { "id": 0 },
-            "crankshaft": { "id": 0 },
-            "banks": [
-                { "id": 0, "position": 0 }
+        "flywheel": { "mass": 6700, "diameter": 263 },
+        "crankshaft": {
+            "radius": 33.0,
+            "crankpins": [
+                { "offset": 0 },
+                { "offset": 180 },
+                { "offset": 180 },
+                { "offset": 0 }
             ]
-        }
+        },
+        "banks": [
+            {
+                "offset": 0,
+                "head": {
+                    "chamberVolume": 33200,
+                    "intakeValvetrain": {
+                        "valvetrainlets": [
+                            {
+                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": -12 }]}, "offset": 0 }],
+                                "valves": [{ "prototype": { "headDiameter": 37.0, "seatAngle": 45.5 }, "count": 1 }]
+                            },
+                            {
+                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": -12 }]}, "offset": 540 }],
+                                "valves": [{ "prototype": { "headDiameter": 37.0, "seatAngle": 45.5 }, "count": 1 }]
+                            },
+                            {
+                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": -12 }]}, "offset": 180 }],
+                                "valves": [{ "prototype": { "headDiameter": 37.0, "seatAngle": 45.5 }, "count": 1 }]
+                            },
+                            {
+                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": -12 }]}, "offset": 360 }],
+                                "valves": [{ "prototype": { "headDiameter": 37.0, "seatAngle": 45.5 }, "count": 1 }]
+                            }
+                        ]
+                    },
+                    "exhaustValvetrain": {
+                        "valvetrainlets": [
+                            {
+                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": 498 }]}, "offset": 0 }],
+                                "valves": [{ "prototype": { "headDiameter": 32.0, "seatAngle": 45.5 }, "count": 1 }]
+                            },
+                            {
+                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": 498 }]}, "offset": 540 }],
+                                "valves": [{ "prototype": { "headDiameter": 32.0, "seatAngle": 45.5 }, "count": 1 }]
+                            },
+                            {
+                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": 498 }]}, "offset": 180 }],
+                                "valves": [{ "prototype": { "headDiameter": 32.0, "seatAngle": 45.5 }, "count": 1 }]
+                            },
+                            {
+                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": 498 }]}, "offset": 360 }],
+                                "valves": [{ "prototype": { "headDiameter": 32.0, "seatAngle": 45.5 }, "count": 1 }]
+                            }
+                        ]
+                    }
+                },
+                "block": {
+                    "height": 207.1,
+                    "gasketHeight": 1.065,
+                    "blocklets": [
+                        {
+                            "piston": { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 },
+                            "conrod": { "length": 136.0 },
+                            "crankpin": 0
+                        },
+                        {
+                            "piston": { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 },
+                            "conrod": { "length": 136.0 },
+                            "crankpin": 1
+                        },
+                        {
+                            "piston": { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 },
+                            "conrod": { "length": 136.0 },
+                            "crankpin": 2
+                        },
+                        {
+                            "piston": { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 },
+                            "conrod": { "length": 136.0 },
+                            "crankpin": 3
+                        }
+                    ]
+                }
+            }
+        ]
     },
     "pipeSystem": {
         "pipes": [

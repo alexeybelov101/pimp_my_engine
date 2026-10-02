@@ -28,7 +28,10 @@ public:
         Flywheel& flywheel
     );
 
-    void addAngle(double angle);
+    double getOmega() const;
+    double getAngle() const;
+
+    void advance(double dt);
     void step(double dt);
 
 private:

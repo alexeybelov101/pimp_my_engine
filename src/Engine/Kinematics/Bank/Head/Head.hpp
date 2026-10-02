@@ -9,7 +9,6 @@ public:
     class Headlet {
     public:
         Headlet(
-            Head* owner,
             Valvetrain::Valvetrainlet& intakeValvetrainlet,
             Valvetrain::Valvetrainlet& exhaustValvetrainlet
         );
@@ -25,17 +24,18 @@ public:
         Head* owner_;
         Valvetrain::Valvetrainlet& intakeValvetrainlet_;
         Valvetrain::Valvetrainlet& exhaustValvetrainlet_;
+
+        friend class Head;
     };
 
     Head(
         double chamberVolume,
         std::unique_ptr<Valvetrain> intakeValvetrain,
-        std::unique_ptr<Valvetrain> exhaustValvetrain
+        std::unique_ptr<Valvetrain> exhaustValvetrain,
+        std::vector<std::unique_ptr<Headlet>> headlets_
     );
 
 private:
-    void setHeadlets(std::vector<std::unique_ptr<Headlet>> headlets);
-
     double chamberVolume_;
     std::unique_ptr<Valvetrain> intakeValvetrain_;
     std::unique_ptr<Valvetrain> exhaustValvetrain_;

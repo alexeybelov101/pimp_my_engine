@@ -6,22 +6,23 @@
 Head::Head(
     double chamberVolume,
     std::unique_ptr<Valvetrain> intakeValvetrain,
-    std::unique_ptr<Valvetrain> exhaustValvetrain
-) : chamberVolume_(chamberVolume),
+    std::unique_ptr<Valvetrain> exhaustValvetrain,
+    std::vector<std::unique_ptr<Headlet>> headlets
+):
+    chamberVolume_(chamberVolume),
     intakeValvetrain_(std::move(intakeValvetrain)),
-    exhaustValvetrain_(std::move(exhaustValvetrain)) {}
+    exhaustValvetrain_(std::move(exhaustValvetrain)),
+    headlets_(std::move(headlets)) {
+        for (auto& h : headlets_) h->owner_ = this;
+    }
 
 Head::Headlet::Headlet(
-    Head* owner,
     Valvetrain::Valvetrainlet& intakeValvetrainlet,
     Valvetrain::Valvetrainlet& exhaustValvetrainlet
-) : owner_(owner),
+):
+    owner_(nullptr),
     intakeValvetrainlet_(intakeValvetrainlet),
     exhaustValvetrainlet_(exhaustValvetrainlet) {}
-
-void Head::setHeadlets(std::vector<std::unique_ptr<Headlet>> headlets) {
-    headlets_ = std::move(headlets);
-}
 
 double Head::Headlet::getChamberVolume() const {
     return owner_->chamberVolume_;

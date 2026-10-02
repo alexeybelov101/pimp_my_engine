@@ -32,7 +32,8 @@ public:
         Crankshaft& crankshaft
     );
 
-    void addAngle(double angle);
+    double getAngle() const;
+    void setAngle(double angle);
 
 private:
     double angle_;

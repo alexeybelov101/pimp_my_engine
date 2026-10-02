@@ -11,11 +11,18 @@ Valvetrain::Valvetrain(
     valvetrainlets_(std::move(valvetrainlets)),
     crankshaft_(crankshaft) {}
 
-void Valvetrain::addAngle(double angle) {
-    angle_ += angle;
-    angle_ = fmod(angle_, 2.0 * std::numbers::pi);
+//TODO: переделать, когда появится нагрузка от ГРМ
+double Valvetrain::getAngle() const {
+    return angle_;
 }
 
+void Valvetrain::setAngle(double angle) {
+    angle_ = angle;
+}
+
+
+// Valvetrainlet
+//==============================================================================
 Valvetrain::Valvetrainlet::Valvetrainlet(
     Valvetrain* owner,
     Camshaft&& camshaft,
@@ -28,12 +35,10 @@ Valvetrain::Valvetrainlet::Valvetrainlet(
     lobeValves_(std::move(lobeValves)) {}
 
 double Valvetrain::Valvetrainlet::getAngle() const {
-    double angle = fmod(
-        owner_->angle_ + position_,
+    return fmod(
+        owner_->angle_ - position_ + 2.0 * std::numbers::pi,
         2.0 * std::numbers::pi
     );
-
-    return angle;
 }
 
 double Valvetrain::Valvetrainlet::getTotalFlowArea() const {

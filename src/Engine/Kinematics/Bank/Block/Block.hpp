@@ -10,7 +10,6 @@ public:
     class Blocklet {
     public:
         Blocklet(
-            Block* owner,
             Piston&& piston,
             Conrod&& conrod,
             Crankshaft::Pin& pin
@@ -35,6 +34,8 @@ public:
         Piston piston_;
         Conrod conrod_;
         Crankshaft::Pin& pin_;
+
+        friend class Block;
     };
 
     Block(

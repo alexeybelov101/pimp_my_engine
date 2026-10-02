@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-#include "CylinderBuilder.hpp"
+#include "BankBuilder.hpp"
 #include "Head/HeadBuilder.hpp"
 #include "Block/BlockBuilder.hpp"
-#include "Cylinder.hpp"
+#include "Bank.hpp"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 
-std::unique_ptr<Cylinder> CylinderBuilder::build(const json& config, double offset) {
-    return std::make_unique<Cylinder>(
+std::unique_ptr<Bank> BankBuilder::build(const json& config, double offset) {
+    return std::make_unique<Bank>(
         HeadBuilder::build(config["head"]),
         BlockBuilder::build(config["block"]),
         offset

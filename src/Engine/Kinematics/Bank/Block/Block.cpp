@@ -3,11 +3,26 @@
 #include <utility>
 #include <cmath>
 
-Block::Block(double height, double gasketHeight, std::vector<Blocklet>&& blocklets):
-    height_(height), gasketHeight_(gasketHeight), blocklets_(std::move(blocklets)) {}
+Block::Block(
+    double height,
+    double gasketHeight,
+    std::vector<Blocklet>&& blocklets
+):
+    height_(height),
+    gasketHeight_(gasketHeight),
+    blocklets_(std::move(blocklets)) {
+        for (auto& b : blocklets_) b.owner_ = this;
+    }
 
-Block::Blocklet::Blocklet(Block* owner, Piston&& piston, Conrod&& conrod, Crankshaft::Pin& pin):
-    owner_(owner), piston_(std::move(piston)), conrod_(std::move(conrod)), pin_(pin) {}
+Block::Blocklet::Blocklet(
+    Piston&& piston,
+    Conrod&& conrod,
+    Crankshaft::Pin& pin
+):
+    owner_(nullptr),
+    piston_(std::move(piston)),
+    conrod_(std::move(conrod)),
+    pin_(pin) {}
 
 // TODO: оптимизация - sqrt(lambda^2 - sin^2) вычисляется дважды
 double Block::Blocklet::getPistonTopPosition() const {
