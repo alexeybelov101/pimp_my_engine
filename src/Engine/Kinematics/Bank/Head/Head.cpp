@@ -7,39 +7,41 @@ Head::Head(
     double chamberVolume,
     std::unique_ptr<Valvetrain> intakeValvetrain,
     std::unique_ptr<Valvetrain> exhaustValvetrain,
-    std::vector<std::unique_ptr<Headlet>> headlets
+    std::vector<Headlet>&& headlets
 ):
     chamberVolume_(chamberVolume),
     intakeValvetrain_(std::move(intakeValvetrain)),
     exhaustValvetrain_(std::move(exhaustValvetrain)),
     headlets_(std::move(headlets)) {
-        for (auto& h : headlets_) h->owner_ = this;
+        for (auto& h : headlets_) h.owner_ = this;
     }
 
+// Headlet
+//==============================================================================
 Head::Headlet::Headlet(
-    Valvetrain::Valvetrainlet& intakeValvetrainlet,
-    Valvetrain::Valvetrainlet& exhaustValvetrainlet
+    Valvetrain::Link* intakeLink,
+    Valvetrain::Link* exhaustLink
 ):
     owner_(nullptr),
-    intakeValvetrainlet_(intakeValvetrainlet),
-    exhaustValvetrainlet_(exhaustValvetrainlet) {}
+    intakeLink_(intakeLink),
+    exhaustLink_(exhaustLink) {}
 
 double Head::Headlet::getChamberVolume() const {
     return owner_->chamberVolume_;
 }
 
 double Head::Headlet::getIntakeFlowArea() const {
-    return intakeValvetrainlet_.getTotalFlowArea();
+    return intakeLink_->getTotalFlowArea();
 }
 
 double Head::Headlet::getIntakeValveArea() const {
-    return intakeValvetrainlet_.getTotalValveArea();
+    return intakeLink_->getTotalValveArea();
 }
 
 double Head::Headlet::getExhaustFlowArea() const {
-    return exhaustValvetrainlet_.getTotalFlowArea();
+    return exhaustLink_->getTotalFlowArea();
 }
 
 double Head::Headlet::getExhaustValveArea() const {
-    return exhaustValvetrainlet_.getTotalValveArea();
+    return exhaustLink_->getTotalValveArea();
 }

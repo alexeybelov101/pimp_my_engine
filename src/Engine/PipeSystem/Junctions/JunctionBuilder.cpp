@@ -4,7 +4,7 @@
 #include "Junction3.hpp"
 #include "Engine/PipeSystem/Atmosphere/Atmosphere.hpp"
 #include "Engine/PipeSystem/Pipe/Pipe.hpp"
-#include "Engine/Cylinder/Cylinder.hpp"
+#include "Engine/PipeSystem/Cylinder/Cylinder.hpp"
 #include "Interfaces/IBoundary.hpp"
 #include "Interfaces/IJunction.hpp"
 

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #include "ValvetrainBuilder.hpp"
 #include "Camshaft/CamshaftBuilder.hpp"
-#include "Valvetrain.hpp"
-#include "Valve.hpp"
+#include "Engine/Kinematics/Bank/Head/Valvetrain/Valve.hpp"
 #include <nlohmann/json.hpp>
+#include <memory>
 #include <numbers>
 #include <cmath>
 
@@ -12,37 +12,61 @@ constexpr double MM_TO_M = 1.0e-3;
 
 using json = nlohmann::json;
 
-Valvetrain ValvetrainBuilder::build(const json& config) {
-    return Valvetrain(
-        CamshaftBuilder::build(config["camshaft"]),
-        createLobeValves(
-            config["valve"],
-            config["camshaft"]["lobe"]["count"].get<size_t>()
-        )
+std::unique_ptr<Valvetrain> ValvetrainBuilder::build(const json& config) {
+    auto camshaft = CamshaftBuilder::build(config["camshaft"]);
+    auto valves = createValves(config["valves"]);
+    auto links = createLinks(config["links"], camshaft.get(), &valves);
+
+    return std::make_unique<Valvetrain>(
+        std::move(camshaft),
+        std::move(valves),
+        std::move(links)
     );
 }
 
-std::vector<std::vector<Valve>> ValvetrainBuilder::createLobeValves(const json& config, size_t lobeCount) {
-    const size_t valvesPerLobe = config["count"].get<size_t>();
-    const auto& valveProto = config["prototype"];
+std::vector<std::unique_ptr<Valve>> ValvetrainBuilder::createValves(const json& config) {
+    std::vector<std::unique_ptr<Valve>> valves;
+    valves.reserve(config.size());
 
-    std::vector<Valve> templateValves;
-    templateValves.reserve(valvesPerLobe);
+    for (const auto& valveProto : config) {
+        valves.emplace_back(
+            std::make_unique<Valve>(
+                valveProto["headDiameter"].get<double>() / 2.0 * MM_TO_M,
+                std::sin(valveProto["seatAngle"].get<double>() * DEG_TO_RAD),
+                std::cos(valveProto["seatAngle"].get<double>() * DEG_TO_RAD)
+            )
+        );
+    }
+    return valves;
+}
 
-    for (size_t valveId = 0; valveId < valvesPerLobe; ++valveId) {
-        templateValves.emplace_back(
-            valveProto["headDiameter"].get<double>() / 2.0 * MM_TO_M,
-            std::sin(valveProto["seatAngle"].get<double>() * DEG_TO_RAD),
-            std::cos(valveProto["seatAngle"].get<double>() * DEG_TO_RAD)
+std::vector<Valvetrain::Link> ValvetrainBuilder::createLinks(
+    const json& config,
+    Camshaft* camshaft,
+    std::vector<std::unique_ptr<Valve>>* valves
+) {
+    auto lobes = camshaft->getLobes();
+    std::vector<Valvetrain::Link> links;
+    links.reserve(config.size());
+
+    for (auto& linkProto : config) {
+        std::vector<Camshaft::Lobe*> linkLobes;
+        linkLobes.reserve(linkProto["lobes"].size());
+        for (auto& lobeId : linkProto["lobes"]) {
+            linkLobes.emplace_back(lobes[lobeId]);
+        }
+
+        std::vector<Valve*> linkValves;
+        linkValves.reserve(linkProto["valves"].size());
+        for (auto& valveId : linkProto["valves"]) {
+            linkValves.emplace_back((*valves)[valveId].get());
+        }
+
+        links.emplace_back(
+            std::move(linkLobes),
+            std::move(linkValves)
         );
     }
 
-    std::vector<std::vector<Valve>> lobeValves;
-    lobeValves.reserve(lobeCount);
-
-    for (size_t lobeId = 0; lobeId < lobeCount; ++lobeId) {
-        lobeValves.push_back(templateValves);
-    }
-
-    return lobeValves;
+    return links;
 }

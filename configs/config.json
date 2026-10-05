@@ -16,76 +16,88 @@
                 "head": {
                     "chamberVolume": 33200,
                     "intakeValvetrain": {
-                        "valvetrainlets": [
-                            {
-                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": -12 }]}, "offset": 0 }],
-                                "valves": [{ "prototype": { "headDiameter": 37.0, "seatAngle": 45.5 }, "count": 1 }]
-                            },
-                            {
-                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": -12 }]}, "offset": 540 }],
-                                "valves": [{ "prototype": { "headDiameter": 37.0, "seatAngle": 45.5 }, "count": 1 }]
-                            },
-                            {
-                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": -12 }]}, "offset": 180 }],
-                                "valves": [{ "prototype": { "headDiameter": 37.0, "seatAngle": 45.5 }, "count": 1 }]
-                            },
-                            {
-                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": -12 }]}, "offset": 360 }],
-                                "valves": [{ "prototype": { "headDiameter": 37.0, "seatAngle": 45.5 }, "count": 1 }]
-                            }
+                        "camshaft": {
+                            "lobes": [
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 708 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 168 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 528 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 348 }
+                            ]
+                        },
+                        "valves": [
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
+                            { "headDiameter": 37.0, "seatAngle": 45.5 }
+                        ],
+                        "links": [
+                            { "lobes": [ 0 ], "valves": [ 0 ] },
+                            { "lobes": [ 1 ], "valves": [ 1 ] },
+                            { "lobes": [ 2 ], "valves": [ 2 ] },
+                            { "lobes": [ 3 ], "valves": [ 3 ] }
                         ]
                     },
                     "exhaustValvetrain": {
-                        "valvetrainlets": [
-                            {
-                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": 498 }]}, "offset": 0 }],
-                                "valves": [{ "prototype": { "headDiameter": 32.0, "seatAngle": 45.5 }, "count": 1 }]
-                            },
-                            {
-                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": 498 }]}, "offset": 540 }],
-                                "valves": [{ "prototype": { "headDiameter": 32.0, "seatAngle": 45.5 }, "count": 1 }]
-                            },
-                            {
-                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": 498 }]}, "offset": 180 }],
-                                "valves": [{ "prototype": { "headDiameter": 32.0, "seatAngle": 45.5 }, "count": 1 }]
-                            },
-                            {
-                                "camshafts": [{ "prototype": { "lobes": [{ "prototype": { "duration": 232.0, "maxLift": 9.728 }, "count": 1, "offset": 498 }]}, "offset": 360 }],
-                                "valves": [{ "prototype": { "headDiameter": 32.0, "seatAngle": 45.5 }, "count": 1 }]
-                            }
+                        "camshaft": {
+                            "lobes": [
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 498 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 678 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 318 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 138 }
+                            ]
+                        },
+                        "valves": [
+                            { "headDiameter": 32.0, "seatAngle": 45.5 },
+                            { "headDiameter": 32.0, "seatAngle": 45.5 },
+                            { "headDiameter": 32.0, "seatAngle": 45.5 },
+                            { "headDiameter": 32.0, "seatAngle": 45.5 }
+                        ],
+                        "links": [
+                            { "lobes": [ 0 ], "valves": [ 0 ] },
+                            { "lobes": [ 1 ], "valves": [ 1 ] },
+                            { "lobes": [ 2 ], "valves": [ 2 ] },
+                            { "lobes": [ 3 ], "valves": [ 3 ] }
                         ]
-                    }
+                    },
+                    "headlets": [
+                        { "intakeLink": 0, "exhaustLink": 0 },
+                        { "intakeLink": 1, "exhaustLink": 1 },
+                        { "intakeLink": 2, "exhaustLink": 2 },
+                        { "intakeLink": 3, "exhaustLink": 3 }
+                    ]
                 },
                 "block": {
                     "height": 207.1,
-                    "gasketHeight": 1.065,
+                    "gasketHeight": 1.15,
+                    "pistons": [
+                        { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 },
+                        { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 },
+                        { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 },
+                        { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 }
+                    ],
+                    "conrods": [
+                        { "length": 136.0 },
+                        { "length": 136.0 },
+                        { "length": 136.0 },
+                        { "length": 136.0 }
+                    ],
                     "blocklets": [
-                        {
-                            "piston": { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 },
-                            "conrod": { "length": 136.0 },
-                            "crankpin": 0
-                        },
-                        {
-                            "piston": { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 },
-                            "conrod": { "length": 136.0 },
-                            "crankpin": 1
-                        },
-                        {
-                            "piston": { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 },
-                            "conrod": { "length": 136.0 },
-                            "crankpin": 2
-                        },
-                        {
-                            "piston": { "diameter": 79.0, "compressionHeight": 37.9, "deckVolume": 3700 },
-                            "conrod": { "length": 136.0 },
-                            "crankpin": 3
-                        }
+                        { "piston": 0, "conrod": 0, "pin": 0 },
+                        { "piston": 1, "conrod": 1, "pin": 1 },
+                        { "piston": 2, "conrod": 2, "pin": 2 },
+                        { "piston": 3, "conrod": 3, "pin": 3 }
                     ]
                 }
             }
         ]
     },
     "pipeSystem": {
+        "cylinders": [
+            { "headlet": 0, "blocklet": 0 },
+            { "headlet": 1, "blocklet": 1 },
+            { "headlet": 2, "blocklet": 2 },
+            { "headlet": 3, "blocklet": 3 }
+        ],
         "pipes": [
                 { "id": 0, "length": 100, "radius": 22 },
                 { "id": 1, "length": 230, "radius": 16 },

@@ -9,8 +9,8 @@ public:
     class Headlet {
     public:
         Headlet(
-            Valvetrain::Valvetrainlet& intakeValvetrainlet,
-            Valvetrain::Valvetrainlet& exhaustValvetrainlet
+            Valvetrain::Link* intakeLink,
+            Valvetrain::Link* exhaustLink
         );
 
         double getChamberVolume() const;
@@ -22,8 +22,8 @@ public:
         double getExhaustValveArea() const;
     private:
         Head* owner_;
-        Valvetrain::Valvetrainlet& intakeValvetrainlet_;
-        Valvetrain::Valvetrainlet& exhaustValvetrainlet_;
+        Valvetrain::Link* intakeLink_;
+        Valvetrain::Link* exhaustLink_;
 
         friend class Head;
     };
@@ -32,12 +32,14 @@ public:
         double chamberVolume,
         std::unique_ptr<Valvetrain> intakeValvetrain,
         std::unique_ptr<Valvetrain> exhaustValvetrain,
-        std::vector<std::unique_ptr<Headlet>> headlets_
+        std::vector<Headlet>&& headlets_
     );
 
 private:
     double chamberVolume_;
     std::unique_ptr<Valvetrain> intakeValvetrain_;
     std::unique_ptr<Valvetrain> exhaustValvetrain_;
-    std::vector<std::unique_ptr<Headlet>> headlets_;
+    std::vector<Headlet> headlets_;
+
+    friend class Bank;
 };

@@ -13,7 +13,7 @@ public:
         std::unique_ptr<Flywheel> flywheel,
         std::unique_ptr<Crankshaft> crankshaft,
         std::vector<std::unique_ptr<Bank>> banks,
-        std::unique_ptr<Drive> drive
+        Drive&& drive
     );
 
     void setOmega(double omega);
@@ -23,5 +23,8 @@ private:
     std::unique_ptr<Flywheel> flywheel_;
     std::unique_ptr<Crankshaft> crankshaft_;
     std::vector<std::unique_ptr<Bank>> banks_;
-    std::unique_ptr<Drive> drive_;
+    Drive drive_;
+
+    std::vector<Bank*> getBanks();
+    friend class PipeSystemBuilder;
 };

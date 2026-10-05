@@ -9,8 +9,8 @@
 class Cylinder : public INode {
 public:
     Cylinder(
-        Head::Headlet& headlet,
-        Block::Blocklet& blocklet
+        Head::Headlet* headlet,
+        Block::Blocklet* blocklet
     );
 
     double getTotalChamberVolume() const;
@@ -44,8 +44,8 @@ private:
         bool isLeft_;
     };
 
-    Head::Headlet& headlet_;
-    Block::Blocklet& blocklet_;
+    Head::Headlet* headlet_;
+    Block::Blocklet* blocklet_;
 
     double mass_;
     double energy_;

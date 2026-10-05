@@ -2,8 +2,14 @@
 #include "Piston.hpp"
 #include <numbers>
 
-Piston::Piston(double radius, double compressionHeight, double deckVolume) :
-    radius_(radius), compressionHeight_(compressionHeight), deckVolume_(deckVolume) {}
+Piston::Piston(
+    double radius,
+    double compressionHeight,
+    double deckVolume
+):
+    radius_(radius),
+    compressionHeight_(compressionHeight),
+    deckVolume_(deckVolume) {}
 
 double Piston::getBore() const {
     return radius_ * 2.0;

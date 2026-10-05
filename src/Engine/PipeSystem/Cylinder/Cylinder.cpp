@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Cylinder.hpp"
-#include <utility>
 #include <algorithm>
 
 namespace GD = GasDynamics;
 
 Cylinder::Cylinder(
-    Head::Headlet& headlet,
-    Block::Blocklet& blocklet
+    Head::Headlet* headlet,
+    Block::Blocklet* blocklet
 ):
     headlet_(headlet), blocklet_(blocklet),
     mass_(GD::RHO_AMBIENT * getCurrentVolume()),
@@ -22,16 +21,16 @@ void Cylinder::step(double dt) {
 }
 
 double Cylinder::getTotalChamberVolume() const {
-    return headlet_.getChamberVolume() + blocklet_.getTotalDeckVolume();
+    return headlet_->getChamberVolume() + blocklet_->getTotalDeckVolume();
 }
 
 double Cylinder::getCompressionRatio() const {
     double totalChamberVolume = getTotalChamberVolume();
-    return (blocklet_.getSweptVolume() + totalChamberVolume) / totalChamberVolume;
+    return (blocklet_->getSweptVolume() + totalChamberVolume) / totalChamberVolume;
 }
 
 double Cylinder::getCurrentVolume() const {
-    return getTotalChamberVolume() + blocklet_.getDisplacedVolume();
+    return getTotalChamberVolume() + blocklet_->getDisplacedVolume();
 }
 
 double Cylinder::calculatePressure() const {
@@ -39,22 +38,22 @@ double Cylinder::calculatePressure() const {
 }
 
 double Cylinder::calculateForceG() const {
-    return calculatePressure() * blocklet_.getBoreArea();
+    return calculatePressure() * blocklet_->getBoreArea();
 }
 
 double Cylinder::calculateForceI() const {
-    return (calculatePressure() - GD::P_ATM) * blocklet_.getBoreArea();
+    return (calculatePressure() - GD::P_ATM) * blocklet_->getBoreArea();
 }
 
 void Cylinder::applyForce() {
-    blocklet_.applyForce(calculateForceI());
+    blocklet_->applyForce(calculateForceI());
 }
 
 void Cylinder::applyFlux(double dt) {
     mass_ += flux_.mass * dt;
     energy_ += flux_.energy * dt;
 
-    energy_ -= calculateForceG() * blocklet_.getPistonVelocity() * dt;
+    energy_ -= calculateForceG() * blocklet_->getPistonVelocity() * dt;
 
     mass_ = std::max(mass_, 1.0e-12);
     energy_ = std::max(energy_, 1.0e-12);
@@ -95,14 +94,14 @@ void Cylinder::CylinderBoundary::setFlux(const Flux& flux) const {
 
 double Cylinder::CylinderBoundary::getArea() const {
     return isLeft_
-        ? owner_->headlet_.getIntakeValveArea()
-        : owner_->headlet_.getExhaustValveArea();
+        ? owner_->headlet_->getIntakeValveArea()
+        : owner_->headlet_->getExhaustValveArea();
 }
 
 double Cylinder::CylinderBoundary::getAperture() const {
     return isLeft_
-        ? owner_->headlet_.getIntakeFlowArea()
-        : owner_->headlet_.getExhaustFlowArea();
+        ? owner_->headlet_->getIntakeFlowArea()
+        : owner_->headlet_->getExhaustFlowArea();
 }
 
 bool Cylinder::CylinderBoundary::isLeft() const {

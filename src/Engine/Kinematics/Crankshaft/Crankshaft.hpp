@@ -7,7 +7,7 @@ class Crankshaft {
 public:
     class Pin {
     public:
-        explicit Pin(double position);
+        explicit Pin(double offset);
 
         double getThrow() const;
         double getAngle() const;
@@ -17,7 +17,7 @@ public:
 
     private:
         Crankshaft* owner_;
-        double position_;
+        double offset_;
 
         friend class Crankshaft;
     };
@@ -41,4 +41,7 @@ private:
 
     std::vector<Pin> pins_;
     Flywheel& flywheel_;
+
+    std::vector<Pin*> getPins();
+    friend class BlockBuilder;
 };

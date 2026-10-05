@@ -9,18 +9,19 @@ class Pipe;
 class IJunction;
 class Atmosphere;
 class Cylinder;
+class Kinematics;
 
 class PipeSystemBuilder {
 public:
     static std::unique_ptr<PipeSystem> build(
         const nlohmann::json& config,
-        const std::vector<std::unique_ptr<Cylinder>>& cylinders,
+        Kinematics* kinematics,
         const double dt
     );
 
 private:
     static std::vector<std::unique_ptr<Pipe>> createPipes(const nlohmann::json& config, double dt);
-
+    static std::vector<std::unique_ptr<Cylinder>> createCylinders(const nlohmann::json& config, Kinematics* kinematics);
     static std::vector<std::unique_ptr<IJunction>> createJunctions(
         const nlohmann::json& config,
         const Atmosphere& atmosphere,

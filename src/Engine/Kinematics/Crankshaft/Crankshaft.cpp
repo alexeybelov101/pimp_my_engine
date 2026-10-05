@@ -35,15 +35,25 @@ void Crankshaft::advance(double dt) {
 void Crankshaft::step(double dt) {
     flywheel_.applyTorque(torque_, dt);
     torque_ = 0.0;
-
     advance(dt);
+}
+
+std::vector<Crankshaft::Pin*> Crankshaft::getPins() {
+    std::vector<Crankshaft::Pin*> result;
+    result.reserve(pins_.size());
+
+    for (auto& pin : pins_) {
+        result.push_back(&pin);
+    }
+
+    return result;
 }
 
 // Pin
 //==============================================================================
-Crankshaft::Pin::Pin(double position):
+Crankshaft::Pin::Pin(double offset):
     owner_(nullptr),
-    position_(position) {}
+    offset_(offset) {}
 
 double Crankshaft::Pin::getThrow() const {
     return owner_->radius_;
@@ -51,7 +61,7 @@ double Crankshaft::Pin::getThrow() const {
 
 double Crankshaft::Pin::getAngle() const {
     return fmod(
-        owner_->angle_ - position_ + 2.0 * std::numbers::pi,
+        owner_->angle_ - offset_ + 2.0 * std::numbers::pi,
         2.0 * std::numbers::pi
     );
 }

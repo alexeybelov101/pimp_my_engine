@@ -1,42 +1,44 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
-#include "Engine/Kinematics/Crankshaft/Crankshaft.hpp"
 #include "Camshaft/Camshaft.hpp"
 #include "Valve.hpp"
+#include <memory>
 #include <vector>
 
 class Valvetrain {
 public:
-    class Valvetrainlet {
+    class Link {
     public:
-        Valvetrainlet(
-            Valvetrain* owner,
-            Camshaft&& camshaft,
-            double position,
-            std::vector<std::vector<Valve>>&& lobeValves
+        Link(
+            std::vector<Camshaft::Lobe*>&& lobes,
+            std::vector<Valve*>&& valves
         );
 
-        double getAngle() const;
         double getTotalFlowArea() const;
         double getTotalValveArea() const;
 
     private:
         Valvetrain* owner_;
-        Camshaft camshaft_;
-        double position_;
-        std::vector<std::vector<Valve>> lobeValves_;
+        std::vector<Camshaft::Lobe*> lobes_;
+        std::vector<Valve*> valves_;
+
+        friend class Valvetrain;
     };
 
     Valvetrain(
-        std::vector<Valvetrainlet>&& valvetrainlets,
-        Crankshaft& crankshaft
+        std::unique_ptr<Camshaft> camshaft,
+        std::vector<std::unique_ptr<Valve>> valves,
+        std::vector<Link>&& links
     );
 
     double getAngle() const;
     void setAngle(double angle);
 
 private:
-    double angle_;
-    std::vector<Valvetrainlet> valvetrainlets_;
-    Crankshaft& crankshaft_;
+    std::unique_ptr<Camshaft> camshaft_;
+    std::vector<std::unique_ptr<Valve>> valves_;
+    std::vector<Link> links_; //links zwo, drei, vier
+
+    std::vector<Link*> getLinks();
+    friend class HeadBuilder;
 };

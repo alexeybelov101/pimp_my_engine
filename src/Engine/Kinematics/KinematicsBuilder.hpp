@@ -7,7 +7,6 @@
 class Flywheel;
 class Crankshaft;
 class Bank;
-class Valvetrain;
 class Drive;
 class Kinematics;
 
@@ -17,5 +16,5 @@ public:
 
 private:
     static std::unique_ptr<Flywheel> createFlywheel(const nlohmann::json& config);
-    static std::unique_ptr<Drive> createDrive(Crankshaft& crankshaft, std::vector<Valvetrain*> valvetrains);
+    static Drive createDrive(Crankshaft* crankshaft, std::vector<std::unique_ptr<Bank>>* banks);
 };

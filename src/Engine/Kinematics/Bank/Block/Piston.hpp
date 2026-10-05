@@ -3,7 +3,11 @@
 
 class Piston {
     public:
-        Piston(double radius, double compressionHeight, double deckVolume);
+        Piston(
+            double radius,
+            double compressionHeight,
+            double deckVolume
+        );
 
         double getBore() const;
         double getCompressionHeight() const;

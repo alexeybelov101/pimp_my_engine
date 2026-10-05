@@ -1,65 +1,62 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Valvetrain.hpp"
-#include <numbers>
-#include <cmath>
+#include <utility>
 
 Valvetrain::Valvetrain(
-    std::vector<Valvetrainlet>&& valvetrainlets,
-    Crankshaft& crankshaft
+    std::unique_ptr<Camshaft> camshaft,
+    std::vector<std::unique_ptr<Valve>> valves,
+    std::vector<Link>&& links
 ):
-    angle_(0.0),
-    valvetrainlets_(std::move(valvetrainlets)),
-    crankshaft_(crankshaft) {}
+    camshaft_(std::move(camshaft)),
+    valves_(std::move(valves)),
+    links_(std::move(links)) {
+        for (auto& l : links_) l.owner_ = this;
+    }
 
 //TODO: переделать, когда появится нагрузка от ГРМ
 double Valvetrain::getAngle() const {
-    return angle_;
+    return camshaft_->getAngle();
 }
 
 void Valvetrain::setAngle(double angle) {
-    angle_ = angle;
+    camshaft_->setAngle(angle);
 }
 
+std::vector<Valvetrain::Link*> Valvetrain::getLinks() {
+    std::vector<Valvetrain::Link*> result;
+    result.reserve(links_.size());
 
-// Valvetrainlet
+    for (auto& link : links_) {
+        result.push_back(&link);
+    }
+
+    return result;
+}
+
+// Link
 //==============================================================================
-Valvetrain::Valvetrainlet::Valvetrainlet(
-    Valvetrain* owner,
-    Camshaft&& camshaft,
-    double position,
-    std::vector<std::vector<Valve>>&& lobeValves
+Valvetrain::Link::Link(
+    std::vector<Camshaft::Lobe*>&& lobes,
+    std::vector<Valve*>&& valves
 ):
-    owner_(owner),
-    camshaft_(std::move(camshaft)),
-    position_(position),
-    lobeValves_(std::move(lobeValves)) {}
+    owner_(nullptr),
+    lobes_(std::move(lobes)),
+    valves_(std::move(valves)) {}
 
-double Valvetrain::Valvetrainlet::getAngle() const {
-    return fmod(
-        owner_->angle_ - position_ + 2.0 * std::numbers::pi,
-        2.0 * std::numbers::pi
-    );
-}
-
-double Valvetrain::Valvetrainlet::getTotalFlowArea() const {
-    double angle = getAngle();
+double Valvetrain::Link::getTotalFlowArea() const {
+    double lift = lobes_[0]->getLift(); //TODO: реализовать логику VTEC
     double sum = 0.0;
-    for (size_t lobeId = 0; lobeId < lobeValves_.size(); ++lobeId) {
-        double lift = camshaft_.getLift(lobeId, angle);
-        for (const Valve& valve : lobeValves_[lobeId]) {
-            sum += valve.getFlowArea(lift);
-        }
+    for (auto& valve : valves_ ) {
+        sum += valve->getFlowArea(lift);
     }
 
     return sum;
 }
 
-double Valvetrain::Valvetrainlet::getTotalValveArea() const {
+double Valvetrain::Link::getTotalValveArea() const {
     double sum = 0.0;
-    for (const auto& valves : lobeValves_) {
-        for (const auto& valve : valves) {
-            sum += valve.getValveArea();
-        }
+    for (const auto& valve : valves_) {
+        sum += valve->getValveArea();
     }
 
     return sum;

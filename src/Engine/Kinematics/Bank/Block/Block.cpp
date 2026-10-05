@@ -6,30 +6,34 @@
 Block::Block(
     double height,
     double gasketHeight,
+    std::vector<std::unique_ptr<Piston>>&& pistons,
+    std::vector<std::unique_ptr<Conrod>>&& conrods,
     std::vector<Blocklet>&& blocklets
 ):
     height_(height),
     gasketHeight_(gasketHeight),
+    pistons_(std::move(pistons)),
+    conrods_(std::move(conrods)),
     blocklets_(std::move(blocklets)) {
         for (auto& b : blocklets_) b.owner_ = this;
     }
 
 Block::Blocklet::Blocklet(
-    Piston&& piston,
-    Conrod&& conrod,
-    Crankshaft::Pin& pin
+    Piston* piston,
+    Conrod* conrod,
+    Crankshaft::Pin* pin
 ):
     owner_(nullptr),
-    piston_(std::move(piston)),
-    conrod_(std::move(conrod)),
+    piston_(piston),
+    conrod_(conrod),
     pin_(pin) {}
 
 // TODO: оптимизация - sqrt(lambda^2 - sin^2) вычисляется дважды
 double Block::Blocklet::getPistonTopPosition() const {
-    double angle = pin_.getAngle();
-    double R = pin_.getThrow();
-    double L = conrod_.getLength();
-    double H = piston_.getCompressionHeight();
+    double angle = pin_->getAngle();
+    double R = pin_->getThrow();
+    double L = conrod_->getLength();
+    double H = piston_->getCompressionHeight();
     double lambda = L / R;
 
     double sinA, cosA;
@@ -39,9 +43,9 @@ double Block::Blocklet::getPistonTopPosition() const {
 }
 
 double Block::Blocklet::getLeverArm() const {
-    double angle = pin_.getAngle();
-    double R = pin_.getThrow();
-    double L = conrod_.getLength();
+    double angle = pin_->getAngle();
+    double R = pin_->getThrow();
+    double L = conrod_->getLength();
     double lambda = L / R;  // отношение длины шатуна к радиусу
 
     double sinA, cosA;
@@ -51,11 +55,11 @@ double Block::Blocklet::getLeverArm() const {
 }
 
 double Block::Blocklet::getPistonVelocity() const {
-    return pin_.getOmega() * getLeverArm();
+    return pin_->getOmega() * getLeverArm();
 }
 
 double Block::Blocklet::getDisplacedVolume() const {
-    double S = piston_.getBoreArea();
+    double S = piston_->getBoreArea();
     double x_TDC = getTDC();
     double x_current = getPistonTopPosition();
 
@@ -63,21 +67,21 @@ double Block::Blocklet::getDisplacedVolume() const {
 }
 
 double Block::Blocklet::getSweptVolume() const {
-    return piston_.getBoreArea() * pin_.getThrow() * 2.0;
+    return piston_->getBoreArea() * pin_->getThrow() * 2.0;
 }
 
 double Block::Blocklet::getTDC() const {
-    double R = pin_.getThrow();
-    double L = conrod_.getLength();
-    double H = piston_.getCompressionHeight();
+    double R = pin_->getThrow();
+    double L = conrod_->getLength();
+    double H = piston_->getCompressionHeight();
 
     return H + L + R;
 }
 
 double Block::Blocklet::getBDC() const {
-    double R = pin_.getThrow();
-    double L = conrod_.getLength();
-    double H = piston_.getCompressionHeight();
+    double R = pin_->getThrow();
+    double L = conrod_->getLength();
+    double H = piston_->getCompressionHeight();
 
     return H + L - R;
 }
@@ -87,13 +91,13 @@ double Block::Blocklet::getDeckClearance() const { //недоход
 }
 
 double Block::Blocklet::getTotalDeckVolume() const {
-    return piston_.getDeckVolume() + (getDeckClearance() + owner_->gasketHeight_) * piston_.getBoreArea();
+    return piston_->getDeckVolume() + (getDeckClearance() + owner_->gasketHeight_) * piston_->getBoreArea();
 }
 
 double Block::Blocklet::getBoreArea() const {
-    return piston_.getBoreArea();
+    return piston_->getBoreArea();
 }
 
 void Block::Blocklet::applyForce(double force) {
-    pin_.setTorque(force * getLeverArm());
+    pin_->setTorque(force * getLeverArm());
 }

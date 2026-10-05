@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #include "CamshaftBuilder.hpp"
-#include "Camlobe.hpp"
 #include "Camshaft.hpp"
 #include <nlohmann/json.hpp>
-#include <utility>
 #include <numbers>
 
 constexpr double DEG_TO_RAD = std::numbers::pi / 180.0;
@@ -11,23 +9,23 @@ constexpr double MM_TO_M = 1.0e-3;
 
 using json = nlohmann::json;
 
-Camshaft CamshaftBuilder::build(const json& config) {
-    std::vector<Camshaft::LobePos> lobePos;
+std::unique_ptr<Camshaft> CamshaftBuilder::build(const json& config) {
+    return make_unique<Camshaft>(
+        createLobes(config["lobes"])
+    );
+}
 
-    const auto& lobeProto = config["lobe"]["prototype"];
+std::vector<Camshaft::Lobe> CamshaftBuilder::createLobes(const json& config) {
+    std::vector<Camshaft::Lobe> lobes;
+    lobes.reserve(config.size());
 
-    const size_t lobeCount = config["lobe"]["count"].get<size_t>();
-    lobePos.reserve(lobeCount);
-
-    for (size_t i = 0; i < lobeCount; ++i) {
-        lobePos.emplace_back(
-            Camlobe (
-                lobeProto["maxLift"].get<double>() * MM_TO_M,
-                lobeProto["duration"].get<double>() / 2.0 * DEG_TO_RAD
-            ),
-            lobeProto["position"].get<double>() / 2.0 * DEG_TO_RAD
+    for (const auto& lobeProto : config) {
+        lobes.emplace_back(
+            lobeProto["offset"].get<double>() / 2.0 * DEG_TO_RAD,
+            lobeProto["maxLift"].get<double>() * MM_TO_M,
+            lobeProto["duration"].get<double>() / 2.0 * DEG_TO_RAD
         );
     }
 
-    return Camshaft(std::move(lobePos));
+    return lobes;
 }

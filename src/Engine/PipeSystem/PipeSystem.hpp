@@ -5,6 +5,7 @@
 
 class Atmosphere;
 class Pipe;
+class Cylinder;
 class IJunction;
 
 class PipeSystem {
@@ -12,6 +13,7 @@ public:
     PipeSystem(
         std::unique_ptr<Atmosphere> atmosphere,
         std::vector<std::unique_ptr<Pipe>> pipes,
+        std::vector<std::unique_ptr<Cylinder>> cylinders,
         std::vector<std::unique_ptr<IJunction>> junctions
     );
 
@@ -32,5 +34,6 @@ public:
 private:
     std::unique_ptr<Atmosphere> atmosphere_;
     std::vector<std::unique_ptr<Pipe>> pipes_;
+    std::vector<std::unique_ptr<Cylinder>> cylinders_;
     std::vector<std::unique_ptr<IJunction>> junctions_;
 };

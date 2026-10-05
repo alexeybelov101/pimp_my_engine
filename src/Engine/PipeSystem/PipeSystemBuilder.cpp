@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #include "PipeSystemBuilder.hpp"
+#include "Engine/Kinematics/Kinematics.hpp"
 #include "Pipe/PipeBuilder.hpp"
 #include "Junctions/JunctionBuilder.hpp"
 #include "PipeSystem.hpp"
 #include "Pipe/Pipe.hpp"
 #include "Atmosphere/Atmosphere.hpp"
-#include "../../Interfaces/IJunction.hpp"
-#include "../Cylinder/Cylinder.hpp"
+#include "Interfaces/IJunction.hpp"
+#include "Cylinder/Cylinder.hpp"
 
 #include <nlohmann/json.hpp>
 #include <memory>
@@ -16,21 +17,24 @@ using json = nlohmann::json;
 
 std::unique_ptr<PipeSystem> PipeSystemBuilder::build(
     const json& config,
-    const std::vector<std::unique_ptr<Cylinder>>& cylinders,
+    Kinematics* kinematics,
     const double dt
 ) {
-    // 1. Владеющие контейнеры — сразу в куче
     auto atmosphere = std::make_unique<Atmosphere>();
-    auto pipes = createPipes(config["nodes"]["pipes"], dt);
+    auto pipes = createPipes(config["pipes"], dt);
+    auto cylinders = createCylinders(config["cylinders"], kinematics);
 
-    // 2. Junction'ы строим ПОСЛЕ — адреса *atmosphere и *pipes[i] финальны
     auto junctions = createJunctions(
-        config["junctions"], *atmosphere, pipes, cylinders);
+        config["junctions"],
+        *atmosphere,
+        pipes,
+        cylinders
+    );
 
-    // 3. Move unique_ptr — сами объекты остаются на месте
     return std::make_unique<PipeSystem>(
         std::move(atmosphere),
         std::move(pipes),
+        std::move(cylinders),
         std::move(junctions)
     );
 }
@@ -62,4 +66,30 @@ std::vector<std::unique_ptr<IJunction>> PipeSystemBuilder::createJunctions(
     }
 
     return junctions;
+}
+
+std::vector<std::unique_ptr<Cylinder>> PipeSystemBuilder::createCylinders(const json& config, Kinematics* kinematics) {
+    std::vector<std::unique_ptr<Cylinder>> cylinders;
+    cylinders.reserve(config.size());
+
+    auto banks = kinematics->getBanks();
+    std::vector<Head::Headlet*> headlets;
+    std::vector<Block::Blocklet*> blocklets;
+    for (auto& bank : banks) {
+        auto hl = bank->getHeadlets();
+        auto bl = bank->getBlocklets();
+        headlets.insert(headlets.end(), hl.begin(), hl.end());
+        blocklets.insert(blocklets.end(), bl.begin(), bl.end());
+    }
+
+    for (auto& cylinderProto : config) {
+        cylinders.emplace_back(
+            std::make_unique<Cylinder>(
+                headlets[cylinderProto["headlet"].get<size_t>()],
+                blocklets[cylinderProto["blocklet"].get<size_t>()]
+            )
+        );
+    }
+
+    return cylinders;
 }

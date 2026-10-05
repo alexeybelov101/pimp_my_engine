@@ -1,18 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
-#include "BottomEnd/Piston.hpp"
-#include "BottomEnd/Conrod.hpp"
+#include "Piston.hpp"
+#include "Conrod.hpp"
 #include "Engine/Kinematics/Crankshaft/Crankshaft.hpp"
+#include <memory>
 #include <vector>
 
 class Block {
 public:
     class Blocklet {
     public:
-        Blocklet(
-            Piston&& piston,
-            Conrod&& conrod,
-            Crankshaft::Pin& pin
+        explicit Blocklet(
+            Piston* piston,
+            Conrod* conrod,
+            Crankshaft::Pin* pin
         );
 
         double getPistonTopPosition() const;
@@ -31,9 +32,9 @@ public:
 
     private:
         Block* owner_;
-        Piston piston_;
-        Conrod conrod_;
-        Crankshaft::Pin& pin_;
+        Piston* piston_;
+        Conrod* conrod_;
+        Crankshaft::Pin* pin_;
 
         friend class Block;
     };
@@ -41,11 +42,17 @@ public:
     Block(
         double height,
         double gasketHeight,
+        std::vector<std::unique_ptr<Piston>>&& pistons,
+        std::vector<std::unique_ptr<Conrod>>&& conrods,
         std::vector<Blocklet>&& blocklets
     );
 
 private:
     double height_;
     double gasketHeight_;
+    std::vector<std::unique_ptr<Piston>> pistons_;
+    std::vector<std::unique_ptr<Conrod>> conrods_;
     std::vector<Blocklet> blocklets_;
+
+    friend class Bank;
 };

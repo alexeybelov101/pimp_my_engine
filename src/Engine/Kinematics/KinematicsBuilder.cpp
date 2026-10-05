@@ -3,6 +3,7 @@
 #include "Flywheel/Flywheel.hpp"
 #include "Crankshaft/CrankshaftBuilder.hpp"
 #include "Crankshaft/Crankshaft.hpp"
+#include "Bank/BankBuilder.hpp"
 #include "Bank/Bank.hpp"
 #include "Bank/Head/Valvetrain/Valvetrain.hpp"
 #include "Drive/Drive.hpp"
@@ -13,29 +14,38 @@
 
 using json = nlohmann::json;
 
+constexpr double G_TO_KG = 1.0e-3;
+constexpr double MM_TO_M = 1.0e-3;
+
 std::unique_ptr<Kinematics> KinematicsBuilder::build(const json& config) {
-    std::unique_ptr<Flywheel> flywheel = createFlywheel(config["flywheel"]);
-    std::unique_ptr<Crankshaft> crankshaft = CrankshaftBuilder::build(config["crankshaft"], *flywheel);
-    std::vector<std::unique_ptr<Bank>> banks = BankBuilder::build(config["banks"], *crankshaft);
-    std::unique_ptr<Drive> drive = createDrive(*crankshaft, valvetrains);
+    auto flywheel = createFlywheel(config["flywheel"]);
+    auto crankshaft = CrankshaftBuilder::build(config["crankshaft"], *flywheel);
+    std::vector<std::unique_ptr<Bank>> banks = BankBuilder::build(config["banks"], crankshaft.get());
+    Drive drive = createDrive(crankshaft.get(), &banks);
     return std::make_unique<Kinematics>(
-        flywheel,
-        crankshaft,
-        banks,
-        drive
+        std::move(flywheel),
+        std::move(crankshaft),
+        std::move(banks),
+        std::move(drive)
     );
 }
 
-std::unique_ptr<Flywheel> createFlywheel(const json& config) {
+std::unique_ptr<Flywheel> KinematicsBuilder::createFlywheel(const json& config) {
     return std::make_unique<Flywheel>(
-        config["mass"].get<double>(),
-        config["diameter"].get<double>() * 0.5
+        config["mass"].get<double>() * G_TO_KG,
+        config["diameter"].get<double>() * 0.5 * MM_TO_M
     );
 }
 
-std::unique_ptr<Drive> createDrive(Crankshaft& crankshaft, std::vector<Valvetrain*> valvetrains) {
-    return std::make_unique<Drive>(
+Drive KinematicsBuilder::createDrive(Crankshaft* crankshaft, std::vector<std::unique_ptr<Bank>>* banks) {
+    std::vector<Valvetrain*> valvetrains;
+    for (auto& bank : *banks) {
+        const auto& bv = bank->getValvetrains();
+        valvetrains.insert(valvetrains.end(), bv.begin(), bv.end());
+    }
+
+    return Drive(
         crankshaft,
-        valvetrains
+        std::move(valvetrains)
     );
 }

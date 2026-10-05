@@ -6,7 +6,7 @@ Kinematics::Kinematics(
     std::unique_ptr<Flywheel> flywheel,
     std::unique_ptr<Crankshaft> crankshaft,
     std::vector<std::unique_ptr<Bank>> banks,
-    std::unique_ptr<Drive> drive
+    Drive&& drive
 ):
     flywheel_(std::move(flywheel)),
     crankshaft_(std::move(crankshaft)),
@@ -19,5 +19,17 @@ void Kinematics::setOmega(double omega) {
 
 void Kinematics::step(double dt) {
     crankshaft_->step(dt);
-    drive_->step(dt);
+    drive_.step(dt);
 }
+
+std::vector<Bank*> Kinematics::getBanks() {
+    std::vector<Bank*> result;
+    result.reserve(banks_.size());
+
+    for (auto& bank : banks_) {
+        result.push_back(bank.get());
+    }
+
+    return result;
+}
+

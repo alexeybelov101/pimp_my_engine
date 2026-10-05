@@ -1,22 +1,37 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
-#include "Camlobe.hpp"
 #include <vector>
 
 class Camshaft {
 public:
-    struct LobePos {
-        Camlobe lobe_;
-        double position_;
+    class Lobe {
+    public:
+        Lobe(
+            double offset,
+            double maxLift,
+            double duration
+        );
 
-        LobePos(Camlobe&& lobe, double pos)
-            : lobe_(std::move(lobe)), position_(pos) {}
+        double getLift() const;
+
+    private:
+        Camshaft* owner_;
+        double offset_;
+        double maxLift_;
+        double duration_;
+
+        friend class Camshaft;
     };
 
-    Camshaft(std::vector<LobePos>&& lobePos);
+    Camshaft(std::vector<Lobe>&& lobes);
 
-    double getLift(size_t lobeId, double angle) const;
+    double getAngle() const;
+    void setAngle(double angle);
 
 private:
-    std::vector<LobePos> lobePos_;
+    double angle_;
+    std::vector<Lobe> lobes_;
+
+    std::vector<Lobe*> getLobes();
+    friend class ValvetrainBuilder;
 };
