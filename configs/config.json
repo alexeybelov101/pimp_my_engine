@@ -1,9 +1,9 @@
 {
-    "kinematics": {
+    "mechanics": {
         "flywheel": { "mass": 6700, "diameter": 263 },
         "crankshaft": {
             "radius": 33.0,
-            "crankpins": [
+            "pins": [
                 { "offset": 0 },
                 { "offset": 180 },
                 { "offset": 180 },
@@ -15,55 +15,45 @@
                 "offset": 0,
                 "head": {
                     "chamberVolume": 33200,
-                    "intakeValvetrain": {
+                    "valvetrain": {
                         "camshaft": {
                             "lobes": [
                                 { "duration": 232.0, "maxLift": 9.728, "offset": 708 },
-                                { "duration": 232.0, "maxLift": 9.728, "offset": 168 },
-                                { "duration": 232.0, "maxLift": 9.728, "offset": 528 },
-                                { "duration": 232.0, "maxLift": 9.728, "offset": 348 }
-                            ]
-                        },
-                        "valves": [
-                            { "headDiameter": 37.0, "seatAngle": 45.5 },
-                            { "headDiameter": 37.0, "seatAngle": 45.5 },
-                            { "headDiameter": 37.0, "seatAngle": 45.5 },
-                            { "headDiameter": 37.0, "seatAngle": 45.5 }
-                        ],
-                        "links": [
-                            { "lobes": [ 0 ], "valves": [ 0 ] },
-                            { "lobes": [ 1 ], "valves": [ 1 ] },
-                            { "lobes": [ 2 ], "valves": [ 2 ] },
-                            { "lobes": [ 3 ], "valves": [ 3 ] }
-                        ]
-                    },
-                    "exhaustValvetrain": {
-                        "camshaft": {
-                            "lobes": [
                                 { "duration": 232.0, "maxLift": 9.728, "offset": 498 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 168 },
                                 { "duration": 232.0, "maxLift": 9.728, "offset": 678 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 528 },
                                 { "duration": 232.0, "maxLift": 9.728, "offset": 318 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 348 },
                                 { "duration": 232.0, "maxLift": 9.728, "offset": 138 }
                             ]
                         },
                         "valves": [
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
                             { "headDiameter": 32.0, "seatAngle": 45.5 },
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
                             { "headDiameter": 32.0, "seatAngle": 45.5 },
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
                             { "headDiameter": 32.0, "seatAngle": 45.5 },
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
                             { "headDiameter": 32.0, "seatAngle": 45.5 }
                         ],
                         "links": [
                             { "lobes": [ 0 ], "valves": [ 0 ] },
                             { "lobes": [ 1 ], "valves": [ 1 ] },
                             { "lobes": [ 2 ], "valves": [ 2 ] },
-                            { "lobes": [ 3 ], "valves": [ 3 ] }
+                            { "lobes": [ 3 ], "valves": [ 3 ] },
+                            { "lobes": [ 4 ], "valves": [ 4 ] },
+                            { "lobes": [ 5 ], "valves": [ 5 ] },
+                            { "lobes": [ 6 ], "valves": [ 6 ] },
+                            { "lobes": [ 7 ], "valves": [ 7 ] }
                         ]
                     },
                     "headlets": [
-                        { "intakeLink": 0, "exhaustLink": 0 },
-                        { "intakeLink": 1, "exhaustLink": 1 },
-                        { "intakeLink": 2, "exhaustLink": 2 },
-                        { "intakeLink": 3, "exhaustLink": 3 }
+                        { "intakeLink": 0, "exhaustLink": 1 },
+                        { "intakeLink": 2, "exhaustLink": 3 },
+                        { "intakeLink": 4, "exhaustLink": 5 },
+                        { "intakeLink": 6, "exhaustLink": 7 }
                     ]
                 },
                 "block": {
@@ -91,7 +81,7 @@
             }
         ]
     },
-    "pipeSystem": {
+    "gasDynamics": {
         "cylinders": [
             { "headlet": 0, "blocklet": 0 },
             { "headlet": 1, "blocklet": 1 },

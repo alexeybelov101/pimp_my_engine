@@ -2,11 +2,11 @@
 #pragma once
 #include "Structs/Cell.hpp"
 #include "Structs/Flux.hpp"
-#include "Constants/GasDynamics.hpp"
+#include "Constants/GasConstants.hpp"
 #include <cmath>
 #include <algorithm>
 
-namespace GD = GasDynamics;
+namespace GC = GasConstants;
 
 namespace Solvers {
     inline Flux HLL(const Cell& L, const Cell& R, double area) {
@@ -14,14 +14,14 @@ namespace Solvers {
 
         double rhoL = L.rho;
         double uL = (rhoL > 1e-10) ? L.rho_u / rhoL : 0.0;
-        double pL = std::max((GD::GAMMA - 1.0) * (L.rho_E - 0.5 * L.rho_u * uL), 1.0);
+        double pL = std::max((GC::GAMMA - 1.0) * (L.rho_E - 0.5 * L.rho_u * uL), 1.0);
 
         double rhoR = R.rho;
         double uR = (rhoR > 1e-10) ? R.rho_u / rhoR : 0.0;
-        double pR = std::max((GD::GAMMA - 1.0) * (R.rho_E - 0.5 * R.rho_u * uR), 1.0);
+        double pR = std::max((GC::GAMMA - 1.0) * (R.rho_E - 0.5 * R.rho_u * uR), 1.0);
 
-        double aL = std::sqrt(GD::GAMMA * pL / rhoL);
-        double aR = std::sqrt(GD::GAMMA * pR / rhoR);
+        double aL = std::sqrt(GC::GAMMA * pL / rhoL);
+        double aR = std::sqrt(GC::GAMMA * pR / rhoR);
 
         // Оценки скоростей волн (Davis)
         double S_L = std::min(uL - aL, uR - aR);

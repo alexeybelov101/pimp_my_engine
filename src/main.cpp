@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Utility/ConfigReader.hpp"
 #include "Utility/ArgsParser.hpp"
-#include "Engine/EngineBuilder.hpp"
+#include "Factories/EngineFactory.hpp"
 #include "Engine/Engine.hpp"
 #include <nlohmann/json.hpp>
 #include <numbers>
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     const int steps = static_cast<int>(simulationTime / dt);
 
 
-    Engine engine = EngineBuilder::build(
+    Engine engine = EngineFactory::build(
         ConfigReader::read(settings.configPath),
         dt
     );

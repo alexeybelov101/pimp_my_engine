@@ -3,17 +3,17 @@
 #include <utility>
 
 Engine::Engine(
-    std::unique_ptr<Kinematics> kinematics,
-    std::unique_ptr<PipeSystem> pipeSystem
+    std::unique_ptr<Mechanics> mechanics,
+    std::unique_ptr<GasDynamics> gasDynamics
 ):
-    kinematics_(std::move(kinematics)),
-    pipeSystem_(std::move(pipeSystem)) {}
+    mechanics_(std::move(mechanics)),
+    gasDynamics_(std::move(gasDynamics)) {}
 
 void Engine::setOmega(double omega) {
-    kinematics_->setOmega(omega);
+    mechanics_->setOmega(omega);
 }
 
 void Engine::step(double dt) {
-    pipeSystem_->step(dt);
-    kinematics_->step(dt);
+    gasDynamics_->step(dt);
+    mechanics_->step(dt);
 }
