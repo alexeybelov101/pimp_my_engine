@@ -9,4 +9,7 @@ Bank::Bank(
 ):
     offset_(offset),
     head_(std::move(head)),
-    block_(std::move(block)) {}
+    block_(std::move(block)) {
+        head_->valvetrain_->bankOffset_ = offset_ * 0.5;
+        block_->bankOffset_ = offset_;
+    }

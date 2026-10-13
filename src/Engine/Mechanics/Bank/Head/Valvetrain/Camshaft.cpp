@@ -35,7 +35,7 @@ double Camshaft::Lobe::getLift() const {
     double angle = fmod(
         owner_->angle_ - offset_ + 2.0 * std::numbers::pi,
         2.0 * std::numbers::pi
-    );;
+    );
 
     if (angle > duration_) return 0.0;
 

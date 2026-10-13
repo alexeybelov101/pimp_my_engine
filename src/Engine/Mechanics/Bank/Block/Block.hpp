@@ -48,9 +48,12 @@ public:
     );
 
 private:
+    double bankOffset_;
     double height_;
     double gasketHeight_;
     std::vector<std::unique_ptr<Piston>> pistons_;
     std::vector<std::unique_ptr<Conrod>> conrods_;
     std::vector<std::unique_ptr<Blocklet>> blocklets_;
+
+    friend class Bank;
 };

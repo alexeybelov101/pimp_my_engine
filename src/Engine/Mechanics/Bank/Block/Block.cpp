@@ -10,6 +10,7 @@ Block::Block(
     std::vector<std::unique_ptr<Conrod>>&& conrods,
     std::vector<std::unique_ptr<Blocklet>>&& blocklets
 ):
+    bankOffset_(0.0),
     height_(height),
     gasketHeight_(gasketHeight),
     pistons_(std::move(pistons)),
@@ -29,7 +30,7 @@ Block::Blocklet::Blocklet(
 
 // TODO: оптимизация - sqrt(lambda^2 - sin^2) вычисляется дважды
 double Block::Blocklet::getPistonTopPosition() const {
-    double angle = pin_->getAngle();
+    double angle = pin_->getAngle() - owner_->bankOffset_;
     double R = pin_->getThrow();
     double L = conrod_->getLength();
     double H = piston_->getCompressionHeight();
@@ -42,10 +43,10 @@ double Block::Blocklet::getPistonTopPosition() const {
 }
 
 double Block::Blocklet::getLeverArm() const {
-    double angle = pin_->getAngle();
+    double angle = pin_->getAngle() - owner_->bankOffset_;
     double R = pin_->getThrow();
     double L = conrod_->getLength();
-    double lambda = L / R;  // отношение длины шатуна к радиусу
+    double lambda = L / R;
 
     double sinA, cosA;
     sincos(angle, &sinA, &cosA);

@@ -35,7 +35,10 @@ public:
     void setAngle(double angle);
 
 private:
+    double bankOffset_;
     std::unique_ptr<Camshaft> camshaft_;
     std::vector<Valve> valves_;
     std::vector<Link> links_; //links zwo, drei, vier
+
+    friend class Bank;
 };

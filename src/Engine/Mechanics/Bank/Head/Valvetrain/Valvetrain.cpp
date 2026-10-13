@@ -7,6 +7,7 @@ Valvetrain::Valvetrain(
     std::vector<Valve>&& valves,
     std::vector<Link>&& links
 ):
+    bankOffset_(0.0),
     camshaft_(std::move(camshaft)),
     valves_(std::move(valves)),
     links_(std::move(links)) {
@@ -19,7 +20,7 @@ double Valvetrain::getAngle() const {
 }
 
 void Valvetrain::setAngle(double angle) {
-    camshaft_->setAngle(angle);
+    camshaft_->setAngle(angle - bankOffset_);
 }
 
 // Link

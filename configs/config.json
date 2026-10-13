@@ -81,6 +81,28 @@
             }
         ]
     },
+    "electrics": {
+        "distributor": {
+            "staticAdvance": 5.0,
+            "revvLimit": 8000,
+            "shutterExtent": 100.0,
+            "windowExtent": 80.0,
+            "firingOrder": [ 0, 2, 3, 1 ]
+        },
+        "coil": {
+            "windings": {
+                "primary": { "resistance": 0.43, "inductance": 3.9, "saturationCurrent": 7.6 },
+                "secondary": { "resistance": 4080, "inductance": 0 }
+            },
+            "transformationCoefficient": 64
+        },
+        "sparkPlus": [
+            { "gap": 0.9, "resistor": 5000 },
+            { "gap": 0.9, "resistor": 5000 },
+            { "gap": 0.9, "resistor": 5000 },
+            { "gap": 0.9, "resistor": 5000 }
+        ]
+    },
     "gasDynamics": {
         "cylinders": [
             { "headlet": 0, "blocklet": 0 },

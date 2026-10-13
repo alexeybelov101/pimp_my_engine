@@ -11,9 +11,8 @@ public:
         std::unique_ptr<Head>&& head,
         std::unique_ptr<Block>&& block
     );
-
-    const double offset_;
 private:
+    const double offset_;
     std::unique_ptr<Head> head_;
     std::unique_ptr<Block> block_;
 };
