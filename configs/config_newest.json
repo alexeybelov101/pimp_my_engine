@@ -1,0 +1,160 @@
+{
+    "mechanics": {
+        "flywheel": { "mass": 6700, "diameter": 263 },
+        "crankshaft": {
+            "radius": 33.0,
+            "crankpins": [
+                { "offset": 0 },
+                { "offset": 180 },
+                { "offset": 180 },
+                { "offset": 0 }
+            ]
+        },
+        "camshafts": [{
+            "lobes": [
+                { "duration": 232.0, "maxLift": 9.728, "offset": 708 },
+                { "duration": 232.0, "maxLift": 9.728, "offset": 498 },
+                { "duration": 232.0, "maxLift": 9.728, "offset": 168 },
+                { "duration": 232.0, "maxLift": 9.728, "offset": 678 },
+                { "duration": 232.0, "maxLift": 9.728, "offset": 528 },
+                { "duration": 232.0, "maxLift": 9.728, "offset": 318 },
+                { "duration": 232.0, "maxLift": 9.728, "offset": 348 },
+                { "duration": 232.0, "maxLift": 9.728, "offset": 138 }
+            ]
+        }],
+        "valves": [
+            { "headDiameter": 37.0, "seatAngle": 45.5 },
+            { "headDiameter": 32.0, "seatAngle": 45.5 },
+            { "headDiameter": 37.0, "seatAngle": 45.5 },
+            { "headDiameter": 32.0, "seatAngle": 45.5 },
+            { "headDiameter": 37.0, "seatAngle": 45.5 },
+            { "headDiameter": 32.0, "seatAngle": 45.5 },
+            { "headDiameter": 37.0, "seatAngle": 45.5 },
+            { "headDiameter": 32.0, "seatAngle": 45.5 }
+        ],
+        "valvetrains": [{
+            "camshaft": 0,
+            "valves": [ 0, 1, 2, 3, 4, 5, 6, 7 ],
+            "links": [
+                { "lobes": [ 0 ], "valves": [ 0 ] },
+                { "lobes": [ 1 ], "valves": [ 1 ] },
+                { "lobes": [ 2 ], "valves": [ 2 ] },
+                { "lobes": [ 3 ], "valves": [ 3 ] },
+                { "lobes": [ 4 ], "valves": [ 4 ] },
+                { "lobes": [ 5 ], "valves": [ 5 ] },
+                { "lobes": [ 6 ], "valves": [ 6 ] },
+                { "lobes": [ 7 ], "valves": [ 7 ] }
+            ]
+        }],
+        "heads": [{
+            "chamberVolume": 33200,
+            "valvetrain": 0,
+            "headlets": [
+                { "intakeLink": 0, "exhaustLink": 1 },
+                { "intakeLink": 2, "exhaustLink": 3 },
+                { "intakeLink": 4, "exhaustLink": 5 },
+                { "intakeLink": 6, "exhaustLink": 7 }
+            ]
+        }],
+        "pistons": [
+            { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 },
+            { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 },
+            { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 },
+            { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 }
+        ],
+        "conrods": [
+            { "length": 136.0 },
+            { "length": 136.0 },
+            { "length": 136.0 },
+            { "length": 136.0 }
+        ],
+        "blocks": [{
+            "height": 207.1,
+            "gasketHeight": 1.15,
+            "pistons": [ 0, 1, 2, 3 ],
+            "conrods": [ 0, 1, 2, 3 ],
+            "blocklets": [
+                { "piston": 0, "conrod": 0, "pin": 0 },
+                { "piston": 1, "conrod": 1, "pin": 1 },
+                { "piston": 2, "conrod": 2, "pin": 2 },
+                { "piston": 3, "conrod": 3, "pin": 3 }
+            ]
+        }],
+        "banks": [{ "offset": 0, "head": 0, "block": 0 }]
+    },
+    "gasDynamics": {
+        "cylinders": [
+            { "headlet": 0, "blocklet": 0 },
+            { "headlet": 1, "blocklet": 1 },
+            { "headlet": 2, "blocklet": 2 },
+            { "headlet": 3, "blocklet": 3 }
+        ],
+        "pipes": [
+                { "id": 0, "length": 100, "radius": 22 },
+                { "id": 1, "length": 230, "radius": 16 },
+                { "id": 2, "length": 230, "radius": 16 },
+                { "id": 3, "length": 230, "radius": 16 },
+                { "id": 4, "length": 230, "radius": 16 },
+                { "id": 5, "length": 380, "radius": 18 },
+                { "id": 6, "length": 380, "radius": 18 },
+                { "id": 7, "length": 380, "radius": 18 },
+                { "id": 8, "length": 380, "radius": 18 },
+                { "id": 9, "length": 620, "radius": 21.5  },
+                { "id": 10, "length": 620, "radius": 21.5  },
+                { "id": 11, "length": 1580, "radius": 21.5 },
+                { "id": 12, "length": 1165, "radius": 20 }
+        ],
+
+        "junctions0": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 1 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 2 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 3 ] }},
+
+            { "left": { "cylinders": [ 0 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "cylinders": [ 1 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "cylinders": [ 2 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "cylinders": [ 3 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 1 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 2 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 3 ] }},
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 4 ] }},
+
+            { "left": { "pipes": [ 1 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "pipes": [ 2 ] }, "right": { "cylinders": [ 1 ] }},
+            { "left": { "pipes": [ 3 ] }, "right": { "cylinders": [ 2 ] }},
+            { "left": { "pipes": [ 4 ] }, "right": { "cylinders": [ 3 ] }},
+
+            { "left": { "cylinders": [ 0 ] }, "right": { "pipes": [ 5 ] }},
+            { "left": { "cylinders": [ 1 ] }, "right": { "pipes": [ 6 ] }},
+            { "left": { "cylinders": [ 2 ] }, "right": { "pipes": [ 7 ] }},
+            { "left": { "cylinders": [ 3 ] }, "right": { "pipes": [ 8 ] }},
+
+            { "left": { "pipes": [ 5 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "pipes": [ 6 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "pipes": [ 7 ] }, "right": { "atmosphere": [ 0 ] }},
+            { "left": { "pipes": [ 8 ] }, "right": { "atmosphere": [ 0 ] }}
+        ],
+
+        "junctions2": [
+            { "left": { "atmosphere": [ 0 ] }, "right": { "pipes": [ 0 ] }},
+            { "left": { "pipes": [ 0 ] }, "right": { "pipes": [ 1, 2, 3, 4 ] }},
+            { "left": { "pipes": [ 1 ] }, "right": { "cylinders": [ 0 ] }},
+            { "left": { "pipes": [ 2 ] }, "right": { "cylinders": [ 1 ] }},
+            { "left": { "pipes": [ 3 ] }, "right": { "cylinders": [ 2 ] }},
+            { "left": { "pipes": [ 4 ] }, "right": { "cylinders": [ 3 ] }},
+            { "left": { "cylinders": [ 0 ] }, "right": { "pipes": [ 5 ] }},
+            { "left": { "cylinders": [ 1 ] }, "right": { "pipes": [ 6 ] }},
+            { "left": { "cylinders": [ 2 ] }, "right": { "pipes": [ 7 ] }},
+            { "left": { "cylinders": [ 3 ] }, "right": { "pipes": [ 8 ] }},
+            { "left": { "pipes": [ 5, 7 ] }, "right": { "pipes": [ 9 ] }},
+            { "left": { "pipes": [ 6, 8 ] }, "right": { "pipes": [ 10 ] }},
+            { "left": { "pipes": [ 9, 10 ] }, "right": { "pipes": [ 11 ] }},
+            { "left": { "pipes": [ 11 ] }, "right": { "pipes": [ 12 ] }},
+            { "left": { "pipes": [ 12 ] }, "right": { "atmosphere": [ 0 ] }}
+        ]
+    }
+}

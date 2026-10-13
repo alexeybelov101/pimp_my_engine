@@ -1,5 +1,5 @@
 #include "Atmosphere.hpp"
-#include "../../Constants/GasDynamics.hpp"
+#include "Constants/GasDynamics.hpp"
 #include <limits>
 #include <cmath>
 #include <cstdint>
@@ -17,7 +17,7 @@ Atmosphere::Atmosphere():
         0.0,
         GD::P_ATM / (GD::GAMMA - 1.0)
     ) {
-        startRecording("engine.wav", 48000);
+        startRecording("engine.wav", 96000);
     }
 
 Atmosphere::~Atmosphere() {

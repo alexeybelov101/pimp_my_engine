@@ -6,9 +6,9 @@
 class ArgsParser {
 public:
     struct Settings {
-        double time = 20;         // секунды
-        double frequency = 1000.0;  // Гц
-        double rpm = 600.0;             //об/мин
+        double time = 2;         // секунды
+        double frequency = 2000.0;  // Гц
+        double rpm = 60.0;             //об/мин
         std::string configPath = "configs/config.json";
     };
 

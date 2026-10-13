@@ -1,89 +1,130 @@
 {
-    "flywheel" : {
-        "mass": 6700,
-        "diameter": 263
-    },
-    "cylinder": {
-        "count": 4,
-        "prototype": {
-            "head": {
-                "chamberVolume": 33200,
-                "intakeValvetrain": {
-                    "camshaft": {
-                        "lobe": {
-                            "count": 1,
-                            "prototype": {
-                                "position": -12.0,
-                                "duration": 232.0,
-                                "maxLift": 9.728
-                            }
-                        }
-                    },
-                    "valve" : {
-                        "count": 1,
-                        "prototype": {
-                            "headDiameter": 37.0,
-                            "seatAngle": 45.5
-                        }
-                    }
-                },
-                "exhaustValvetrain": {
-                    "camshaft": {
-                        "lobe": {
-                            "count": 1,
-                            "prototype": {
-                                "position": 498.0,
-                                "duration": 232.0,
-                                "maxLift": 9.728
-                            }
-                        }
-                    },
-                    "valve" : {
-                        "count": 1,
-                        "prototype": {
-                            "headDiameter": 32.0,
-                            "seatAngle": 45.5
-                        }
-                    }
-                }
-            },
-            "block": {
-                "height": 207.1,
-                "gasketHeight": 1.065,
-                "piston": {
-                    "diameter": 79.0,
-                    "compressionHeight": 37.9,
-                    "deckVolume": 3700
-                },
-                "conrod": {
-                    "length": 136.0
-                },
-                "crankshaft": {
-                    "stroke": 66.0
-                }
-            }
-        }
-    },
-    "pipeSystem": {
-        "nodes": {
-            "atmosphere": [],
-            "cylinders": [ 0, 1, 2, 3 ],
-            "pipes": [
-                    { "id": 0, "length": 100, "radius": 22 },
-                    { "id": 1, "length": 230, "radius": 16 },
-                    { "id": 2, "length": 230, "radius": 16 },
-                    { "id": 3, "length": 230, "radius": 16 },
-                    { "id": 4, "length": 230, "radius": 16 },
-                    { "id": 5, "length": 380, "radius": 18 },
-                    { "id": 6, "length": 380, "radius": 18 },
-                    { "id": 7, "length": 380, "radius": 18 },
-                    { "id": 8, "length": 380, "radius": 18 },
-                    { "id": 9, "length": 620, "radius": 21.5  },
-                    { "id": 10, "length": 620, "radius": 21.5  },
-                    { "id": 11, "length": 1580, "radius": 21.5 },
-                    { "id": 12, "length": 1165, "radius": 20 }
+    "mechanics": {
+        "flywheel": { "mass": 6700, "diameter": 263 },
+        "crankshaft": {
+            "radius": 33.0,
+            "pins": [
+                { "offset": 0 },
+                { "offset": 180 },
+                { "offset": 180 },
+                { "offset": 0 }
             ]
         },
+        "banks": [
+            {
+                "offset": 0,
+                "head": {
+                    "chamberVolume": 33200,
+                    "valvetrain": {
+                        "camshaft": {
+                            "lobes": [
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 708 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 498 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 168 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 678 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 528 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 318 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 348 },
+                                { "duration": 232.0, "maxLift": 9.728, "offset": 138 }
+                            ]
+                        },
+                        "valves": [
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
+                            { "headDiameter": 32.0, "seatAngle": 45.5 },
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
+                            { "headDiameter": 32.0, "seatAngle": 45.5 },
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
+                            { "headDiameter": 32.0, "seatAngle": 45.5 },
+                            { "headDiameter": 37.0, "seatAngle": 45.5 },
+                            { "headDiameter": 32.0, "seatAngle": 45.5 }
+                        ],
+                        "links": [
+                            { "lobes": [ 0 ], "valves": [ 0 ] },
+                            { "lobes": [ 1 ], "valves": [ 1 ] },
+                            { "lobes": [ 2 ], "valves": [ 2 ] },
+                            { "lobes": [ 3 ], "valves": [ 3 ] },
+                            { "lobes": [ 4 ], "valves": [ 4 ] },
+                            { "lobes": [ 5 ], "valves": [ 5 ] },
+                            { "lobes": [ 6 ], "valves": [ 6 ] },
+                            { "lobes": [ 7 ], "valves": [ 7 ] }
+                        ]
+                    },
+                    "headlets": [
+                        { "intakeLink": 0, "exhaustLink": 1 },
+                        { "intakeLink": 2, "exhaustLink": 3 },
+                        { "intakeLink": 4, "exhaustLink": 5 },
+                        { "intakeLink": 6, "exhaustLink": 7 }
+                    ]
+                },
+                "block": {
+                    "height": 207.1,
+                    "gasketHeight": 1.15,
+                    "pistons": [
+                        { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 },
+                        { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 },
+                        { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 },
+                        { "diameter": 79.0, "compressionHeight": 38.0, "deckVolume": 3700 }
+                    ],
+                    "conrods": [
+                        { "length": 136.0 },
+                        { "length": 136.0 },
+                        { "length": 136.0 },
+                        { "length": 136.0 }
+                    ],
+                    "blocklets": [
+                        { "piston": 0, "conrod": 0, "pin": 0 },
+                        { "piston": 1, "conrod": 1, "pin": 1 },
+                        { "piston": 2, "conrod": 2, "pin": 2 },
+                        { "piston": 3, "conrod": 3, "pin": 3 }
+                    ]
+                }
+            }
+        ]
+    },
+    "electrics": {
+        "distributor": {
+            "staticAdvance": 5.0,
+            "revvLimit": 8000,
+            "shutterExtent": 100.0,
+            "windowExtent": 80.0,
+            "firingOrder": [ 0, 2, 3, 1 ]
+        },
+        "coil": {
+            "windings": {
+                "primary": { "resistance": 0.43, "inductance": 3.9, "saturationCurrent": 7.6 },
+                "secondary": { "resistance": 4080, "inductance": 0 }
+            },
+            "transformationCoefficient": 64
+        },
+        "sparkPlus": [
+            { "gap": 0.9, "resistor": 5000 },
+            { "gap": 0.9, "resistor": 5000 },
+            { "gap": 0.9, "resistor": 5000 },
+            { "gap": 0.9, "resistor": 5000 }
+        ]
+    },
+    "gasDynamics": {
+        "cylinders": [
+            { "headlet": 0, "blocklet": 0 },
+            { "headlet": 1, "blocklet": 1 },
+            { "headlet": 2, "blocklet": 2 },
+            { "headlet": 3, "blocklet": 3 }
+        ],
+        "pipes": [
+                { "id": 0, "length": 100, "radius": 22 },
+                { "id": 1, "length": 230, "radius": 16 },
+                { "id": 2, "length": 230, "radius": 16 },
+                { "id": 3, "length": 230, "radius": 16 },
+                { "id": 4, "length": 230, "radius": 16 },
+                { "id": 5, "length": 380, "radius": 18 },
+                { "id": 6, "length": 380, "radius": 18 },
+                { "id": 7, "length": 380, "radius": 18 },
+                { "id": 8, "length": 380, "radius": 18 },
+                { "id": 9, "length": 620, "radius": 21.5  },
+                { "id": 10, "length": 620, "radius": 21.5  },
+                { "id": 11, "length": 1580, "radius": 21.5 },
+                { "id": 12, "length": 1165, "radius": 20 }
+        ],
 
         "junctions0": [
             { "left": { "atmosphere": [ 0 ] }, "right": { "cylinders": [ 0 ] }},

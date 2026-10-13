@@ -3,11 +3,11 @@
 #include "Structs/Cell.hpp"
 #include "Structs/Flux.hpp"
 #include "Structs/HLLCResult.hpp"
-#include "Constants/GasDynamics.hpp"
+#include "Constants/GasConstants.hpp"
 #include <cmath>
 #include <algorithm>
 
-namespace GD = GasDynamics;
+namespace GC = GasConstants;
 
 namespace Solvers {
     inline HLLCResult HLLC(const Cell& L, const Cell& R, double area) {
@@ -16,20 +16,20 @@ namespace Solvers {
         // Левое состояние
         double rhoL = L.rho;
         double uL = (rhoL > 1e-10) ? L.rho_u / rhoL : 0.0;
-        double pL = (GD::GAMMA - 1.0) * (L.rho_E - 0.5 * L.rho_u * uL);
+        double pL = (GC::GAMMA - 1.0) * (L.rho_E - 0.5 * L.rho_u * uL);
 
         // Правое состояние
         double rhoR = R.rho;
         double uR = (rhoR > 1e-10) ? R.rho_u / rhoR : 0.0;
-        double pR = (GD::GAMMA - 1.0) * (R.rho_E - 0.5 * R.rho_u * uR);
+        double pR = (GC::GAMMA - 1.0) * (R.rho_E - 0.5 * R.rho_u * uR);
 
         // Защита от отрицательных давлений
         pL = std::max(pL, 1.0);
         pR = std::max(pR, 1.0);
 
         // Скорость звука
-        double aL = std::sqrt(GD::GAMMA * pL / rhoL);
-        double aR = std::sqrt(GD::GAMMA * pR / rhoR);
+        double aL = std::sqrt(GC::GAMMA * pL / rhoL);
+        double aR = std::sqrt(GC::GAMMA * pR / rhoR);
 
         // Оценки скоростей волн (формула Davis)
         double S_L = std::min(uL - aL, uR - aR);
@@ -56,7 +56,7 @@ namespace Solvers {
             p_star = pL + rhoL * (S_L - uL) * (S_M - uL);
 
             // Полная энергия в звёздном состоянии
-            double E_star = p_star / ((GD::GAMMA - 1.0) * rho_star) + 0.5 * u_star * u_star;
+            double E_star = p_star / ((GC::GAMMA - 1.0) * rho_star) + 0.5 * u_star * u_star;
             double rhoE_star = rho_star * E_star;
 
             flux.mass = rho_star * u_star * area;
@@ -70,7 +70,7 @@ namespace Solvers {
             p_star = pR + rhoR * (S_R - uR) * (S_M - uR);
 
             // Полная энергия в звёздном состоянии
-            double E_star = p_star / ((GD::GAMMA - 1.0) * rho_star) + 0.5 * u_star * u_star;
+            double E_star = p_star / ((GC::GAMMA - 1.0) * rho_star) + 0.5 * u_star * u_star;
             double rhoE_star = rho_star * E_star;
 
             flux.mass = rho_star * u_star * area;

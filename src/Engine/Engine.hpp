@@ -1,17 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #pragma once
-#include "Flywheel.hpp"
-#include "Cylinder/Cylinder.hpp"
-#include "PipeSystem/PipeSystem.hpp"
-#include <vector>
 #include <memory>
+#include "Mechanics/Mechanics.hpp"
+#include "GasDynamics/GasDynamics.hpp"
 
 class Engine {
 public:
     Engine(
-        std::vector<std::unique_ptr<Cylinder>> cylinders,
-        std::unique_ptr<Flywheel> flywheel,
-        std::unique_ptr<PipeSystem> pipeSystem
+        std::unique_ptr<Mechanics> mechanics,
+        std::unique_ptr<GasDynamics> gasDynamics
     );
 
     void setOmega(double omega);
@@ -21,7 +18,6 @@ public:
 private:
     double angle_;
 
-    std::vector<std::unique_ptr<Cylinder>> cylinders_;
-    std::unique_ptr<Flywheel> flywheel_;
-    std::unique_ptr<PipeSystem> pipeSystem_;
+    std::unique_ptr<Mechanics> mechanics_;
+    std::unique_ptr<GasDynamics> gasDynamics_;
 };
