@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 #include "Cylinder.hpp"
+#include "Constants/GasConstants.hpp"
 #include <algorithm>
 
 namespace GC = GasConstants;
@@ -33,27 +34,39 @@ double Cylinder::getCurrentVolume() const {
     return getTotalChamberVolume() + blocklet_->getDisplacedVolume();
 }
 
-double Cylinder::calculatePressure() const {
+double Cylinder::getPressure() const {
     return (GC::GAMMA - 1.0) * energy_ / getCurrentVolume();
 }
 
-double Cylinder::calculateForceG() const {
-    return calculatePressure() * blocklet_->getBoreArea();
+double Cylinder::getTemperature() const {
+    return (GC::GAMMA - 1.0) * energy_ / (mass_ * GC::R_SPECIFIC);
 }
 
-double Cylinder::calculateForceI() const {
-    return (calculatePressure() - GC::P_ATM) * blocklet_->getBoreArea();
+double Cylinder::getMass() const {
+    return mass_;
+}
+
+double Cylinder::getCurrentDensity() const {
+    return mass_ / getCurrentVolume();
+}
+
+double Cylinder::getForceG() const {
+    return getPressure() * blocklet_->getBoreArea();
+}
+
+double Cylinder::getForceI() const {
+    return (getPressure() - GC::P_ATM) * blocklet_->getBoreArea();
 }
 
 void Cylinder::applyForce() {
-    blocklet_->applyForce(calculateForceI());
+    blocklet_->applyForce(getForceI());
 }
 
 void Cylinder::applyFlux(double dt) {
     mass_ += flux_.mass * dt;
     energy_ += flux_.energy * dt;
 
-    energy_ -= calculateForceG() * blocklet_->getPistonVelocity() * dt;
+    energy_ -= getForceG() * blocklet_->getPistonVelocity() * dt;
 
     mass_ = std::max(mass_, 1.0e-12);
     energy_ = std::max(energy_, 1.0e-12);
@@ -78,7 +91,7 @@ Cylinder::CylinderBoundary::CylinderBoundary(Cylinder* owner, bool isLeft)
 
 Cell Cylinder::CylinderBoundary::getState() const {
     double rho = owner_->mass_ / owner_->getCurrentVolume();
-    double p = owner_->calculatePressure();
+    double p = owner_->getPressure();
 
     // rho_E = p / (gamma - 1) + 0.5 * rho * u^2..
     const double rho_E = p / (GC::GAMMA - 1.0); // + 0.5 * rho * u * u;

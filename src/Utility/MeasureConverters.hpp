@@ -3,19 +3,23 @@
 #include <numbers>
 
 namespace MeasureConverters {
-    inline double degToRad(double angle) {
+    constexpr double degToRad(double angle) {
         return angle / 180.0 * std::numbers::pi;
     }
 
-    inline double mmToM(double length) {
+    constexpr double mmToM(double length) {
         return length * 1.0e-3;
     }
 
-    inline double mm3ToM3(double volume) {
+    constexpr double mm3ToM3(double volume) {
         return volume * 1.0e-9;
     }
 
-    inline double gToKg(double mass) {
+    constexpr double gToKg(double mass) {
         return mass * 1.0e-3;
+    }
+
+    constexpr double torrCmToPaM(double townsend) {
+        return townsend * 100 / 133.332;
     }
 }

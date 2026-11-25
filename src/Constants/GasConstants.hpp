@@ -42,5 +42,13 @@ namespace GasConstants {
     constexpr double P_ATM = 101325.0;        // Па (Атмосферное давление)
     constexpr double T_AMBIENT = 293.0;       // К (20°C)
     constexpr double RHO_AMBIENT = P_ATM / (R_SPECIFIC * T_AMBIENT); // ~1.204 кг/м³
+    constexpr double kB = 1.380649e-23;       // Дж/К (постоянная Больцмана)
+    constexpr double N0 = P_ATM / (kB * T_AMBIENT); // м^-3 (приведённая плотность при НУ)
 
+    // =========================================================================
+    // Электрические константы
+    // =========================================================================
+    //NOTE: константы взяты с потолка
+    constexpr double PASHEN_K1 = 2.422e6;      // В·К/(Па·м)
+    constexpr double PASHEN_K2 = 6.08e4;       // В·К^0.5/(Па·м)^0.5
 }

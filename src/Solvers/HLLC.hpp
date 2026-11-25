@@ -48,6 +48,7 @@ namespace Solvers {
             flux.mass = rhoL * uL * area;
             flux.momentum = (rhoL * uL * uL + pL) * area;
             flux.energy = uL * (L.rho_E + pL) * area;
+            p_star = pL;
 
         } else if (S_L <= 0.0 && 0.0 <= S_M) {
             // Левое звёздное состояние (*L)
@@ -82,6 +83,7 @@ namespace Solvers {
             flux.mass = rhoR * uR * area;
             flux.momentum = (rhoR * uR * uR + pR) * area;
             flux.energy = uR * (R.rho_E + pR) * area;
+            p_star = pR;
         }
 
         return {flux, p_star};

@@ -17,9 +17,13 @@ public:
     double getCompressionRatio() const;
     double getCurrentVolume() const;
 
-    double calculatePressure() const;
-    double calculateForceG() const; //Работа над газом
-    double calculateForceI() const; //Индикаторная работа
+    double getPressure() const;
+    double getTemperature() const;
+    double getMass() const;
+    double getCurrentDensity() const;
+
+    double getForceG() const; //Работа над газом
+    double getForceI() const; //Индикаторная работа
 
     void applyForce();
 

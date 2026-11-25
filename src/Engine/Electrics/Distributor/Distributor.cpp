@@ -26,10 +26,9 @@ void Distributor::step(double dt) {
     );
 
     if (checkHallSensor(angle)) {
-        coil_.charge(dt);
-        std::cout << getClosestContact(angle) << std::endl;
+        coil_->charge(dt);
     } else {
-        coil_.discharge(dt);
+        coil_->discharge(dt);
     }
 }
 
